@@ -14,9 +14,6 @@ vim.opt.rtp:prepend(lazypath)
 
 require("lazy").setup({
 	{ import = "nautilus.plugins" },
-	{ import = "nautilus.plugins.git" },
-	{ import = "nautilus.plugins.cmake" },
-	{ import = "nautilus.after.ftplugins" },
 }, {
 	-- Enable automatic checks for update but without notification
 	checker = {

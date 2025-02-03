@@ -1,18 +1,14 @@
 require("nautilus.core")
 require("nautilus.lazy")
 
-vim.cmd("colorscheme tokyonight")
+vim.cmd("colorscheme equinusocio_material")
 
-vim.cmd("colorscheme tokyonight-moon")
+vim.cmd("colorscheme equinusocio_material")
 
-vim.cmd("colorscheme tokyonight-moon")
+vim.cmd("colorscheme catppuccin-macchiato")
 
-vim.cmd("colorscheme tokyonight-storm")
-
-vim.cmd("colorscheme tokyonight-storm")
-
-vim.cmd("colorscheme tokyonight-day")
+vim.cmd("colorscheme default")
 
 vim.cmd("colorscheme catppuccin-mocha")
 
-vim.cmd("colorscheme onelight")
+vim.cmd("colorscheme darkblue")

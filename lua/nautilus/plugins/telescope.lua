@@ -33,13 +33,14 @@ return {
 			-- set keymaps
 			local keymap = vim.keymap -- for conciseness
 
-			keymap.set("n", "<leader>ff", builtin.find_files, { desc = "Fuzzy find files in cwd" })
-			keymap.set("n", "<leader>fg", builtin.live_grep, { desc = "Find string in cwd" })
-			keymap.set("n", "<leader>fr", builtin.oldfiles, { desc = "Fuzzy find recent files" })
-			keymap.set("n", "<leader>fb", builtin.buffers, { desc = "Lists open buffers" })
-			keymap.set("n", "<leader>fc", builtin.grep_string, { desc = "Find string under cursor in cwd" })
-			keymap.set("n", "<leader>fh", builtin.help_tags, { desc = "Lists available help tags" })
+			keymap.set("n", "<leader>ff", builtin.find_files, { desc = "[F]uzzy [F]ind files in cwd" })
+			keymap.set("n", "<leader>fg", builtin.live_grep, { desc = "[F]ind [G]rep string in cwd" })
+			keymap.set("n", "<leader>fr", builtin.oldfiles, { desc = "[F]uzzy find [R]ecent files" })
+			keymap.set("n", "<leader>fb", builtin.buffers, { desc = "[F]ind open [B]uffers" })
+			keymap.set("n", "<leader>fc", builtin.grep_string, { desc = "[F]ind string under [C]ursor in cwd" })
+			keymap.set("n", "<leader>fh", builtin.help_tags, { desc = "[F]ind available [H]elp tags" })
 			keymap.set("n", "<leader>ft", "<cmd>TodoTelescope<cr>", { desc = "Find todos" })
+			keymap.set("n", "<leader>fk", "<cmd>Telescope keymaps<cr>", { desc = "[F]ind [K]eymaps" })
 		end,
 	},
 	{
