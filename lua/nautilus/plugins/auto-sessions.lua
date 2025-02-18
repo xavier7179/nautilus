@@ -1,21 +1,17 @@
-local config = function()
-	local auto_session = require("auto-session")
-
-	auto_session.setup({
-		log_level = "error",
-		auto_restore_enabled = false,
-		auto_session_suppress_dirs = { "~/", "~/Downloads", "~/Documents", "~/Desktop/" },
-		auto_session_use_git_branch = false,
-	})
-
-	local keymap = vim.keymap
-
-	keymap.set("n", "<leader>wr", "<cmd>SessionRestore<CR>", { desc = "Restore session for cwd" }) -- restore last workspace session for current directory
-	keymap.set("n", "<leader>ws", "<cmd>SessionSave<CR>", { desc = "Save session for auto session root dir" }) -- save workspace session for current working directory
-end
-
 return {
 	"rmagatti/auto-session",
 	lazy = true,
-	config = config,
+	keys = {
+		-- Will use Telescope if installed or a vim.ui.select picker otherwise
+		{ "<leader>wr", "<cmd>SessionSearch<CR>", desc = "Session search" },
+		{ "<leader>wl", "<cmd>SessionRestore<CR>", desc = "Restore last session" },
+		{ "<leader>ws", "<cmd>SessionSave<CR>", desc = "Save session" },
+		{ "<leader>wa", "<cmd>SessionToggleAutoSave<CR>", desc = "Toggle autosave" },
+	},
+	opts = {
+		suppressed_dirs = { "~/", "~/Downloads", "~/Documents", "~/Desktop/" },
+		log_level = "error",
+		auto_restore = false,
+		use_git_branch = false, -- Include git branch name in session name
+	},
 }

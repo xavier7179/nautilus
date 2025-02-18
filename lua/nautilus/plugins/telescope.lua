@@ -39,8 +39,6 @@ return {
 			keymap.set("n", "<leader>fb", builtin.buffers, { desc = "[F]ind open [B]uffers" })
 			keymap.set("n", "<leader>fc", builtin.grep_string, { desc = "[F]ind string under [C]ursor in cwd" })
 			keymap.set("n", "<leader>fh", builtin.help_tags, { desc = "[F]ind available [H]elp tags" })
-			keymap.set("n", "<leader>ft", "<cmd>TodoTelescope<cr>", { desc = "Find todos" })
-			keymap.set("n", "<leader>fk", "<cmd>Telescope keymaps<cr>", { desc = "[F]ind [K]eymaps" })
 		end,
 	},
 	{

@@ -13,15 +13,24 @@ return {
 		},
 		keys = {
 			-- lazy.nvim keys
+			{ "<leader>a", "", desc = "+ai", mode = { "n", "v" } },
 			{
-				"<leader>cc",
+				"<leader>ac",
 				"",
 				desc = "+CopilotChat",
 				mode = { "n", "v" },
 			},
+			{
+				"<leader>aa",
+				function()
+					return require("CopilotChat").toggle()
+				end,
+				desc = "Toggle (CopilotChat)",
+				mode = { "n", "v" },
+			},
 			-- Show help actions with telescope
 			{
-				"<leader>cch",
+				"<leader>ach",
 				function()
 					local actions = require("CopilotChat.actions")
 					require("CopilotChat.integrations.telescope").pick(actions.help_actions())
@@ -30,7 +39,7 @@ return {
 			},
 			-- Show prompts actions with telescope
 			{
-				"<leader>ccp",
+				"<leader>acp",
 				function()
 					local actions = require("CopilotChat.actions")
 					require("CopilotChat.integrations.telescope").pick(actions.prompt_actions())
@@ -38,5 +47,31 @@ return {
 				desc = "CopilotChat - Prompt actions",
 			},
 		},
+		config = function(_, opts)
+			local chat = require("CopilotChat")
+
+			vim.api.nvim_create_autocmd("BufEnter", {
+				pattern = "copilot-chat",
+				callback = function()
+					vim.opt_local.relativenumber = false
+					vim.opt_local.number = false
+				end,
+			})
+
+			chat.setup(opts)
+		end,
+	},
+	-- Edgy integration
+	{
+		"folke/edgy.nvim",
+		optional = true,
+		opts = function(_, opts)
+			opts.right = opts.right or {}
+			table.insert(opts.right, {
+				ft = "copilot-chat",
+				title = "Copilot Chat",
+				size = { width = 50 },
+			})
+		end,
 	},
 }
