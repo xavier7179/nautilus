@@ -27,7 +27,6 @@ return {
 					"comment",
 					"gitignore",
 					"gitcommit",
-					"php",
 					"json",
 					"python",
 					"javascript",
