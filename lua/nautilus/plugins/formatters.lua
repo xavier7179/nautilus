@@ -24,6 +24,7 @@ return {
 					bibtex = { "bibtex-tidy" },
 					docker = { "hadolint" },
 					-- php = { "pretty-php", "phpstan" },
+					php = { "php_cs_fixer" },
 				},
 				format_on_save = function(bufnr)
 					-- Disable with a global or buffer-local variable

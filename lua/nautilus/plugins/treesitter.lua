@@ -31,7 +31,6 @@ return {
 					"python",
 					"javascript",
 					"html",
-					"cpp",
 					"css", -- "doxygen",
 					"regex",
 					"ruby",
@@ -41,6 +40,7 @@ return {
 					"dockerfile",
 					"markdown",
 					"markdown_inline",
+					"php",
 				},
 				-- List of parsers to ignore installing (or "all")
 				ignore_install = {},

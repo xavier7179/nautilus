@@ -29,7 +29,7 @@ return {
 					"lua_ls", -- Lua
 					"markdown_oxide",
 					"marksman", -- Markdown
-					-- "psalm", -- PHP
+					"phpactor", -- PHP
 					"pylsp",
 					"ruby_lsp",
 					"rust_analyzer", -- RUST
@@ -56,6 +56,8 @@ return {
 					"markdownlint", -- markdown linter
 					-- "phpstan", -- PHP linter
 					-- "pretty-php", -- PHP Linter
+					"phpcs", -- PHP linter
+					"php-cs-fixer", -- PHP formatter
 				},
 			})
 		end,
