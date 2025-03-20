@@ -115,7 +115,18 @@ return {
 				enabled = true,
 				timeout = 3000,
 			},
-			picker = { enabled = true },
+			picker = {
+				enabled = true,
+				sources = {
+					colorschemes = {
+						confirm = function(picker, item)
+							local source = require("snacks.picker.config.sources").colorschemes
+							source.confirm(picker, item)
+							save_colorscheme(item.text)
+						end,
+					},
+				},
+			},
 			quickfile = { enabled = true },
 			scroll = { enabled = true },
 			statuscolumn = { enabled = true },
@@ -317,7 +328,8 @@ return {
 						Snacks.debug.backtrace()
 					end
 					vim.print = _G.dd -- Override print to use snacks for `:=` command
-
+					-- get default colorscheme if available
+					vim.cmd.colorscheme(get_colorscheme("default"))
 					-- Create some toggle mappings
 					Snacks.toggle.option("spell", { name = "Spelling" }):map("<leader>us")
 					Snacks.toggle.option("wrap", { name = "Wrap" }):map("<leader>uw")
