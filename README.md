@@ -7,8 +7,8 @@ ready and going.
 
 There are a couple of things this configuration is based on:
 
-- iTerm terminal
-- Nerd font (I have font-hack-nerd-font on brew)
+- iTerm2 terminal
+- Nerd font: `brew install font-meslo-lg-nerd-font` and the select Meslo LGS Nerd Font Mono on iTerm2 profile
 - brew install ripgrep
 - brew install rg
 

@@ -108,7 +108,7 @@ return {
 					{ section = "startup" },
 				},
 			},
-			exlporer = { replace_netrw = true },
+			explorer = { enabled = true, replace_netrw = true },
 			indent = { enabled = true, char = "┊" },
 			input = { enabled = true },
 			notifier = {
