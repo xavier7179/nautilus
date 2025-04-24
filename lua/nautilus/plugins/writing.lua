@@ -1,3 +1,10 @@
 return {
-	{ "preservim/vim-pencil" }, -- tool for better writing
-}
+    {
+        "preservim/vim-pencil",
+        lazy = true,
+        ft = { "plaintex", "markdown", "tex" },
+        init = function()
+            vim.g["pencil#wrapModeDefault"] = "soft"
+        end,
+
+    } }

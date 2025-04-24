@@ -1,26 +1,11 @@
 -- Debuggers (hopefully for all supported languages
 return {
 	{
-		"jay-babu/mason-nvim-dap.nvim",
-		event = "VeryLazy",
-		dependencies = {
-			"williamboman/mason.nvim",
-			"mfussenegger/nvim-dap",
-		},
-		opts = {
-			handlers = {},
-			ensure_installed = {
-				-- C /CPP / Rust
-				"codelldb",
-			},
-		},
-	},
-	{
 		"mfussenegger/nvim-dap",
 		dependencies = {
 			"rcarriga/nvim-dap-ui",
 			"nvim-neotest/nvim-nio",
-			"theHamsta/nvim-dap-virtual-text",
+			{ "theHamsta/nvim-dap-virtual-text", opts = {} },
 		}, -- stylua: ignore
 		keys = {
 			{ "<leader>d", "", desc = "+debug", mode = { "n", "v" } },
@@ -143,26 +128,45 @@ return {
 				end,
 				desc = "Widgets",
 			},
-			{
-				"<leader>du",
-				function()
-					require("dapui").toggle({})
-				end,
-				desc = "Dap UI",
-			},
-			{
-				"<leader>de",
-				function()
-					require("dapui").eval()
-				end,
-				desc = "Eval",
-				mode = { "n", "v" },
-			},
 		},
 		config = function()
+			vim.api.nvim_set_hl(0, "DapStoppedLine", { default = true, link = "Visual" })
+		end,
+	},
+	-- fancy UI for the debugger
+	{
+		"rcarriga/nvim-dap-ui",
+		dependencies = { "nvim-neotest/nvim-nio" },
+    -- stylua: ignore
+    keys = {
+      { "<leader>du", function() require("dapui").toggle({ }) end, desc = "Dap UI" },
+      { "<leader>de", function() require("dapui").eval() end, desc = "Eval", mode = {"n", "v"} },
+    },
+		opts = {
+			-- Set icons to characters that are more likely to work in every terminal.
+			--    Feel free to remove or use ones that you like more! :)
+			--    Don't feel like these are good choices.
+			icons = { expanded = "▾", collapsed = "▸", current_frame = "*" },
+			controls = {
+				icons = {
+					pause = "⏸",
+					play = "▶",
+					step_into = "⏎",
+					step_over = "⏭",
+					step_out = "⏮",
+					step_back = "b",
+					run_last = "▶▶",
+					terminate = "⏹",
+					disconnect = "⏏",
+				},
+			},
+		},
+		config = function(_, opts)
 			local dap = require("dap")
 			local dapui = require("dapui")
-			local dapvt = require("nvim-dap-virtual-text")
+			-- Dap UI setup
+			-- For more information, see |:help nvim-dap-ui|
+			dapui.setup(opts)
 
 			-- Attaching DAP-UI to DAP sessions
 			dap.listeners.before.attach.dapui_config = function()
@@ -171,37 +175,15 @@ return {
 			dap.listeners.before.launch.dapui_config = function()
 				dapui.open()
 			end
-			dap.listeners.before.event_terminated.dapui_config = function()
-				dapui.close()
+			dap.listeners.after.event_initialized["dapui_config"] = function()
+				dapui.open({})
 			end
-			dap.listeners.before.event_exited.dapui_config = function()
-				dapui.close()
+			dap.listeners.before.event_terminated["dapui_config"] = function()
+				dapui.close({})
 			end
-
-			-- Dap UI setup
-			-- For more information, see |:help nvim-dap-ui|
-			dapui.setup({
-				-- Set icons to characters that are more likely to work in every terminal.
-				--    Feel free to remove or use ones that you like more! :)
-				--    Don't feel like these are good choices.
-				icons = { expanded = "▾", collapsed = "▸", current_frame = "*" },
-				controls = {
-					icons = {
-						pause = "⏸",
-						play = "▶",
-						step_into = "⏎",
-						step_over = "⏭",
-						step_out = "⏮",
-						step_back = "b",
-						run_last = "▶▶",
-						terminate = "⏹",
-						disconnect = "⏏",
-					},
-				},
-			})
-
-			-- Dap Virtual-text setup
-			dapvt.setup({})
+			dap.listeners.before.event_exited["dapui_config"] = function()
+				dapui.close({})
+			end
 		end,
 	},
 }

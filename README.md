@@ -11,6 +11,8 @@ There are a couple of things this configuration is based on:
 - Nerd font: `brew install font-meslo-lg-nerd-font` and the select Meslo LGS Nerd Font Mono on iTerm2 profile
 - brew install ripgrep
 - brew install rg
+- brew install fzf
+- brew install xclip
 
 ### Linters
 
