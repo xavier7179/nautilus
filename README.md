@@ -24,6 +24,7 @@ ln -s "$(brew --prefix llvm)/bin/clang-format" "/usr/local/bin/clang-format"
 ln -s "$(brew --prefix llvm)/bin/clang-tidy" "/usr/local/bin/clang-tidy"
 ```
 
+- Rust: ensure adding the rust-analyzer if not present by running `rustup component add rust-analyzer`
 ## Post-Install (OSX)
 
 - Update the .zshrc placing the EDITOR as nvim

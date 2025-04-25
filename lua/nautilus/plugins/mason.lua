@@ -1,19 +1,17 @@
 return {
     {
         "jay-babu/mason-nvim-dap.nvim",
-        event = "VeryLazy",
-        cmd = { "DapInstall", "DapUninstall" },
-        dependencies = {
-            "williamboman/mason.nvim",
-            "mfussenegger/nvim-dap",
-        },
+        --       event = "VeryLazy",
+        -- cmd = { "DapInstall", "DapUninstall" },
+        -- dependencies = {
+        --    "williamboman/mason.nvim",
+        --    "mfussenegger/nvim-dap",
+        -- },
     },
+    "williamboman/mason-lspconfig.nvim",
+    "WhoIsSethDaniel/mason-tool-installer.nvim",
     {
         "williamboman/mason.nvim",
-        dependencies = {
-            "williamboman/mason-lspconfig.nvim",
-            "WhoIsSethDaniel/mason-tool-installer.nvim",
-        },
         config = function()
             -- import mason
             local mason = require("mason")
@@ -41,7 +39,6 @@ return {
                     "phpactor", -- PHP
                     -- "pylsp",
                     --					"ruby_lsp",
-                    --					"rust_analyzer", -- RUST
                     --					"sqlls",
                     --					"lemminx", -- XML
                     --					"hydra_lsp", -- YAML
@@ -49,6 +46,7 @@ return {
                 },
             })
             mason_tool_installer.setup({
+                auto_update = false,
                 ensure_installed = {
                     "clang-format", -- C/C++ formatter_path
                     --	"cpplint", -- C/C++ Linter -- removed not very good
@@ -66,19 +64,20 @@ return {
                     "markdownlint-cli2", -- markdown formatter
                     "markdown-toc",      -- mardown formatter
                     "markdownlint",      -- markdown linter
-                    -- "phpstan", -- PHP linter
-                    -- "pretty-php", -- PHP Linter
-                    "phpcs",        -- PHP linter
-                    "php-cs-fixer", -- PHP formatter
+                    "phpcs",             -- PHP linter
+                    "php-cs-fixer",      -- PHP formatter
+                },
+                integrations = {
+                    ['mason-lspconfig'] = true,
+                    ['mason-null-ls'] = false,
+                    ['mason-nvim-dap'] = true,
                 },
             })
             mason_nvim_dap.setup({
                 automatic_installation = true,
                 ensure_installed = {
-                    -- C /CPP / Rust
-                    "codelldb",
-                    -- PHP
-                    "php-debug-adapter",
+                    "codelldb", -- C /CPP / Rust
+                    "php"       -- php-debug-adapter -- PHP
                 },
             })
         end,
