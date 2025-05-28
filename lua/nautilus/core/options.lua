@@ -2,6 +2,10 @@
 --
 local opt = vim.opt
 
+-- NOTE: the following line allow to map IT-based keys with the EN-base equivalent, this should help making less awkward moves
+-- right now is limited to map:
+-- è -> [
+-- + -> ]
 opt.langmap = "è[+]"
 
 -- c: Automatically break comments using the textwidth value.
