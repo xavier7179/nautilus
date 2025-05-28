@@ -16,6 +16,7 @@ return {
             checkbox = {
                 enabled = false,
             },
+            latex = { enabled = false }
         },
         config = function(_, opts)
             require("render-markdown").setup(opts)

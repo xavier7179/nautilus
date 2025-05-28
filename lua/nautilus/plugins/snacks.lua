@@ -122,15 +122,16 @@ return {
                     colorschemes = {
                         confirm = function(picker, item)
                             local source = require("snacks.picker.config.sources").colorschemes
+                            local core = require("nautilus.core.functions")
                             source.confirm(picker, item)
-                            save_colorscheme(item.text)
+                            core.saveColorscheme(item.text)
                         end,
                     },
                 },
             },
             quickfile = { enabled = true },
             scroll = { enabled = true },
-            statuscolumn = { enabled = true },
+            statuscolumn = { enabled = true, folds = { open = true } },
             terminal = { enabled = true },
             toggle = { enabled = true, which_key = false },
             words = { enabled = true },
@@ -321,6 +322,7 @@ return {
             vim.api.nvim_create_autocmd("User", {
                 pattern = "VeryLazy",
                 callback = function()
+                    local core = require("nautilus.core.functions")
                     -- Setup some globals for debugging (lazy-loaded)
                     _G.dd = function(...)
                         Snacks.debug.inspect(...)
@@ -330,7 +332,7 @@ return {
                     end
                     vim.print = _G.dd -- Override print to use snacks for `:=` command
                     -- get default colorscheme if available
-                    vim.cmd.colorscheme(get_colorscheme("default"))
+                    vim.cmd.colorscheme(core.getColorscheme("default"))
                     -- Create some toggle mappings
                     Snacks.toggle.option("spell", { name = "Spelling" }):map("<leader>us")
                     Snacks.toggle.option("wrap", { name = "Wrap" }):map("<leader>uw")

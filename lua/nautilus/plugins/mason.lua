@@ -39,6 +39,7 @@ return {
                 "phpactor",           -- PHP
                 "bashls",             -- Bash
                 -- Linters and Formatters
+                "shellcheck",         -- bash linter
                 "clang-format",       -- C/C++ formatter_path
                 "stylua",             -- lua formatter
                 "shfmt",              -- shell formatter

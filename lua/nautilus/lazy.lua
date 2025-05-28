@@ -1,42 +1,28 @@
--- Lazy
+-- Bootstrap lazy.nvim
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not (vim.uv or vim.loop).fs_stat(lazypath) then
-    vim.fn.system({
-        "git",
-        "clone",
-        "--filter=blob:none",
-        "https://github.com/folke/lazy.nvim.git",
-        "--branch=stable", -- latest stable release
-        lazypath,
-    })
+    local lazyrepo = "https://github.com/folke/lazy.nvim.git"
+    local out = vim.fn.system({ "git", "clone", "--filter=blob:none", "--branch=stable", lazyrepo, lazypath })
+    if vim.v.shell_error ~= 0 then
+        vim.api.nvim_echo({
+            { "Failed to clone lazy.nvim:\n", "ErrorMsg" },
+            { out,                            "WarningMsg" },
+            { "\nPress any key to exit..." },
+        }, true, {})
+        vim.fn.getchar()
+        os.exit(1)
+    end
 end
 vim.opt.rtp:prepend(lazypath)
 
--- Colorscheme functions
---
----@param fallback? string
----@return string|nil
-_G.get_colorscheme = function(fallback)
-    if not vim.g.COLORS_NAME then
-        vim.cmd.rshada()
-    end
-    return vim.g.COLORS_NAME or fallback
-end
-
----@param colorscheme? string
-_G.save_colorscheme = function(colorscheme)
-    colorscheme = colorscheme or vim.g.colors_name
-    if get_colorscheme() == colorscheme then
-        return
-    end
-    vim.g.COLORS_NAME = colorscheme
-    vim.cmd.wshada()
-end
+local core = require("nautilus.core.functions")
 
 require("lazy").setup({
     spec = {
-        { import = "nautilus.plugins" },      -- common plugins
-        { import = "nautilus.plugins.lang" }, -- language related plugins
+        { import = "nautilus.plugins" },       -- common plugins
+        { import = "nautilus.plugins.ui" },    -- user interface related plugins
+        { import = "nautilus.plugins.lang" },  -- language related plugins
+        { import = "nautilus.plugins.utils" }, -- utility plugins
     },
 }, {
     -- Enable automatic checks for update but without notification
@@ -50,6 +36,6 @@ require("lazy").setup({
     },
     install = {
         -- Set the colorscheme for the `:Lazy` UI
-        colorscheme = { get_colorscheme("default") },
+        colorscheme = { core.getColorscheme("default") },
     },
 })

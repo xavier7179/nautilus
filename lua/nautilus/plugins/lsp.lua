@@ -36,36 +36,41 @@ return {
             -- The nvim-cmp almost supports LSP's capabilities so You should advertise it to LSP servers..
             local capabilities = cmp_nvim_lsp.default_capabilities()
 
-            mason_lspconfig.setup_handlers({
-                -- default handler for installed servers
-                function(server_name)
-                    lspconfig[server_name].setup({
-                        capabilities = capabilities,
-                    })
-                end,
-                ["lua_ls"] = function()
-                    -- configure lua server (with special settings)
-                    lspconfig["lua_ls"].setup({
-                        capabilities = capabilities,
-                        settings = {
-                            Lua = {
-                                -- make the language server recognize "vim" global
-                                diagnostics = {
-                                    globals = { "vim" },
-                                },
-                                completion = {
-                                    callSnippet = "Replace",
+            mason_lspconfig.setup({
+                ensure_installed = {},
+                automatic_enable = true,
+                handlers = {
+                    -- default handler for installed servers
+                    function(server_name)
+                        lspconfig[server_name].setup({
+                            capabilities = capabilities,
+                        })
+                    end,
+                    ["lua_ls"] = function()
+                        -- configure lua server (with special settings)
+                        lspconfig["lua_ls"].setup({
+                            capabilities = capabilities,
+                            settings = {
+                                Lua = {
+                                    -- make the language server recognize "vim" global
+                                    diagnostics = {
+                                        globals = { "vim" },
+                                    },
+                                    completion = {
+                                        callSnippet = "Replace",
+                                    },
                                 },
                             },
-                        },
-                    })
-                end,
-                ["bashls"] = function()
-                    lspconfig["bashls"].setup({
-                        capabilities = capabilities,
-                        filetypes = { "sh", "zsh", "bash" }
-                    })
-                end
+                        })
+                    end,
+                    ["bashls"] = function()
+                        lspconfig["bashls"].setup({
+                            capabilities = capabilities,
+                            filetypes = { "sh", "zsh", "bash" }
+                        })
+                    end
+
+                }
             })
             vim.api.nvim_create_autocmd("LspAttach", {
                 group = vim.api.nvim_create_augroup("UserLspConfig", {}),

@@ -1,6 +1,5 @@
 return {
-
-    "MunifTanjim/nui.nvim",
+    { "MunifTanjim/nui.nvim", },
     -- Highly experimental plugin that completely replaces the UI for messages, cmdline and the popupmenu.
     {
         "folke/noice.nvim",

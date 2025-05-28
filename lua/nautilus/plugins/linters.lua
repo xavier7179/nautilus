@@ -7,15 +7,14 @@ return {
             local lint = require("lint")
 
             lint.linters_by_ft = {
+                bash = { "shellcheck" },
                 -- c = { "cpplint" }, -- Removed as it does not work well
                 -- cpp = { "cpplint" }, -- Removed as it is fixed to Google Style
                 cmake = { "cmakelint" },
-                javascript = { "eslint_d" },
-                javascriptreact = { "eslint_d" },
-                python = { "pylint" },
                 markdown = { "markdownlint-cli2" },
-                -- php = { "phpstan" },
+                sh = { "shellcheck" },
                 php = { "phpcs" },
+                zsh = { "shellcheck" },
             }
 
             local lint_augroup = vim.api.nvim_create_augroup("lint", { clear = true })
