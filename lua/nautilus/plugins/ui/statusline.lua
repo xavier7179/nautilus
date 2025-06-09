@@ -1,39 +1,69 @@
 return {
-	"nvim-lualine/lualine.nvim",
-	dependencies = { "nvim-tree/nvim-web-devicons" },
-	event = "VeryLazy",
-	config = function()
-		local lualine = require("lualine")
-		local lazy_status = require("lazy.status") -- to configure lazy pending updates counting
+	{
+		"echasnovski/mini.statusline",
+		version = "*",
+		opts = {
+			use_icons = vim.g.have_nerd_font,
+		},
+		config = function()
+			-- Mini.statusline configuration
+			require("mini.statusline").setup({
+				content = {
+					-- Left section: Add your overseer and lazy status updates here
+					active = function()
+						local mode, mode_hl = MiniStatusline.section_mode({ trunc_width = 120 })
+						local git = MiniStatusline.section_git({ trunc_width = 40 })
+						local diagnostics = MiniStatusline.section_diagnostics({ trunc_width = 75 })
+						local lsp = MiniStatusline.section_lsp({ trunc_width = 75 })
+						-- local filename = MiniStatusline.section_filename({ trunc_width = 140 })
+						local fileinfo = MiniStatusline.section_fileinfo({ trunc_width = 120 })
+						local location = MiniStatusline.section_location({ trunc_width = 75 })
+						local search = MiniStatusline.section_searchcount({ trunc_width = 75 })
+						-- Function to get overseer status
+						-- TODO: instead # of running tasks provide details about the status
+						local function get_overseer_status()
+							local overseer = require("overseer")
+							local tasks = overseer.list_tasks()
+							if #tasks > 0 then
+								return #tasks .. " tasks running"
+							else
+								return "No tasks running"
+							end
+						end
+						-- Lazy status updates
+						local lazy_status = require("lazy.status")
+						local lazy_updates = ""
+						if lazy_status.has_updates() then
+							lazy_updates = string.format("Lazy: %s", lazy_status.updates())
+						end
 
-		lualine.setup({
-			options = {
-				theme = "auto",
-				disabled_filetypes = { status_line = { "snack_dashboard" } },
-			},
-			-- add on Section X the update status (and keep the rest)
-			sections = {
-				lualine_x = {
-					{
-						"overseer",
-					},
-					{
-						lazy_status.updates,
-						cond = lazy_status.has_updates,
-						color = { fg = "#ff9e64" },
-					},
-					{ "encoding" },
-					{ "fileformat" },
-					{ "filetype" },
+						-- Encoding, fileformat, and filetype
+						local encoding = vim.bo.fenc ~= "" and vim.bo.fenc or vim.o.enc
+
+						-- Combine all sections
+						return MiniStatusline.combine_groups({
+							{ hl = mode_hl, strings = { mode } },
+							{ hl = "MiniStatuslineDevinfo", strings = { git, lazy_updates, diagnostics, lsp } },
+							"%<", -- Mark general truncate point
+							{ hl = "MiniStatuslineFilename", strings = { get_overseer_status() } },
+							--	{ hl = "MiniStatuslineFilename", strings = { filename } },
+							"%=", -- End left alignment
+							{ hl = "MiniStatuslineFileinfo", strings = { encoding, fileinfo } },
+							{ hl = mode_hl, strings = { search, location } },
+						})
+					end,
+
+					-- Inactive statusline
+					inactive = function()
+						return MiniStatusline.combine_groups({
+							{ hl = "MiniStatuslineInactive", strings = { "%f" } },
+						})
+					end,
 				},
-			},
-			extensions = {
-				-- "fugitive", "quickfix", "fzf", "oil"
-				"lazy",
-				"mason",
-				"nvim-dap-ui",
-				"trouble",
-			},
-		})
-	end,
+
+				-- Use default options or customize as needed
+				set_vim_settings = true,
+			})
+		end,
+	},
 }

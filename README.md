@@ -14,6 +14,9 @@ There are a couple of things this configuration is based on:
 - brew install fzf
 - brew install xclip
 
+### Grammars
+- brew install tree-sitter (to support treesitter automatic installation of parsers
+
 ### Linters
 
 - (clang-tidy) Install llvm
