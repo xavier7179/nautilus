@@ -7,6 +7,7 @@
 
 ## Plugins
 
+[ ] Snacks.nvim Profiler
 [ ] Blink.cmp
 [X] mini.statusline
 [ ] More mini plugins

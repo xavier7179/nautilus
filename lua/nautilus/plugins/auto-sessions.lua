@@ -6,7 +6,7 @@ return {
 		{ "<leader>wr", "<cmd>SessionSearch<CR>", desc = "Session search" },
 		{ "<leader>wl", "<cmd>SessionRestore<CR>", desc = "Restore last session" },
 		{ "<leader>ws", "<cmd>SessionSave<CR>", desc = "Save session" },
-		{ "<leader>wa", "<cmd>SessionToggleAutoSave<CR>", desc = "Toggle autosave" },
+		{ "<leader>uS", "<cmd>SessionToggleAutoSave<CR>", desc = "Toggle autosave" },
 	},
 	opts = {
 		suppressed_dirs = { "~/", "~/Downloads", "~/Documents", "~/Desktop/" },

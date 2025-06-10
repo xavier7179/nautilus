@@ -80,9 +80,7 @@ return {
 						desc = "Browse Repo",
 						padding = 1,
 						key = "b",
-						action = function()
-							Snacks.gitbrowse()
-						end,
+						action = function() Snacks.gitbrowse() end,
 					},
 					function()
 						local in_git = Snacks.git.get_root() ~= nil
@@ -94,16 +92,19 @@ return {
 								height = 10,
 							},
 						}
-						return vim.tbl_map(function(cmd)
-							return vim.tbl_extend("force", {
-								pane = 2,
-								section = "terminal",
-								enabled = in_git,
-								padding = 1,
-								ttl = 5 * 60,
-								indent = 3,
-							}, cmd)
-						end, cmds)
+						return vim.tbl_map(
+							function(cmd)
+								return vim.tbl_extend("force", {
+									pane = 2,
+									section = "terminal",
+									enabled = in_git,
+									padding = 1,
+									ttl = 5 * 60,
+									indent = 3,
+								}, cmd)
+							end,
+							cmds
+						)
 					end,
 					{ section = "startup" },
 				},
@@ -165,116 +166,84 @@ return {
 		keys = {
 			{
 				"<leader>z",
-				function()
-					Snacks.zen()
-				end,
+				function() Snacks.zen() end,
 				desc = "Toggle Zen Mode",
 			},
 			{
 				"<leader>Z",
-				function()
-					Snacks.zen.zoom()
-				end,
+				function() Snacks.zen.zoom() end,
 				desc = "Toggle Zoom",
 			},
 			{
 				"<leader>.",
-				function()
-					Snacks.scratch()
-				end,
+				function() Snacks.scratch() end,
 				desc = "Toggle Scratch Buffer",
 			},
 			{
 				"<leader>S",
-				function()
-					Snacks.scratch.select()
-				end,
+				function() Snacks.scratch.select() end,
 				desc = "Select Scratch Buffer",
 			},
 			{
 				"<leader>n",
-				function()
-					Snacks.notifier.show_history()
-				end,
+				function() Snacks.notifier.show_history() end,
 				desc = "Notification History",
 			},
 			{
 				"<leader>bd",
-				function()
-					Snacks.bufdelete()
-				end,
+				function() Snacks.bufdelete() end,
 				desc = "Delete Buffer",
 			},
 			{
 				"<leader>cR",
-				function()
-					Snacks.rename.rename_file()
-				end,
+				function() Snacks.rename.rename_file() end,
 				desc = "Rename File",
 			},
 			{
 				"<leader>gB",
-				function()
-					Snacks.gitbrowse()
-				end,
+				function() Snacks.gitbrowse() end,
 				desc = "Git Browse",
 				mode = { "n", "v" },
 			},
 			{
 				"<leader>gb",
-				function()
-					Snacks.git.blame_line()
-				end,
+				function() Snacks.git.blame_line() end,
 				desc = "Git Blame Line",
 			},
 			{
 				"<leader>gf",
-				function()
-					Snacks.lazygit.log_file()
-				end,
+				function() Snacks.lazygit.log_file() end,
 				desc = "Lazygit Current File History",
 			},
 			{
 				"<leader>gg",
-				function()
-					Snacks.lazygit()
-				end,
+				function() Snacks.lazygit() end,
 				desc = "Lazygit",
 			},
 			{
 				"<leader>gl",
-				function()
-					Snacks.lazygit.log()
-				end,
+				function() Snacks.lazygit.log() end,
 				desc = "Lazygit Log (cwd)",
 			},
 			{
 				"<leader>un",
-				function()
-					Snacks.notifier.hide()
-				end,
+				function() Snacks.notifier.hide() end,
 				desc = "Dismiss All Notifications",
 			},
 			{
 				"<c-t>",
-				function()
-					Snacks.terminal()
-				end,
+				function() Snacks.terminal() end,
 				desc = "Toggle Terminal",
 			},
 			{
 				"]]",
-				function()
-					Snacks.words.jump(vim.v.count1)
-				end,
+				function() Snacks.words.jump(vim.v.count1) end,
 				desc = "Next Reference",
 				mode = { "n", "t" },
 			},
 			{
 				"[[",
-				function()
-					Snacks.words.jump(-vim.v.count1)
-				end,
+				function() Snacks.words.jump(-vim.v.count1) end,
 				desc = "Prev Reference",
 				mode = { "n", "t" },
 			},
@@ -296,26 +265,50 @@ return {
 					})
 				end,
 			},
+			{ "<leader>fe", function() Snacks.explorer() end, desc = "Toggle file explorer" }, -- toggle file explorer
+			{ "<leader>sf", function() Snacks.picker.files({ layout = "telescope" }) end, desc = "[S]earch [F]iles" },
+			{ "<leader>sg", function() Snacks.picker.grep({ layout = "telescope" }) end, desc = "[S]earch [G]rep" },
 			{
-				"<leader>fe",
+				"<leader>sr",
+				function() Snacks.picker.recent({ layout = "telescope" }) end,
+				desc = "[S]earch [R]ecent",
+			},
+			{
+				"<leader>sb",
 				function()
-					Snacks.explorer()
+					Snacks.picker.buffers({
+						layout = "sidebar",
+						preview = false,
+						on_show = function(picker)
+							require("nautilus.core.functions").closePickersByLayout(
+								Snacks.picker.get(),
+								"sidebar",
+								picker
+							)
+						end,
+					})
 				end,
-				desc = "Toggle file explorer",
-			}, -- toggle file explorer
+				desc = "[S]earch Open [B]uffers",
+			},
+			{
+				"<leader>sB",
+				function() Snacks.picker.grep_buffers({ layout = "telescope" }) end,
+				desc = "[S]earch Grep Open [B]uffers",
+			},
+			{
+				"<leader>sh",
+				function() Snacks.picker.help({ layout = "telescope" }) end,
+				desc = "[S]earch [H]elp Pages",
+			},
 			{
 				"<leader>uC",
-				function()
-					Snacks.picker.colorschemes({ layout = "ivy" })
-				end,
+				function() Snacks.picker.colorschemes({ layout = "ivy" }) end,
 				desc = "Pick colorschemes",
 			}, -- toggle the Color schemes selection
 			{
-				"<leader>hk",
-				function()
-					Snacks.picker.keymaps({ layout = "ivy" })
-				end,
-				desc = "[H]elp with [K]eymaps",
+				"<leader>sk",
+				function() Snacks.picker.keymaps({ layout = "ivy" }) end,
+				desc = "[S]earch with [K]eymaps",
 			},
 		},
 		init = function()
@@ -324,12 +317,8 @@ return {
 				callback = function()
 					local core = require("nautilus.core.functions")
 					-- Setup some globals for debugging (lazy-loaded)
-					_G.dd = function(...)
-						Snacks.debug.inspect(...)
-					end
-					_G.bt = function()
-						Snacks.debug.backtrace()
-					end
+					_G.dd = function(...) Snacks.debug.inspect(...) end
+					_G.bt = function() Snacks.debug.backtrace() end
 					vim.print = _G.dd -- Override print to use snacks for `:=` command
 					-- get default colorscheme if available
 					vim.cmd.colorscheme(core.getColorscheme("default"))
@@ -384,17 +373,13 @@ return {
 		keys = {
 			{
 				"<leader>st",
-				function()
-					Snacks.picker.todo_comments()
-				end,
-				desc = "Todo",
+				function() Snacks.picker.todo_comments() end,
+				desc = "[S]earch [T]odo",
 			},
 			{
 				"<leader>sT",
-				function()
-					Snacks.picker.todo_comments({ keywords = { "TODO", "FIX", "FIXME" } })
-				end,
-				desc = "Todo/Fix/Fixme",
+				function() Snacks.picker.todo_comments({ keywords = { "TODO", "FIX", "FIXME" } }) end,
+				desc = "[S]earch Todo/Fix/Fixme",
 			},
 		},
 	},

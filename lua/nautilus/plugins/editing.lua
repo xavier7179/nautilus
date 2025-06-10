@@ -14,15 +14,11 @@ return {
 			vim.keymap.set("n", "zM", require("ufo").closeAllFolds, { desc = "Close all folds" })
 			vim.keymap.set("n", "zK", function()
 				local winid = require("ufo").peekFoldedLinesUnderCursor()
-				if not winid then
-					vim.lsp.buf.hover()
-				end
+				if not winid then vim.lsp.buf.hover() end
 			end, { desc = "Peek Fold" })
 
 			require("ufo").setup({
-				provider_selector = function(bufnr, filetype, buftype)
-					return { "treesitter", "indent" }
-				end,
+				provider_selector = function(bufnr, filetype, buftype) return { "treesitter", "indent" } end,
 			})
 		end,
 	},
@@ -63,9 +59,7 @@ return {
 						require("trouble").prev({ skip_groups = true, jump = true })
 					else
 						local ok, err = pcall(vim.cmd.cprev)
-						if not ok then
-							vim.notify(err, vim.log.levels.ERROR)
-						end
+						if not ok then vim.notify(err, vim.log.levels.ERROR) end
 					end
 				end,
 				desc = "Previous Trouble/Quickfix Item",
@@ -77,9 +71,7 @@ return {
 						require("trouble").next({ skip_groups = true, jump = true })
 					else
 						local ok, err = pcall(vim.cmd.cnext)
-						if not ok then
-							vim.notify(err, vim.log.levels.ERROR)
-						end
+						if not ok then vim.notify(err, vim.log.levels.ERROR) end
 					end
 				end,
 				desc = "Next Trouble/Quickfix Item",
@@ -129,14 +121,12 @@ return {
 	{ -- TODO comments navigations
 		"folke/todo-comments.nvim",
 		event = { "BufReadPre", "BufNewFile" },
-		cmd = { "TodoTrouble", "TodoTelescope" },
+		cmd = { "TodoTrouble" },
 		opts = { signs = false },
         -- stylua: ignore
         keys = {
             { "]t",         function() require("todo-comments").jump_next() end,              desc = "Next Todo Comment" },
             { "[t",         function() require("todo-comments").jump_prev() end,              desc = "Previous Todo Comment" },
-            { "<leader>st", "<cmd>TodoTelescope<cr>",                                         desc = "Todo" },
-            { "<leader>sT", "<cmd>TodoTelescope keywords=TODO,FIX,FIXME<cr>",                 desc = "Todo/Fix/Fixme" },
         },
 	},
 }
