@@ -269,6 +269,17 @@ return {
 			{ "<leader>sf", function() Snacks.picker.files({ layout = "telescope" }) end, desc = "[S]earch [F]iles" },
 			{ "<leader>sg", function() Snacks.picker.grep({ layout = "telescope" }) end, desc = "[S]earch [G]rep" },
 			{
+				"<leader>sc",
+				function() Snacks.picker.files({ cwd = vim.fn.stdpath("config") }) end,
+				desc = "[S]earch [C]onfig File",
+			},
+			{
+				"<leader>sw",
+				function() Snacks.picker.grep_word() end,
+				desc = "[S]earch [W]ord (selection)",
+				mode = { "n", "x" },
+			},
+			{
 				"<leader>sr",
 				function() Snacks.picker.recent({ layout = "telescope" }) end,
 				desc = "[S]earch [R]ecent",
@@ -294,6 +305,11 @@ return {
 				"<leader>sB",
 				function() Snacks.picker.grep_buffers({ layout = "telescope" }) end,
 				desc = "[S]earch Grep Open [B]uffers",
+			},
+			{
+				"<leader>sp",
+				function() Snacks.picker.projects({ layout = "telescope" }) end,
+				desc = "[S]earch [P]rojects",
 			},
 			{
 				"<leader>sh",
