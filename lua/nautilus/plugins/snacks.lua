@@ -29,6 +29,12 @@ return {
 							action = ":lua Snacks.dashboard.pick('oldfiles')",
 						},
 						{
+							icon = " ",
+							key = "P",
+							desc = "Recent projects",
+							action = ":lua Snacks.dashboard.pick('projects')",
+						},
+						{
 							icon = " ",
 							key = "c",
 							desc = "Config",
@@ -49,12 +55,7 @@ return {
 							action = ":lua require('lazy').sync()",
 							enabled = package.loaded.lazy ~= nil,
 						},
-						{
-							icon = "󱌣",
-							key = "p",
-							desc = "Update Parsers",
-							action = ":TSUpdate all",
-						},
+						{ icon = "󱌣", key = "p", desc = "Update Parsers", action = ":TSUpdate all" },
 						{
 							icon = "󰉼",
 							key = "m",
@@ -62,12 +63,7 @@ return {
 							action = ":MasonUpdate",
 							enabled = package.loaded.mason ~= nil,
 						},
-						{
-							icon = "󰋠",
-							key = "h",
-							desc = "Check Health",
-							action = ":checkhealth",
-						},
+						{ icon = "󰋠", key = "h", desc = "Check Health", action = ":checkhealth" },
 						{ icon = " ", key = "q", desc = "Quit", action = ":qa" },
 					},
 				},
@@ -164,89 +160,22 @@ return {
 			},
 		},
 		keys = {
-			{
-				"<leader>z",
-				function() Snacks.zen() end,
-				desc = "Toggle Zen Mode",
-			},
-			{
-				"<leader>Z",
-				function() Snacks.zen.zoom() end,
-				desc = "Toggle Zoom",
-			},
-			{
-				"<leader>.",
-				function() Snacks.scratch() end,
-				desc = "Toggle Scratch Buffer",
-			},
-			{
-				"<leader>S",
-				function() Snacks.scratch.select() end,
-				desc = "Select Scratch Buffer",
-			},
-			{
-				"<leader>n",
-				function() Snacks.notifier.show_history() end,
-				desc = "Notification History",
-			},
-			{
-				"<leader>bd",
-				function() Snacks.bufdelete() end,
-				desc = "Delete Buffer",
-			},
-			{
-				"<leader>cR",
-				function() Snacks.rename.rename_file() end,
-				desc = "Rename File",
-			},
-			{
-				"<leader>gB",
-				function() Snacks.gitbrowse() end,
-				desc = "Git Browse",
-				mode = { "n", "v" },
-			},
-			{
-				"<leader>gb",
-				function() Snacks.git.blame_line() end,
-				desc = "Git Blame Line",
-			},
-			{
-				"<leader>gf",
-				function() Snacks.lazygit.log_file() end,
-				desc = "Lazygit Current File History",
-			},
-			{
-				"<leader>gg",
-				function() Snacks.lazygit() end,
-				desc = "Lazygit",
-			},
-			{
-				"<leader>gl",
-				function() Snacks.lazygit.log() end,
-				desc = "Lazygit Log (cwd)",
-			},
-			{
-				"<leader>un",
-				function() Snacks.notifier.hide() end,
-				desc = "Dismiss All Notifications",
-			},
-			{
-				"<c-t>",
-				function() Snacks.terminal() end,
-				desc = "Toggle Terminal",
-			},
-			{
-				"]]",
-				function() Snacks.words.jump(vim.v.count1) end,
-				desc = "Next Reference",
-				mode = { "n", "t" },
-			},
-			{
-				"[[",
-				function() Snacks.words.jump(-vim.v.count1) end,
-				desc = "Prev Reference",
-				mode = { "n", "t" },
-			},
+			{ "<leader>z", function() Snacks.zen() end, desc = "Toggle Zen Mode" },
+			{ "<leader>Z", function() Snacks.zen.zoom() end, desc = "Toggle Zoom" },
+			{ "<leader>.", function() Snacks.scratch() end, desc = "Toggle Scratch Buffer" },
+			{ "<leader>S", function() Snacks.scratch.select() end, desc = "Select Scratch Buffer" },
+			{ "<leader>n", function() Snacks.notifier.show_history() end, desc = "Notification History" },
+			{ "<leader>bd", function() Snacks.bufdelete() end, desc = "Delete Buffer" },
+			{ "<leader>cR", function() Snacks.rename.rename_file() end, desc = "Rename File" },
+			{ "<leader>gB", function() Snacks.gitbrowse() end, desc = "Git Browse", mode = { "n", "v" } },
+			{ "<leader>gb", function() Snacks.git.blame_line() end, desc = "Git Blame Line" },
+			{ "<leader>gf", function() Snacks.lazygit.log_file() end, desc = "Lazygit Current File History" },
+			{ "<leader>gg", function() Snacks.lazygit() end, desc = "Lazygit" },
+			{ "<leader>gl", function() Snacks.lazygit.log() end, desc = "Lazygit Log (cwd)" },
+			{ "<leader>un", function() Snacks.notifier.hide() end, desc = "Dismiss All Notifications" },
+			{ "<c-t>", function() Snacks.terminal() end, desc = "Toggle Terminal" },
+			{ "]]", function() Snacks.words.jump(vim.v.count1) end, desc = "Next Reference", mode = { "n", "t" } },
+			{ "[[", function() Snacks.words.jump(-vim.v.count1) end, desc = "Prev Reference", mode = { "n", "t" } },
 			{
 				"<leader>N",
 				desc = "Neovim News",
@@ -370,12 +299,7 @@ return {
 						actions = require("trouble.sources.snacks").actions,
 						win = {
 							input = {
-								keys = {
-									["<c-x>"] = {
-										"trouble_open",
-										mode = { "n", "i" },
-									},
-								},
+								keys = { ["<c-x>"] = { "trouble_open", mode = { "n", "i" } } },
 							},
 						},
 					},
@@ -387,11 +311,7 @@ return {
 		"folke/todo-comments.nvim",
 		optional = true,
 		keys = {
-			{
-				"<leader>st",
-				function() Snacks.picker.todo_comments() end,
-				desc = "[S]earch [T]odo",
-			},
+			{ "<leader>st", function() Snacks.picker.todo_comments() end, desc = "[S]earch [T]odo" },
 			{
 				"<leader>sT",
 				function() Snacks.picker.todo_comments({ keywords = { "TODO", "FIX", "FIXME" } }) end,

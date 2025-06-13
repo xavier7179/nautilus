@@ -1,20 +1,6 @@
 return {
-	{
-		"echasnovski/mini.splitjoin",
-		version = false,
-		config = function()
-			local miniSJ = require("mini.splitjoin")
-			miniSJ.setup({
-				mappings = { toggle = "" }, -- Disable default mappings
-			})
-			vim.keymap.set({ "n", "x" }, "sj", function()
-				miniSJ.join()
-			end, { desc = "Join Arguments" })
-			vim.keymap.set({ "n", "x" }, "ss", function()
-				miniSJ.split()
-			end, { desc = "Split Arguments" })
-		end,
-	},
+	-- Split join (gS to toggle)
+	{ "echasnovski/mini.splitjoin", version = false, opts = {} },
 	{ "echasnovski/mini.icons", version = false }, -- mini icons required by many plugins
 	-- Better Around/Inside textobjects
 	--
@@ -29,4 +15,5 @@ return {
 	-- - sd'   - [S]urround [D]elete [']quotes
 	-- - sr)'  - [S]urround [R]eplace [)] [']
 	{ "echasnovski/mini.surround", version = false },
+	{ "echasnovski/mini.tabline", version = false, opts = {} },
 }
