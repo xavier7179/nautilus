@@ -15,5 +15,14 @@ return {
 	-- - sd'   - [S]urround [D]elete [']quotes
 	-- - sr)'  - [S]urround [R]eplace [)] [']
 	{ "echasnovski/mini.surround", version = false },
-	{ "echasnovski/mini.tabline", version = false, opts = {} },
+	{
+		"echasnovski/mini.tabline",
+		version = false,
+		opts = {
+			format = function(buf_id, label)
+				local suffix = vim.bo[buf_id].modified and " " or ""
+				return MiniTabline.default_format(buf_id, label) .. suffix
+			end,
+		},
+	},
 }

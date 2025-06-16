@@ -11,6 +11,7 @@
 [ ] Blink.cmp
 [X] mini.statusline
 [ ] More mini plugins
+[ ] Edgy templates for each type of Supported Language
 
 ## Language support
 

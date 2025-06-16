@@ -4,6 +4,10 @@ return {
 		---@module 'edgy'
 		---@param opts Edgy.Config
 		event = "VeryLazy",
+		init = function()
+			vim.opt.laststatus = 3
+			vim.opt.splitkeep = "screen"
+		end,
 		opts = function(_, opts)
 			for _, pos in ipairs({ "top", "bottom", "left", "right" }) do
 				opts[pos] = opts[pos] or {}

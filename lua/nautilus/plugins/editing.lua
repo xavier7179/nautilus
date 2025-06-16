@@ -24,81 +24,6 @@ return {
 	},
 	-- Automatic indentation style detection
 	{ "nmac427/guess-indent.nvim", opts = {} },
-	-- better diagnostics list and others
-	{
-		"folke/trouble.nvim",
-		dependencies = { "nvim-tree/nvim-web-devicons", "folke/todo-comments.nvim" },
-		cmd = { "Trouble" },
-		opts = {
-			modes = {
-				lsp = {
-					win = { position = "right" },
-				},
-			},
-		},
-		keys = {
-			{ "<leader>xx", "<cmd>Trouble diagnostics toggle<cr>", desc = "Diagnostics (Trouble)" },
-			{ "<leader>xX", "<cmd>Trouble diagnostics toggle filter.buf=0<cr>", desc = "Buffer Diagnostics (Trouble)" },
-			{ "<leader>cs", "<cmd>Trouble symbols toggle<cr>", desc = "Symbols (Trouble)" },
-			{
-				"<leader>cS",
-				"<cmd>Trouble lsp toggle<cr>",
-				desc = "LSP references/definitions/... (Trouble)",
-			},
-			{ "<leader>xL", "<cmd>Trouble loclist toggle<cr>", desc = "Location List (Trouble)" },
-			{ "<leader>xQ", "<cmd>Trouble qflist toggle<cr>", desc = "Quickfix List (Trouble)" },
-			{
-				"<leader>xt",
-				"<cmd>TodoTrouble<CR>",
-				{ desc = "Open todos in trouble", silent = true, noremap = true },
-			},
-			{
-				"[q",
-				function()
-					if require("trouble").is_open() then
-						require("trouble").prev({ skip_groups = true, jump = true })
-					else
-						local ok, err = pcall(vim.cmd.cprev)
-						if not ok then vim.notify(err, vim.log.levels.ERROR) end
-					end
-				end,
-				desc = "Previous Trouble/Quickfix Item",
-			},
-			{
-				"]q",
-				function()
-					if require("trouble").is_open() then
-						require("trouble").next({ skip_groups = true, jump = true })
-					else
-						local ok, err = pcall(vim.cmd.cnext)
-						if not ok then vim.notify(err, vim.log.levels.ERROR) end
-					end
-				end,
-				desc = "Next Trouble/Quickfix Item",
-			},
-		},
-		config = function()
-			-- Diagnostic signs
-			-- https://github.com/folke/trouble.nvim/issues/52
-			local signs = {
-				Error = " ",
-				Warning = " ",
-				Hint = " ",
-				Information = " ",
-			}
-			for type, icon in pairs(signs) do
-				local hl = "DiagnosticSign" .. type
-
-				vim.diagnostic.config({
-					signs = {
-						active = {
-							{ name = hl, text = icon, numhl = hl },
-						},
-					},
-				})
-			end
-		end,
-	},
 	{ -- Comments management
 		"numToStr/Comment.nvim",
 		event = { "BufReadPre", "BufNewFile" },
@@ -117,16 +42,5 @@ return {
 				pre_hook = ts_context_commentstring.create_pre_hook(),
 			})
 		end,
-	},
-	{ -- TODO comments navigations
-		"folke/todo-comments.nvim",
-		event = { "BufReadPre", "BufNewFile" },
-		cmd = { "TodoTrouble" },
-		opts = { signs = false },
-        -- stylua: ignore
-        keys = {
-            { "]t",         function() require("todo-comments").jump_next() end,              desc = "Next Todo Comment" },
-            { "[t",         function() require("todo-comments").jump_prev() end,              desc = "Previous Todo Comment" },
-        },
 	},
 }

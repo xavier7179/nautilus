@@ -15,7 +15,7 @@ local opt = vim.opt
 -- right now is limited to map:
 -- è -> [
 -- + -> ]
-opt.langmap = "è[+]"
+opt.langmap = "è+;[]"
 
 -- Don't show the mode, since it's already in the status line
 opt.showmode = false

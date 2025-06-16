@@ -5,6 +5,7 @@ return {
 		lazy = false,
 		---@type snacks.Config
 		opts = {
+			animate = { enabled = true },
 			bigfile = { enabled = true },
 			dashboard = {
 				preset = {
@@ -284,39 +285,21 @@ return {
 					Snacks.toggle.indent():map("<leader>ug")
 					Snacks.toggle.dim():map("<leader>uD")
 					Snacks.toggle.profiler():map("<leader>uP")
+					Snacks.toggle.animate():map("<leader>uA")
 				end,
 			})
 		end,
 	},
-	{
-		"folke/trouble.nvim",
-		optional = true,
-		specs = {
-			"folke/snacks.nvim",
-			opts = function(_, opts)
-				return vim.tbl_deep_extend("force", opts or {}, {
-					picker = {
-						actions = require("trouble.sources.snacks").actions,
-						win = {
-							input = {
-								keys = { ["<c-x>"] = { "trouble_open", mode = { "n", "i" } } },
-							},
-						},
-					},
-				})
-			end,
-		},
-	},
-	{
-		"folke/todo-comments.nvim",
-		optional = true,
-		keys = {
-			{ "<leader>st", function() Snacks.picker.todo_comments() end, desc = "[S]earch [T]odo" },
-			{
-				"<leader>sT",
-				function() Snacks.picker.todo_comments({ keywords = { "TODO", "FIX", "FIXME" } }) end,
-				desc = "[S]earch Todo/Fix/Fixme",
-			},
-		},
-	},
+	--	{
+	--		"folke/todo-comments.nvim",
+	--		optional = true,
+	--		keys = {
+	--			{ "<leader>st", function() Snacks.picker.todo_comments() end, desc = "[S]earch [T]odo" },
+	--			{
+	--				"<leader>sT",
+	--				function() Snacks.picker.todo_comments({ keywords = { "TODO", "FIX", "FIXME" } }) end,
+	--				desc = "[S]earch Todo/Fix/Fixme",
+	--			},
+	--		},
+	--	},
 }
