@@ -2,13 +2,13 @@
 
 ## Functionalities
 
-[ ] Advanced Theme (from [here](https://github.com/folke/snacks.nvim/discussions/1239))
-[ ] Remove telescope and place Snacks pickers
+[X] Advanced Theme (from [here](https://github.com/folke/snacks.nvim/discussions/1239))
+[X] Remove telescope and place Snacks pickers
 
 ## Plugins
 
 [ ] Snacks.nvim Profiler
-[ ] Blink.cmp
+[X] Blink.cmp
 [X] mini.statusline
 [ ] More mini plugins
 [ ] Hologram.nvim
