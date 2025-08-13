@@ -37,9 +37,6 @@ return {
 							lazy_updates = string.format("Lazy: %s", lazy_status.updates())
 						end
 
-						-- Encoding, fileformat, and filetype
-						local encoding = vim.bo.fenc ~= "" and vim.bo.fenc or vim.o.enc
-
 						-- Combine all sections
 						return MiniStatusline.combine_groups({
 							{ hl = mode_hl, strings = { mode } },
@@ -48,7 +45,7 @@ return {
 							{ hl = "MiniStatuslineFilename", strings = { get_overseer_status() } },
 							--	{ hl = "MiniStatuslineFilename", strings = { filename } },
 							"%=", -- End left alignment
-							{ hl = "MiniStatuslineFileinfo", strings = { encoding, fileinfo } },
+							{ hl = "MiniStatuslineFileinfo", strings = { fileinfo } },
 							{ hl = mode_hl, strings = { search, location } },
 						})
 					end,

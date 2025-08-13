@@ -116,13 +116,15 @@ return {
 			},
 			picker = {
 				enabled = true,
+				ui_select = true,
 				sources = {
 					colorschemes = {
 						confirm = function(picker, item)
 							local source = require("snacks.picker.config.sources").colorschemes
-							local core = require("nautilus.core.functions")
+							-- local core = require("nautilus.core.functions")
 							source.confirm(picker, item)
-							core.saveColorscheme(item.text)
+							-- core.saveColorscheme(item.text)
+							--require("nautilus.custom.colorscheme").save_colorscheme(item.text)
 						end,
 					},
 				},
@@ -167,7 +169,7 @@ return {
 			{ "<leader>S", function() Snacks.scratch.select() end, desc = "Select Scratch Buffer" },
 			{ "<leader>n", function() Snacks.notifier.show_history() end, desc = "Notification History" },
 			{ "<leader>bd", function() Snacks.bufdelete() end, desc = "Delete Buffer" },
-			{ "<leader>cR", function() Snacks.rename.rename_file() end, desc = "Rename File" },
+			{ "<leader>fR", function() Snacks.rename.rename_file() end, desc = "[F]ile [R]ename" },
 			{ "<leader>gB", function() Snacks.gitbrowse() end, desc = "Git Browse", mode = { "n", "v" } },
 			{ "<leader>gb", function() Snacks.git.blame_line() end, desc = "Git Blame Line" },
 			{ "<leader>gf", function() Snacks.lazygit.log_file() end, desc = "Lazygit Current File History" },
@@ -267,7 +269,7 @@ return {
 					_G.bt = function() Snacks.debug.backtrace() end
 					vim.print = _G.dd -- Override print to use snacks for `:=` command
 					-- get default colorscheme if available
-					vim.cmd.colorscheme(core.getColorscheme("default"))
+					-- vim.cmd.colorscheme(core.getColorscheme("default"))
 					-- Create some toggle mappings
 					Snacks.toggle.option("spell", { name = "Spelling" }):map("<leader>us")
 					Snacks.toggle.option("wrap", { name = "Wrap" }):map("<leader>uw")

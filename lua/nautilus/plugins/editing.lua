@@ -22,8 +22,6 @@ return {
 			})
 		end,
 	},
-	-- Automatic indentation style detection
-	{ "nmac427/guess-indent.nvim", opts = {} },
 	{ -- Comments management
 		"numToStr/Comment.nvim",
 		event = { "BufReadPre", "BufNewFile" },

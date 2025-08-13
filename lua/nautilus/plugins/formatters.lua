@@ -20,8 +20,8 @@ return {
 		opts = {
 			-- Define your formatters
 			formatters_by_ft = {
-				--			c = { "clang-format" },
-				--			cpp = { "clang-format" },
+				c = { "clang_format" },
+				cpp = { "clang_format" },
 				rust = { "rustfmt" },
 				--					javascript = { "prettier" },
 				--					javascriptreact = { "prettier" },
@@ -45,6 +45,28 @@ return {
 						"Always",
 					},
 				},
+				clang_format = function(bufnr)
+					local config_path = require("nautilus.core.functions").get_file_with_path(bufnr, "clang-format")
+					local args = {}
+					if not vim.uv.fs_stat(config_path) then
+						local shiftwidth = vim.bo[bufnr].shiftwidth
+						local tabstop = vim.bo[bufnr].tabstop
+						local expandtab = vim.bo[bufnr].expandtab
+						local use_tab = expandtab and "Never" or "Always"
+						local custom_args = string.format(
+							"{BasedOnStyle: llvm, IndentWidth: %d, TabWidth: %d, UseTab: %s}",
+							shiftwidth,
+							tabstop,
+							use_tab
+						)
+						table.insert(args, "--style=" .. custom_args)
+					end
+					return {
+						cmd = "clang-format",
+						args = args,
+						stdin = true,
+					}
+				end,
 			},
 			-- Set default options
 			default_format_opts = {

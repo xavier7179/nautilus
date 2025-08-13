@@ -4,7 +4,6 @@ return {
 		"neovim/nvim-lspconfig",
 		event = { "BufReadPre", "BufNewFile" },
 		dependencies = {
-			"hrsh7th/cmp-nvim-lsp",
 			{ "antosha417/nvim-lsp-file-operations", config = true },
 		},
 		config = function()
@@ -14,11 +13,6 @@ return {
 			-- import mason_lspconfig plugin
 			local mason_lspconfig = require("mason-lspconfig")
 
-			-- import cmp-nvim-lsp plugin
-			local cmp_nvim_lsp = require("cmp_nvim_lsp")
-
-			-- import telescope
-			-- local telescope = require("telescope.builtin")
 			-- import Snacks.pickers
 			local snacks = require("snacks.picker")
 
@@ -51,36 +45,6 @@ return {
 				},
 			})
 
-			--            mason_lspconfig.setup({
-			--                ensure_installed = {},
-			--                automatic_enable = true,
-			--                handlers = {
-			--                    -- default handler for installed servers
-			--                    function(server_name)
-			--                        lspconfig[server_name].setup({
-			--                            capabilities = capabilities,
-			--                        })
-			--                    end,
-			--                    ["lua_ls"] = function()
-			--                        -- configure lua server (with special settings)
-			--                        lspconfig["lua_ls"].setup({
-			--                            capabilities = capabilities,
-			--                            settings = {
-			--                                Lua = {
-			--                                },
-			--                            },
-			--                        })
-			--                    end,
-			--                    ["bashls"] = function()
-			--                        lspconfig["bashls"].setup({
-			--                            capabilities = capabilities,
-			--                            filetypes = { "sh", "zsh", "bash" }
-			--                        })
-			--                    end
-			--
-			--                }
-			--            })
-			--
 			--  This function gets run when an LSP attaches to a particular buffer.
 			--    That is to say, every time a new file is opened that is associated with
 			--    an lsp (for example, opening `main.rs` is associated with `rust_analyzer`) this
@@ -100,7 +64,7 @@ return {
 
 					-- WARN: This is not Goto Definition, this is Goto Declaration.
 					--  For example, in C this would take you to the header.
-					map("gD", vim.lsp.buf.declaration, "[G]oto [D]eclaration")
+					map("gD", function() Snacks.picker.lsp_declarations() end, "[G]oto [D]eclaration")
 
 					-- Jump to the definition of the word under your cursor.
 					--  This is where a variable was first declared, or where a function is defined, etc.
@@ -123,6 +87,9 @@ return {
 					-- Rename the variable under your cursor.
 					--  Most Language Servers support renaming across files, etc.
 					map("gr", vim.lsp.buf.rename, "[R]e[n]ame")
+
+					-- Open the float version of Diagnostic
+					map("gl", function() vim.diagnostic.open_float() end, "[G]oto f[L]oat Diagnostic")
 
 					-- This function resolves a difference between neovim nightly (version 0.11) and stable (version 0.10)
 					---@param client vim.lsp.Client
@@ -174,9 +141,7 @@ return {
 				end,
 			})
 
-			-- The nvim-cmp almost supports LSP's capabilities so You should advertise it to LSP servers..
-			local capabilities = cmp_nvim_lsp.default_capabilities()
-			-- local capabilities = require('blink.cmp').get_lsp_capabilities()
+			local capabilities = require("blink.cmp").get_lsp_capabilities()
 
 			-- Enable the following language servers
 			--  Feel free to add/remove any LSPs that you want here. They will automatically be installed.

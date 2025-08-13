@@ -45,4 +45,11 @@ M.closePickersByLayout = function(active_pickers, layout_name, picker_to_avoid)
 	end
 end
 
+-- TODO: replace the function with a proper project plugin that makes possible to determine the root of the tree
+M.get_file_with_path = function(bufnr, file)
+	local bufname = vim.api.nvim_buf_get_name(bufnr)
+	local dir = bufname ~= "" and vim.fn.fnamemodify(bufname, ":p:h") or vim.fn.getcwd()
+	return dir .. "/" .. file
+end
+
 return M

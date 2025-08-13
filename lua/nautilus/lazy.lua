@@ -36,7 +36,8 @@ require("lazy").setup({
 	},
 	install = {
 		-- Set the colorscheme for the `:Lazy` UI
-		colorscheme = { core.getColorscheme("default") },
+		-- colorscheme = { core.getColorscheme("default") },
+		colorscheme = { require("nautilus.custom.colorscheme").get_colorscheme("default") },
 	},
 	ui = {
 		-- If you are using a Nerd Font: set icons to an empty table which will use the

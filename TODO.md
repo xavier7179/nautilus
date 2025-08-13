@@ -11,16 +11,33 @@
 [ ] Blink.cmp
 [X] mini.statusline
 [ ] More mini plugins
-[ ] Edgy templates for each type of Supported Language
+[ ] Hologram.nvim
+[ ] Edgy templates for each type of Supported Language (with [edge-group.vim](https://github.com/lucobellic/edgy-group.nvim)?)
 
-## Language support
+## Language support (= LSP, Linter, Formatter, Debugger, Edgy, Extras)
 
-[x] Rust
+[ ] C
+[ ] C++
+[ ] CMake ([CMake tools](https://github.com/Civitasv/cmake-tools.nvim)?)
+[ ] Rust
+[ ] PHP
 [ ] Node
 [ ] LaTeX
 [ ] Javascript
+[ ] Markdown
+[ ] Latex
+
+## Programming Add-on
+
+[ ] MISRA checker
+[ ] Docker support
+
+## AI
+
+[ ] ChatGPT
 
 ## Optimizations
 
-[ ] Check unused or reduntant plugins
+[ ] Check unused or redundant plugins
 [ ] Optimize key mapping
+[ ] Git double check (keep only useful stuff)
