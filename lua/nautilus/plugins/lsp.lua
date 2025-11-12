@@ -90,7 +90,12 @@ return {
 
 					-- Open the float version of Diagnostic
 					map("gl", function() vim.diagnostic.open_float() end, "[G]oto f[L]oat Diagnostic")
-
+					map("<leader>ss", function() Snacks.picker.lsp_symbols() end, "[S]earch LSP [s]ymbols")
+					map(
+						"<leader>sS",
+						function() Snacks.picker.lsp_workspace_symbols() end,
+						"[S]earc LSP Workspace [S]ymbols"
+					)
 					-- This function resolves a difference between neovim nightly (version 0.11) and stable (version 0.10)
 					---@param client vim.lsp.Client
 					---@param method vim.lsp.protocol.Method
@@ -181,6 +186,9 @@ return {
 							},
 							completion = {
 								callSnippet = "Replace",
+							},
+							workspace = {
+								library = vim.api.nvim_get_runtime_file("", true),
 							},
 							-- You can toggle below to ignore Lua_LS's noisy `missing-fields` warnings
 							-- diagnostics = { disable = { 'missing-fields' } },

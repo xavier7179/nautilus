@@ -31,8 +31,6 @@ keymap.set("n", "<A-j>", ":resize -5<CR>", { silent = true })
 keymap.set("n", "<A-k>", ":resize +5<CR>", { silent = true })
 
 -- These lines define key mappings for moving the cursor 10 spaces at a time using Shift + arrow keys
-keymap.set("n", "<S-l>", "10l", { silent = true })
-keymap.set("n", "<S-h>", "10h", { silent = true })
 keymap.set("n", "<S-j>", "10j", { silent = true })
 keymap.set("n", "<S-k>", "10k", { silent = true })
 
@@ -53,6 +51,6 @@ keymap.set("n", "<leader>tf", "<cmd>tabnew %<CR>", { desc = "Open current buffer
 keymap.set("n", "<leader>fn", "<cmd>enew<cr>", { desc = "New File" })
 
 -- buffers
-keymap.set("n", "[b", "<cmd>bprevious<cr>", { desc = "Prev Buffer" })
-keymap.set("n", "]b", "<cmd>bnext<cr>", { desc = "Next Buffer" })
+keymap.set("n", "<S-h>", "<cmd>bprevious<cr>", { desc = "Prev Buffer" })
+keymap.set("n", "<S-l>", "<cmd>bnext<cr>", { desc = "Next Buffer" })
 keymap.set("n", "<leader>bb", "<cmd>e #<cr>", { desc = "Switch to Other Buffer" })

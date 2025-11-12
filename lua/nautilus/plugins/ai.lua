@@ -40,9 +40,9 @@ return {
 		opts = {
 			provider = "copilot",
 			auto_suggestions_provider = "copilot",
-			copilot = {
-				model = "claude-3.7-sonnet",
-			},
+			-- copilot = {
+			-- 	model = "claude-3.7-sonnet",
+			--},
 			openai = {
 				endpoint = "https://api.githubcopilot.com",
 				model = "", -- il tuo modello desiderato (o usa gpt-4o, ecc.)
