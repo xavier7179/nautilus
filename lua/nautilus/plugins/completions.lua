@@ -19,6 +19,8 @@ return {
 			"rafamadriz/friendly-snippets",
 			"moyiz/blink-emoji.nvim",
 			{ "L3MON4D3/LuaSnip", version = "v2.*", build = "make install_jsregexp" },
+			-- NEW: Copilot completion source for Blink
+			"fang2hou/blink-copilot",
 		},
 		event = { "InsertEnter", "CmdlineEnter" },
 		-- use a release tag to download pre-built binaries
@@ -64,7 +66,7 @@ return {
 			-- Default list of enabled providers defined so that you can extend it
 			-- elsewhere in your config, without redefining it, due to `opts_extend`
 			sources = {
-				default = { "lazydev", "lsp", "path", "snippets", "buffer", "emoji" },
+				default = { "lazydev", "lsp", "path", "snippets", "buffer", "emoji", "copilot" },
 				providers = {
 					lazydev = {
 						name = "LazyDev",
@@ -89,6 +91,13 @@ return {
 								vim.o.filetype
 							)
 						end,
+					},
+					-- NEW: Copilot provider
+					copilot = {
+						name = "copilot",
+						module = "blink-copilot", -- this is the module name from fang2hou’s plugin
+						score_offset = 90,
+						async = true,
 					},
 				},
 			},

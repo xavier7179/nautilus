@@ -54,6 +54,8 @@ return {
 				"bash-debug-adapter", -- Bash
 				"codelldb", -- C /CPP / Rust
 				"php-debug-adapter", -- PHP
+				"yamlls", -- YAML LSP
+				"yamllint", -- YAML Linter
 			},
 		},
 	},

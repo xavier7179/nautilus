@@ -1,7 +1,20 @@
 return {
-	"zbirenbaum/copilot.lua", -- for providers='copilot'
+	{
+		"zbirenbaum/copilot.lua",
+		cmd = "Copilot",
+		event = "InsertEnter",
+		opts = {
+			suggestion = { enabled = false }, -- Blink handles suggestions
+			panel = { enabled = false }, -- you have Avante/CopilotChat for chat
+			filetypes = {
+				["*"] = true,
+			},
+		},
+		config = function(_, opts) require("copilot").setup(opts) end,
+	},
 	{ -- Copilot Chat
 		"CopilotC-Nvim/CopilotChat.nvim",
+		enabled = false,
 		build = "make tiktoken", -- Only on MacOS or Linux
 		opts = {
 			debug = true, -- Enable debugging
@@ -111,6 +124,35 @@ return {
 				function() return require("avante.api").toggle() end,
 				desc = "Toggle (Avante)",
 				mode = { "n", "v" },
+			},
+			-- explain current visual selection
+			{
+				"<leader>ave",
+				function()
+					local api = require("avante.api")
+					-- if in visual, use that; otherwise fall back to current cursor context
+					api.ask({
+						prompt = "Complete this code and add detailed explanation comments for students.",
+					})
+				end,
+				desc = "Explain selection (Avante)",
+				mode = { "n", "v" },
+			},
+
+			-- explain full current file
+			{
+				"<leader>avf",
+				function()
+					local api = require("avante.api")
+					local buf = vim.api.nvim_get_current_buf()
+					local last = vim.api.nvim_buf_line_count(buf)
+					api.ask({
+						range = { 1, 0, last, 0 },
+						prompt = "Review this entire file, complete any missing code, and add clear explanation comments suitable for students.",
+					})
+				end,
+				desc = "Explain full file (Avante)",
+				mode = { "n" },
 			},
 		},
 	},

@@ -11,6 +11,7 @@ return {
 				-- c = { "cpplint" }, -- Removed as it does not work well
 				-- cpp = { "cpplint" }, -- Removed as it is fixed to Google Style
 				cmake = { "cmakelint" },
+				yaml = { "yamllint" },
 				markdown = { "markdownlint-cli2" },
 				sh = { "shellcheck" },
 				php = { "phpcs" },
@@ -25,9 +26,7 @@ return {
 					-- Only run the linter in buffers that you can modify in order to
 					-- avoid superfluous noise, notably within the handy LSP pop-ups that
 					-- describe the hovered symbol using Markdown.
-					if vim.bo.modifiable then
-						lint.try_lint()
-					end
+					if vim.bo.modifiable then lint.try_lint() end
 				end,
 			})
 		end,
