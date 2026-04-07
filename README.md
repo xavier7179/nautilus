@@ -15,6 +15,7 @@ There are a couple of things this configuration is based on:
 - brew install fzf
 - brew install xclip
 - npm install -g @mermaid-js/mermaid-cli (to fully support snacks.images)
+- brew install pngpaste
 
 ### Grammars
 

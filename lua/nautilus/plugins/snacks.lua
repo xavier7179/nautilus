@@ -137,7 +137,28 @@ return {
 			words = { enabled = true },
 			styles = {
 				notification = {
-					-- wo = { wrap = true } -- Wrap notifications
+					notification = {
+						ft = "text",
+						bo = {
+							filetype = "snacks_notif",
+						},
+						wo = {
+							wrap = true,
+							conceallevel = 0,
+							spell = false,
+						},
+					},
+					notification_history = {
+						ft = "text",
+						bo = {
+							filetype = "snacks_notif_history",
+						},
+						wo = {
+							wrap = true,
+							conceallevel = 0,
+							spell = false,
+						},
+					},
 				},
 			},
 			zen = {

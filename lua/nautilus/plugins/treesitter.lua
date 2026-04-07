@@ -29,7 +29,6 @@ return {
 				"css", -- "doxygen",
 				"regex",
 				"ruby",
-				"rust",
 				"verilog",
 				"yaml",
 				"dockerfile",

@@ -1,86 +1,46 @@
 return {
-	{ -- Formatter
+	{
 		"stevearc/conform.nvim",
 		event = { "BufWritePre" },
 		cmd = { "ConformInfo" },
 		keys = {
 			{
-				"<leader>fp",
+				"fp",
 				function()
 					require("conform").format({
 						lsp_fallback = true,
 						async = false,
-						timeout_ms = 500,
+						timeout_ms = 1000,
 					})
 				end,
 				mode = { "n", "v" },
-				desc = "[F]ile [P]rettier",
+				desc = "[F]ormat buffer",
 			},
 		},
-		opts = {
-			-- Define your formatters
-			formatters_by_ft = {
-				c = { "clang_format" },
-				cpp = { "clang_format" },
-				rust = { "rustfmt" },
-				--					javascript = { "prettier" },
-				--					javascriptreact = { "prettier" },
-				--					css = { "prettier" },
-				--					html = { "prettier" },
-				--					json = { "prettier" },
-				--					yaml = { "prettier" },
-				lua = { "stylua" },
-				sh = { "shfmt" },
-				markdown = { "markdownlint-cli2", "markdown-toc" },
-				--					python = { "isort", "black" },
-				--					bibtex = { "bibtex-tidy" },
-				--					docker = { "hadolint" },
-				php = { "php_cs_fixer" },
-			},
-			formatters = {
-				stylua = {
-					-- force stylua to avoid expading simple statement
-					prepend_args = {
-						"--collapse-simple-statement",
-						"Always",
-					},
+		opts = function()
+			return {
+				formatters_by_ft = {},
+				formatters = {
+					--	stylua = {
+					--		prepend_args = {
+					--			"--collapse-simple-statement",
+					--			"Always",
+					--		},
+					--	},
 				},
-				clang_format = function(bufnr)
-					local config_path = require("nautilus.core.functions").get_file_with_path(bufnr, "clang-format")
-					local args = {}
-					if not vim.uv.fs_stat(config_path) then
-						local shiftwidth = vim.bo[bufnr].shiftwidth
-						local tabstop = vim.bo[bufnr].tabstop
-						local expandtab = vim.bo[bufnr].expandtab
-						local use_tab = expandtab and "Never" or "Always"
-						local custom_args = string.format(
-							"{BasedOnStyle: llvm, IndentWidth: %d, TabWidth: %d, UseTab: %s}",
-							shiftwidth,
-							tabstop,
-							use_tab
-						)
-						table.insert(args, "--style=" .. custom_args)
-					end
+				default_format_opts = {
+					lsp_format = "fallback",
+				},
+				format_on_save = function(bufnr)
+					if vim.g.disable_autoformat or vim.b[bufnr].disable_autoformat then return end
 					return {
-						cmd = "clang-format",
-						args = args,
-						stdin = true,
+						timeout_ms = 1000,
+						async = false,
+						lsp_format = "fallback",
 					}
 				end,
-			},
-			-- Set default options
-			default_format_opts = {
-				lsp_format = "fallback",
-			},
-			format_on_save = function(bufnr)
-				-- Disable with a global or buffer-local variable
-				if vim.g.disable_autoformat or vim.b[bufnr].disable_autoformat then return end
-				return { timeout_ms = 1000, async = false, lsp_format = "fallback" }
-			end,
-		},
-		init = function()
-			-- If you want the formatexpr, here is the place to set it
-			vim.o.formatexpr = "v:lua.require'conform'.formatexpr()"
+			}
 		end,
+		init = function() vim.o.formatexpr = "v:lua.require'conform'.formatexpr()" end,
 	},
 }

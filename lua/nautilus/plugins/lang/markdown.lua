@@ -1,5 +1,60 @@
 return {
 	{
+		"neovim/nvim-lspconfig",
+		ft = { "markdown" },
+		opts = function(_, opts)
+			opts = opts or {}
+			opts.servers = opts.servers or {}
+
+			opts.servers.marksman = {
+				filetypes = { "markdown", "md" },
+			}
+
+			return opts
+		end,
+	},
+
+	{
+		"mfussenegger/nvim-lint",
+		optional = true,
+		opts = function(_, opts)
+			opts.linters_by_ft = opts.linters_by_ft or {}
+			opts.linters = opts.linters or {}
+
+			opts.linters_by_ft.markdown = { "markdownlint-cli2" }
+
+			opts.linters["markdownlint-cli2"] = vim.tbl_deep_extend("force", opts.linters["markdownlint-cli2"] or {}, {
+				args = { "--config", vim.fn.expand("$HOME/.markdownlint-cli2.yaml"), "--" },
+			})
+
+			return opts
+		end,
+		config = function(_, opts)
+			local lint = require("lint")
+			lint.linters_by_ft = vim.tbl_deep_extend("force", lint.linters_by_ft or {}, opts.linters_by_ft or {})
+			lint.linters = vim.tbl_deep_extend("force", lint.linters or {}, opts.linters or {})
+		end,
+	},
+
+	{
+		"stevearc/conform.nvim",
+		optional = true,
+		opts = function(_, opts)
+			opts.formatters_by_ft = opts.formatters_by_ft or {}
+			opts.formatters = opts.formatters or {}
+
+			opts.formatters_by_ft.markdown = { "markdownlint-cli2" }
+
+			opts.formatters["markdownlint-cli2"] =
+				vim.tbl_deep_extend("force", opts.formatters["markdownlint-cli2"] or {}, {
+					args = { "--config", vim.fn.expand("$HOME/.markdownlint-cli2.yaml"), "--fix", "$FILENAME" },
+				})
+
+			return opts
+		end,
+	},
+
+	{
 		"MeanderingProgrammer/render-markdown.nvim",
 		lazy = true,
 		ft = { "markdown", "norg", "rmd", "org", "codecompanion" },
@@ -21,20 +76,57 @@ return {
 				lsp = { enabled = true },
 			},
 		},
-		-- config = function(_, opts)
-		-- 	require("render-markdown").setup(opts)
-		-- 	Snacks.toggle({
-		-- 		name = "Render Markdown",
-		-- 		get = function() return require("render-markdown.state").enabled end,
-		-- 		set = function(enabled)
-		-- 			local m = require("render-markdown")
-		-- 			if enabled then
-		-- 				m.enable()
-		-- 			else
-		-- 				m.disable()
-		-- 			end
-		-- 		end,
-		-- 	}):map("<leader>um")
-		-- end,
+	},
+
+	{
+		"chrisgrieser/nvim-origami",
+		optional = true,
+		ft = { "markdown" },
+		opts = {},
+	},
+
+	{
+		"AckslD/nvim-FeMaco.lua",
+		optional = true,
+		ft = { "markdown" },
+		opts = {},
+	},
+
+	{
+		"epwalsh/obsidian.nvim",
+		optional = true,
+		ft = { "markdown" },
+		opts = {},
+	},
+
+	{
+		"nvim-treesitter/nvim-treesitter",
+		optional = true,
+		opts = function(_, opts)
+			opts.ensure_installed = opts.ensure_installed or {}
+			vim.list_extend(opts.ensure_installed, { "markdown", "markdown_inline" })
+		end,
+	},
+
+	{
+		"folke/which-key.nvim",
+		optional = true,
+		ft = { "markdown" },
+		opts = function(_, opts)
+			opts = opts or {}
+			opts.spec = opts.spec or {}
+			table.insert(opts.spec, {
+				{ "<leader>m", group = "markdown" },
+				{
+					"<leader>mt",
+					function()
+						vim.cmd("silent !markdown-toc -i " .. vim.fn.expand("%:p"))
+						vim.cmd("edit")
+					end,
+					desc = "Update Markdown TOC",
+				},
+			})
+			return opts
+		end,
 	},
 }
