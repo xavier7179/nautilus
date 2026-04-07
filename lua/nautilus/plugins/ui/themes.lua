@@ -54,14 +54,14 @@ return {
 				},
 			},
 		},
-		{ "yunlingz/equinusocio-material.vim", name = "equinuscio-material" },
-		{
-			"rebelot/kanagawa.nvim",
-			name = "kanagawa",
-			opts = {
-				compile = true,
-			},
-			build = function() vim.cmd("KanagawaCompile") end,
-		},
+		--	{ "yunlingz/equinusocio-material.vim", name = "equinuscio-material" },
+		--	{
+		--		"rebelot/kanagawa.nvim",
+		--		name = "kanagawa",
+		--		opts = {
+		--			compile = true,
+		--		},
+		--		build = function() vim.cmd("KanagawaCompile") end,
+		--	},
 	}),
 }

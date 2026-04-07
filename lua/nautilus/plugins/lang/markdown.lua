@@ -91,23 +91,6 @@ return {
 		ft = { "markdown" },
 		opts = {},
 	},
-
-	{
-		"epwalsh/obsidian.nvim",
-		optional = true,
-		ft = { "markdown" },
-		opts = {},
-	},
-
-	{
-		"nvim-treesitter/nvim-treesitter",
-		optional = true,
-		opts = function(_, opts)
-			opts.ensure_installed = opts.ensure_installed or {}
-			vim.list_extend(opts.ensure_installed, { "markdown", "markdown_inline" })
-		end,
-	},
-
 	{
 		"folke/which-key.nvim",
 		optional = true,

@@ -1,4 +1,10 @@
 -- Editing plugins
+-- -- color highlight
+-- -- folding
+-- -- comments
+-- -- sessions
+-- -- writing wrappings
+-- -- etc.
 return {
 	{ "brenoprata10/nvim-highlight-colors" }, -- highlight color codes in editing
 	{ -- folding plugin
@@ -40,5 +46,39 @@ return {
 				pre_hook = ts_context_commentstring.create_pre_hook(),
 			})
 		end,
+	},
+	{ -- TODO comments navigations
+		"folke/todo-comments.nvim",
+		event = { "BufReadPre", "BufNewFile" },
+		cmd = { "TodoTrouble" },
+		opts = {},
+		keys = {
+			{ "]t", function() require("todo-comments").jump_next() end, desc = "Next Todo Comment" },
+			{ "[t", function() require("todo-comments").jump_prev() end, desc = "Previous Todo Comment" },
+		},
+	},
+	-- Sessions
+	{
+		"rmagatti/auto-session",
+		lazy = true,
+		keys = {
+			-- Will use Telescope if installed or a vim.ui.select picker otherwise
+			{ "<leader>wr", "<cmd>SessionSearch<CR>", desc = "Session search" },
+			{ "<leader>wl", "<cmd>SessionRestore<CR>", desc = "Restore last session" },
+			{ "<leader>ws", "<cmd>SessionSave<CR>", desc = "Save session" },
+			{ "<leader>uS", "<cmd>SessionToggleAutoSave<CR>", desc = "Toggle autosave" },
+		},
+		opts = {
+			suppressed_dirs = { "~/", "~/Downloads", "~/Documents", "~/Desktop/" },
+			log_level = "error",
+			auto_restore = false,
+			use_git_branch = false, -- Include git branch name in session name
+		},
+	},
+	{
+		"preservim/vim-pencil",
+		lazy = true,
+		ft = { "plaintex", "markdown" },
+		init = function() vim.g["pencil#wrapModeDefault"] = "soft" end,
 	},
 }

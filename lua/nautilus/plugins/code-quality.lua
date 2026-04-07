@@ -1,4 +1,5 @@
 return {
+	-- Formatters
 	{
 		"stevearc/conform.nvim",
 		event = { "BufWritePre" },
@@ -42,5 +43,37 @@ return {
 			}
 		end,
 		init = function() vim.o.formatexpr = "v:lua.require'conform'.formatexpr()" end,
+	},
+	-- Linters
+	{
+		"mfussenegger/nvim-lint",
+		event = { "BufReadPre", "BufNewFile" },
+		opts = function()
+			return {
+				linters_by_ft = {},
+			}
+		end,
+		config = function(_, opts)
+			local lint = require("lint")
+
+			lint.linters_by_ft = vim.tbl_deep_extend("force", lint.linters_by_ft or {}, opts.linters_by_ft or {})
+
+			local lint_augroup = vim.api.nvim_create_augroup("lint", { clear = true })
+
+			vim.api.nvim_create_autocmd({ "BufEnter", "BufWritePost", "InsertLeave" }, {
+				group = lint_augroup,
+				callback = function()
+					if vim.bo.modifiable then lint.try_lint() end
+				end,
+			})
+		end,
+	},
+
+	{
+		"nvimdev/guard.nvim",
+		ft = { "c", "cpp" },
+		dependencies = {
+			"nvimdev/guard-collection",
+		},
 	},
 }

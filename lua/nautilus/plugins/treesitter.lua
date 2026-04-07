@@ -10,44 +10,65 @@ return {
 		opts = {
 			auto_install = true,
 			ensure_installed = {
+				-- shell / config
 				"bash",
-				"bibtex",
-				"c",
-				"cpp",
 				"cmake",
+				"dockerfile",
+				"git_config",
+				"gitattributes",
+				"gitcommit",
+				"gitignore",
+				"git_rebase",
+				"json",
+				"json5",
+				"jsonc",
+				"toml",
+				"yaml",
+
+				-- lua / nvim
 				"lua",
+				"luadoc",
+				"luap",
+				"printf",
+				"query",
 				"vim",
 				"vimdoc",
-				"query",
-				"comment",
-				"gitignore",
-				"gitcommit",
-				"json",
-				"python",
-				"javascript",
+
+				-- web / js / ts
+				"css",
 				"html",
-				"css", -- "doxygen",
-				"regex",
-				"ruby",
-				"verilog",
-				"yaml",
-				"dockerfile",
+				"javascript",
+				"jsdoc",
+				"tsx",
+				"typescript",
+				"xml",
+
+				-- systems / native
+				"c",
+				"cpp",
+				"diff",
+				"rust",
+				"ron",
+
+				-- writing / docs
+				"comment",
 				"markdown",
 				"markdown_inline",
+				"regex",
+
+				-- other supported languages
 				"php",
 			},
 			-- List of parsers to ignore installing (or "all")
 			ignore_install = {},
-			sync_install = false,
+			--sync_install = false,
 			-- enable syntax highlighting
 			highlight = {
 				enable = true,
-				-- VimTex Integration
-				disable = { "latex" },
-				additional_vim_regex_highlighting = { "latex", "markdown" },
+				additional_vim_regex_highlighting = { "markdown" },
 			},
 			-- enable indentation
-			indent = { enable = true },
+			indent = { enable = true, disable = { "markdown" } },
 			-- enable autotagging (w/ nvim-ts-autotag plugin)
 			autotag = {
 				enable = true,
