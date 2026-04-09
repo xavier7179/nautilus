@@ -96,7 +96,7 @@ return {
 			}
 		end,
 		config = function(_, opts)
-			local package_path = require("mason-registry").get_package("codelldb"):get_install_path()
+			local package_path = vim.fn.expand("$MASON/packages/codelldb")
 			local codelldb = package_path .. "/extension/adapter/codelldb"
 
 			local library_path
@@ -136,4 +136,23 @@ return {
 			return opts
 		end,
 	},
+	-- Edgy config (language specific)
+	--    {
+	--		"folke/snacks.nvim",
+	--		optional = true,
+	--		ft = { "rust" },
+	--		config = function()
+	--			local Snacks = require("snacks")
+	--
+	--			-- Toggle Rust layout: open a rust-tests terminal at the bottom
+	--			vim.keymap.set("n", "<leader>R", function()
+	--				-- Open or focus a named terminal for Rust tests
+	--				Snacks.terminal.open({
+	--					id = "terminal",
+	--					cwd = vim.loop.cwd(),
+	--					start_insert = true,
+	--				})
+	--			end, { desc = "[R]un Snacks terminal" })
+	--		end,
+	--	},
 }

@@ -8,6 +8,7 @@ return {
 			animate = { enabled = true },
 			bigfile = { enabled = true },
 			dashboard = {
+				enabled = true,
 				preset = {
 					keys = {
 						{
@@ -130,6 +131,10 @@ return {
 				},
 			},
 			quickfile = { enabled = true },
+			scope = {
+				enabled = true,
+				exclude = { "markdown", "markdown_inline" },
+			},
 			scroll = { enabled = true },
 			statuscolumn = { enabled = true, folds = { open = true } },
 			terminal = { enabled = true },
@@ -162,9 +167,6 @@ return {
 				},
 			},
 			zen = {
-				-- your configuration comes here
-				-- or leave it empty to use the default settings
-				-- refer to the configuration section below
 				on_open = function(win)
 					vim.opt.number = false
 					vim.opt.relativenumber = false
@@ -218,7 +220,7 @@ return {
 					})
 				end,
 			},
-			{ "<leader>fe", function() Snacks.explorer() end, desc = "Toggle file explorer" }, -- toggle file explorer
+			{ "<leader>fe", function() Snacks.explorer() end, desc = "Toggle [F]ile [E]xplorer" }, -- toggle file explorer
 			{ "<leader>sf", function() Snacks.picker.files({ layout = "telescope" }) end, desc = "[S]earch [F]iles" },
 			{ "<leader>sg", function() Snacks.picker.grep({ layout = "telescope" }) end, desc = "[S]earch [G]rep" },
 			{
@@ -313,16 +315,4 @@ return {
 			})
 		end,
 	},
-	--	{
-	--		"folke/todo-comments.nvim",
-	--		optional = true,
-	--		keys = {
-	--			{ "<leader>st", function() Snacks.picker.todo_comments() end, desc = "[S]earch [T]odo" },
-	--			{
-	--				"<leader>sT",
-	--				function() Snacks.picker.todo_comments({ keywords = { "TODO", "FIX", "FIXME" } }) end,
-	--				desc = "[S]earch Todo/Fix/Fixme",
-	--			},
-	--		},
-	--	},
 }

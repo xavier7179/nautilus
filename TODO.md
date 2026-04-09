@@ -4,28 +4,30 @@
 
 [X] Advanced Theme (from [here](https://github.com/folke/snacks.nvim/discussions/1239))
 [X] Remove telescope and place Snacks pickers
+[ ] Check the landing page for Git not to report process exit when no changes are detected
 
 ## Plugins
 
-[ ] Snacks.nvim Profiler
+[X] Snacks.nvim Profiler
 [X] Blink.cmp
 [X] mini.statusline
 [ ] More mini plugins
 [ ] Hologram.nvim
 [ ] Edgy templates for each type of Supported Language (with [edge-group.vim](https://github.com/lucobellic/edgy-group.nvim)?)
 
-## Language support (= LSP, Linter, Formatter, Debugger, Edgy, Extras)
+## Language support (= LSP, Linter, Formatter, Debugger, Extras)
 
-[ ] C
-[ ] C++
-[ ] CMake ([CMake tools](https://github.com/Civitasv/cmake-tools.nvim)?)
-[ ] Rust
-[ ] PHP
-[ ] Node
-[ ] LaTeX
-[ ] Javascript
-[ ] Markdown
-[ ] Latex
+[X] C
+[X] C++
+[X] CMake ([CMake tools](https://github.com/Civitasv/cmake-tools.nvim))
+[X] Rust
+[X] PHP
+[X] Node
+[X] Javascript / Typescript
+[X] Markdown
+[X] YAML
+[X] Bash / Shell
+[X] Lua
 
 ## Programming Add-on
 
@@ -34,7 +36,7 @@
 
 ## AI
 
-[ ] ChatGPT
+[X] AI Assistant (CodeCompanion + GitHub Copilot)
 
 ## Optimizations
 

@@ -1,28 +1,60 @@
 return {
 	{
 		"folke/edgy.nvim",
-		---@module 'edgy'
-		---@param opts Edgy.Config
+		optional = true,
 		event = "VeryLazy",
-		init = function()
-			vim.opt.laststatus = 3
-			vim.opt.splitkeep = "screen"
-		end,
 		opts = function(_, opts)
-			for _, pos in ipairs({ "top", "bottom", "left", "right" }) do
-				opts[pos] = opts[pos] or {}
-				table.insert(opts[pos], {
-					ft = "snacks_terminal",
-					size = { height = 0.4 },
-					title = "%{b:snacks_terminal.id}: %{b:term_title}",
-					filter = function(_buf, win)
-						return vim.w[win].snacks_win
-							and vim.w[win].snacks_win.position == pos
-							and vim.w[win].snacks_win.relative == "editor"
-							and not vim.w[win].trouble_preview
-					end,
-				})
-			end
+			opts = opts or {}
+
+			-- Left: Snacks explorer
+			opts.left = opts.left or {}
+			table.insert(opts.left, {
+				ft = "snacks_explorer", -- Snacks explorer filetype
+				title = "Explorer",
+				size = { width = 30 },
+			})
+
+			-- Right: AI chat + DAP UI
+			opts.right = opts.right or {}
+			table.insert(opts.right, {
+				ft = "codecompanion_chat",
+				title = "AI Chat",
+				size = { height = 0.4 },
+			})
+			--table.insert(opts.right, {
+			--	ft = "dapui_scopes",
+			--	title = "Scopes",
+			--	size = { height = 0.2 },
+			--})
+			--table.insert(opts.right, {
+			--	ft = "dapui_watches",
+			--	title = "Watches",
+			--	size = { height = 0.2 },
+			--})
+			--table.insert(opts.right, {
+			--	ft = "dapui_stacks",
+			--	title = "Stacks",
+			--	size = { height = 0.2 },
+			--})
+			--table.insert(opts.right, {
+			--	ft = "dapui_breakpoints",
+			--	title = "Breakpoints",
+			--})
+
+			-- Bottom: terminals + quickfix
+			opts.bottom = opts.bottom or {}
+			table.insert(opts.bottom, {
+				ft = "snacks_terminal",
+				title = "Terminal",
+				size = { height = 12 },
+			})
+			table.insert(opts.bottom, {
+				ft = "qf",
+				title = "Quickfix",
+				size = { height = 8 },
+			})
+
+			return opts
 		end,
 	},
 }
