@@ -6,7 +6,11 @@
 -- -- writing wrappings
 -- -- etc.
 return {
-	{ "brenoprata10/nvim-highlight-colors" }, -- highlight color codes in editing
+	{
+		"brenoprata10/nvim-highlight-colors",
+		--	event = { "BufReadPost", "BufNewFile" },
+		opts = {},
+	}, -- highlight color codes in editing
 	{ -- folding plugin
 		"kevinhwang91/nvim-ufo",
 		dependencies = "kevinhwang91/promise-async",

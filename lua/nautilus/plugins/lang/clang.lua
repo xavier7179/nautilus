@@ -96,7 +96,7 @@ return {
 		ft = { "c", "cpp" },
 		config = function()
 			local dap = require("dap")
-			local mason_path = require("mason-registry").get_package("codelldb"):get_install_path()
+			local mason_path = vim.fn.expand("$MASON/packages/codelldb")
 			local codelldb = mason_path .. "/extension/adapter/codelldb"
 
 			dap.adapters.codelldb = {

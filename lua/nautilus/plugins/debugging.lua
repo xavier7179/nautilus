@@ -2,10 +2,11 @@
 return {
 	{
 		"mfussenegger/nvim-dap",
+		lazy = true,
 		dependencies = {
 			"rcarriga/nvim-dap-ui",
 			"nvim-neotest/nvim-nio",
-			{ "theHamsta/nvim-dap-virtual-text", opts = {} },
+			{ "theHamsta/nvim-dap-virtual-text", lazy = true, opts = {} },
 		},
 		keys = {
 			{ "<leader>d", "", desc = "+debug", mode = { "n", "v" } },
@@ -76,6 +77,7 @@ return {
 
 	{
 		"rcarriga/nvim-dap-ui",
+		lazy = true,
 		dependencies = { "nvim-neotest/nvim-nio" },
 		opts = {
 			icons = { expanded = "▾", collapsed = "▸", current_frame = "*" },

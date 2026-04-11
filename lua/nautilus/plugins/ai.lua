@@ -18,7 +18,8 @@ return {
 	-- CodeCompanion: light AI assistant (chat + edits)
 	{
 		"olimorris/codecompanion.nvim",
-		event = "VeryLazy",
+		event = { "BufReadPre", "BufNewFile" },
+		ft = { "markdown", "lua", "c", "javascript", "typescript", "rust", "php" },
 		opts = {
 			adapters = {
 				copilot = {
