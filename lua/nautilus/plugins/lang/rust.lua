@@ -1,4 +1,4 @@
-local diagnostics = vim.g.nautilus_rust_diagnostics or "rust-analyzer"
+local lang = require("nautilus.custom.lang")
 
 return {
 	{
@@ -18,95 +18,85 @@ return {
 			},
 		},
 	},
-	{
-		"mason-org/mason.nvim",
-		optional = true,
-		opts = function(_, opts)
-			opts.ensure_installed = opts.ensure_installed or {}
-			vim.list_extend(opts.ensure_installed, { "codelldb" })
 
-			if diagnostics == "bacon-ls" then vim.list_extend(opts.ensure_installed, { "bacon", "bacon-ls" }) end
+	{
+		"stevearc/conform.nvim",
+		optional = true,
+		ft = lang.ft("rust"),
+		opts = function(_, opts)
+			opts = opts or {}
+			opts.formatters = opts.formatters or {}
+
+			opts.formatters.rustfmt = vim.tbl_deep_extend("force", opts.formatters.rustfmt or {}, {
+				prepend_args = {},
+			})
+
+			return opts
 		end,
 	},
 
 	{
 		"mrcjkb/rustaceanvim",
 		version = vim.fn.has("nvim-0.10.0") == 0 and "^4" or false,
-		ft = { "rust" },
-		opts = function()
-			return {
-				server = {
-					on_attach = function(_, bufnr)
-						vim.keymap.set(
-							"n",
-							"cR",
-							function() vim.cmd.RustLsp("codeAction") end,
-							{ desc = "Rust Code Action", buffer = bufnr }
-						)
+		ft = lang.ft("rust"),
+		opts = {
+			server = {
+				on_attach = function(_, bufnr)
+					vim.keymap.set(
+						"n",
+						"<leader>cR",
+						function() vim.cmd.RustLsp("codeAction") end,
+						{ desc = "Code Action", buffer = bufnr }
+					)
 
-						vim.keymap.set(
-							"n",
-							"dr",
-							function() vim.cmd.RustLsp("debuggables") end,
-							{ desc = "Rust Debuggables", buffer = bufnr }
-						)
-					end,
-					default_settings = {
-						["rust-analyzer"] = {
-							cargo = {
-								allFeatures = true,
-								loadOutDirsFromCheck = true,
-								buildScripts = {
-									enable = true,
-								},
-							},
-							diagnostics = {
-								enable = diagnostics == "rust-analyzer",
-							},
-							checkOnSave = {
-								enable = diagnostics == "rust-analyzer",
-								allFeatures = true,
-								command = "clippy",
-								extraArgs = { "--no-deps" },
-							},
-							procMacro = {
+					vim.keymap.set(
+						"n",
+						"<leader>dr",
+						function() vim.cmd.RustLsp("debuggables") end,
+						{ desc = "Rust Debuggables", buffer = bufnr }
+					)
+				end,
+				default_settings = {
+					["rust-analyzer"] = {
+						cargo = {
+							allFeatures = true,
+							loadOutDirsFromCheck = true,
+							buildScripts = {
 								enable = true,
-								ignored = {
-									["async-trait"] = { "async_trait" },
-									["napi-derive"] = { "napi" },
-									["async-recursion"] = { "async_recursion" },
-								},
 							},
-							files = {
-								excludeDirs = {
-									".direnv",
-									".git",
-									".github",
-									".gitlab",
-									"bin",
-									"node_modules",
-									"target",
-									"venv",
-									".venv",
-								},
+						},
+						procMacro = {
+							enable = true,
+							ignored = {
+								["async-trait"] = { "async_trait" },
+								["napi-derive"] = { "napi" },
+								["async-recursion"] = { "async_recursion" },
+							},
+						},
+						files = {
+							excludeDirs = {
+								".direnv",
+								".git",
+								".github",
+								".gitlab",
+								"bin",
+								"node_modules",
+								"target",
+								"venv",
+								".venv",
 							},
 						},
 					},
 				},
-			}
-		end,
+			},
+		},
 		config = function(_, opts)
 			local package_path = vim.fn.expand("$MASON/packages/codelldb")
 			local codelldb = package_path .. "/extension/adapter/codelldb"
+			local library_path = package_path .. "/extension/lldb/lib/liblldb.dylib"
+			local uname = io.popen("uname"):read("*l")
 
-			local library_path
-			if vim.loop.os_uname().sysname == "Linux" then
-				library_path = package_path .. "/extension/lldb/lib/liblldb.so"
-			elseif vim.loop.os_uname().sysname == "Darwin" then
-				library_path = package_path .. "/extension/lldb/lib/liblldb.dylib"
-			else
-				library_path = package_path .. "/extension/lldb/bin/liblldb.dll"
-			end
+			if uname == "Linux" then library_path = package_path .. "/extension/lldb/lib/liblldb.so" end
 
 			opts.dap = {
 				adapter = require("rustaceanvim.config").get_codelldb_adapter(codelldb, library_path),
@@ -118,41 +108,20 @@ return {
 
 	{
 		"neovim/nvim-lspconfig",
-		ft = { "rust" },
+		ft = lang.ft("rust"),
 		opts = function(_, opts)
 			opts = opts or {}
 			opts.servers = opts.servers or {}
 
-			opts.servers.rust_analyzer = { enabled = false }
+			opts.servers.bacon_ls = vim.tbl_deep_extend("force", opts.servers.bacon_ls or {}, {
+				enabled = true,
+			})
 
-			if diagnostics == "bacon-ls" then
-				opts.servers.bacon_ls = {
-					init_options = {
-						updateOnSave = true,
-					},
-				}
-			end
+			opts.servers.rust_analyzer = vim.tbl_deep_extend("force", opts.servers.rust_analyzer or {}, {
+				enabled = false,
+			})
 
 			return opts
 		end,
 	},
-	-- Edgy config (language specific)
-	--    {
-	--		"folke/snacks.nvim",
-	--		optional = true,
-	--		ft = { "rust" },
-	--		config = function()
-	--			local Snacks = require("snacks")
-	--
-	--			-- Toggle Rust layout: open a rust-tests terminal at the bottom
-	--			vim.keymap.set("n", "<leader>R", function()
-	--				-- Open or focus a named terminal for Rust tests
-	--				Snacks.terminal.open({
-	--					id = "terminal",
-	--					cwd = vim.loop.cwd(),
-	--					start_insert = true,
-	--				})
-	--			end, { desc = "[R]un Snacks terminal" })
-	--		end,
-	--	},
 }

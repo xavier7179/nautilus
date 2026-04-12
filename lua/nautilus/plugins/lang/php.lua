@@ -1,38 +1,28 @@
+local lang = require("nautilus.custom.lang")
+
 return {
 	{
 		"neovim/nvim-lspconfig",
-		ft = { "php" },
+		ft = lang.ft("php"),
 		opts = function(_, opts)
 			opts = opts or {}
 			opts.servers = opts.servers or {}
 
-			opts.servers.intelephense = {
+			opts.servers.intelephense = vim.tbl_deep_extend("force", opts.servers.intelephense or {}, {
 				init_options = {
-					["language_server_phpstan.enabled"] = false,
-					["language_server_psalm.enabled"] = false,
+					globalStoragePath = vim.fn.stdpath("data") .. "/intelephense",
+					licenceKey = nil,
+					clearCache = false,
 				},
-			}
+				settings = {
+					intelephense = {
+						files = {
+							maxSize = 1000000,
+						},
+					},
+				},
+			})
 
-			return opts
-		end,
-	},
-
-	{
-		"stevearc/conform.nvim",
-		optional = true,
-		opts = function(_, opts)
-			opts.formatters_by_ft = opts.formatters_by_ft or {}
-			opts.formatters_by_ft.php = { "php_cs_fixer" }
-			return opts
-		end,
-	},
-
-	{
-		"mfussenegger/nvim-lint",
-		optional = true,
-		opts = function(_, opts)
-			opts.linters_by_ft = opts.linters_by_ft or {}
-			opts.linters_by_ft.php = { "phpcs" }
 			return opts
 		end,
 	},
@@ -40,9 +30,11 @@ return {
 	{
 		"mfussenegger/nvim-dap",
 		optional = true,
-		ft = { "php" },
+		ft = lang.ft("php"),
 		config = function()
 			local dap = require("dap")
+			if dap.adapters.php then return end
+
 			local path = vim.fn.expand("$MASON/packages/php-debug-adapter")
 			dap.adapters.php = {
 				type = "executable",

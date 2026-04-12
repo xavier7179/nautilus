@@ -1,8 +1,9 @@
 -- Debuggers (hopefully for all supported languages
+local lang = require("nautilus.custom.lang")
 return {
 	{
 		"mfussenegger/nvim-dap",
-		lazy = true,
+		ft = lang.ft_for("dap"),
 		dependencies = {
 			"rcarriga/nvim-dap-ui",
 			"nvim-neotest/nvim-nio",

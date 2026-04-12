@@ -1,23 +1,18 @@
+local lang = require("nautilus.custom.lang")
+
 return {
 	{
 		"neovim/nvim-lspconfig",
-		ft = {
-			"javascript",
-			"javascriptreact",
-			"typescript",
-			"typescriptreact",
-		},
+		ft = lang.ft("javascript"),
 		opts = function(_, opts)
 			opts = opts or {}
 			opts.servers = opts.servers or {}
 
-			opts.servers.vtsls = {
-				filetypes = {
-					"javascript",
-					"javascriptreact",
-					"typescript",
-					"typescriptreact",
-				},
+			local capabilities = require("blink.cmp").get_lsp_capabilities()
+
+			opts.servers.vtsls = vim.tbl_deep_extend("force", opts.servers.vtsls or {}, {
+				capabilities = capabilities,
+				filetypes = lang.ft("javascript"),
 				settings = {
 					typescript = {
 						inlayHints = {
@@ -40,40 +35,7 @@ return {
 						},
 					},
 				},
-			}
-
-			return opts
-		end,
-	},
-
-	{
-		"stevearc/conform.nvim",
-		optional = true,
-		opts = function(_, opts)
-			opts.formatters_by_ft = opts.formatters_by_ft or {}
-
-			opts.formatters_by_ft.javascript = { "biome" }
-			opts.formatters_by_ft.javascriptreact = { "biome" }
-			opts.formatters_by_ft.typescript = { "biome" }
-			opts.formatters_by_ft.typescriptreact = { "biome" }
-			opts.formatters_by_ft.json = { "biome" }
-			opts.formatters_by_ft.css = { "biome" }
-			opts.formatters_by_ft.html = { "biome" }
-
-			return opts
-		end,
-	},
-
-	{
-		"mfussenegger/nvim-lint",
-		optional = true,
-		opts = function(_, opts)
-			opts.linters_by_ft = opts.linters_by_ft or {}
-
-			opts.linters_by_ft.javascript = { "eslint" }
-			opts.linters_by_ft.javascriptreact = { "eslint" }
-			opts.linters_by_ft.typescript = { "eslint" }
-			opts.linters_by_ft.typescriptreact = { "eslint" }
+			})
 
 			return opts
 		end,
@@ -81,12 +43,7 @@ return {
 
 	{
 		"mxsdev/nvim-dap-vscode-js",
-		ft = {
-			"javascript",
-			"javascriptreact",
-			"typescript",
-			"typescriptreact",
-		},
+		ft = lang.ft("javascript"),
 		dependencies = {
 			"mfussenegger/nvim-dap",
 		},
@@ -106,12 +63,7 @@ return {
 			require("dap-vscode-js").setup(opts)
 
 			local dap = require("dap")
-			local languages = {
-				"javascript",
-				"javascriptreact",
-				"typescript",
-				"typescriptreact",
-			}
+			local languages = lang.ft("javascript")
 
 			for _, language in ipairs(languages) do
 				dap.configurations[language] = {

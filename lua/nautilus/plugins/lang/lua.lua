@@ -1,12 +1,16 @@
+local lang = require("nautilus.custom.lang")
+
 return {
-	-- LSP config
 	{
 		"neovim/nvim-lspconfig",
-		ft = { "lua" },
+		ft = lang.ft("lua"),
 		opts = function(_, opts)
+			opts = opts or {}
+			opts.servers = opts.servers or {}
+
 			local capabilities = require("blink.cmp").get_lsp_capabilities()
 
-			opts.servers.lua_ls = {
+			opts.servers.lua_ls = vim.tbl_deep_extend("force", opts.servers.lua_ls or {}, {
 				capabilities = capabilities,
 				settings = {
 					Lua = {
@@ -25,26 +29,28 @@ return {
 						},
 					},
 				},
-			}
+			})
 
 			return opts
 		end,
 	},
-	{ -- Formatter
+
+	{
 		"stevearc/conform.nvim",
-		opts = {
-			formatters_by_ft = {
-				lua = { "stylua" },
-			},
-			formatters = {
-				stylua = {
-					-- force stylua to avoid expading simple statement
-					prepend_args = {
-						"--collapse-simple-statement",
-						"Always",
-					},
+		optional = true,
+		ft = lang.ft("lua"),
+		opts = function(_, opts)
+			opts = opts or {}
+			opts.formatters = opts.formatters or {}
+
+			opts.formatters.stylua = vim.tbl_deep_extend("force", opts.formatters.stylua or {}, {
+				prepend_args = {
+					"--collapse-simple-statement",
+					"Always",
 				},
-			},
-		},
+			})
+
+			return opts
+		end,
 	},
 }

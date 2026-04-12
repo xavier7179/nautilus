@@ -1,12 +1,17 @@
+local lang = require("nautilus.custom.lang")
+
 return {
 	{
 		"neovim/nvim-lspconfig",
-		ft = { "c", "cpp" },
+		ft = lang.ft("c"),
 		opts = function(_, opts)
 			opts = opts or {}
 			opts.servers = opts.servers or {}
 
-			opts.servers.clangd = {
+			local capabilities = require("blink.cmp").get_lsp_capabilities()
+
+			opts.servers.clangd = vim.tbl_deep_extend("force", opts.servers.clangd or {}, {
+				capabilities = capabilities,
 				cmd = {
 					"clangd",
 					"--background-index",
@@ -17,50 +22,15 @@ return {
 					"--fallback-style=llvm",
 				},
 				filetypes = { "c", "cpp", "objc", "objcpp" },
-			}
+			})
 
 			return opts
 		end,
 	},
-
-	{
-		"p00f/clangd_extensions.nvim",
-		ft = { "c", "cpp" },
-		opts = {
-			inlay_hints = {
-				inline = false,
-			},
-			ast = {
-				--These require codicons (https://github.com/microsoft/vscode-codicons)
-				role_icons = {
-					type = "",
-					declaration = "",
-					expression = "",
-					specifier = "",
-					statement = "",
-					["template argument"] = "",
-				},
-				kind_icons = {
-					Compound = "",
-					Recovery = "",
-					TranslationUnit = "",
-					PackExpansion = "",
-					TemplateTypeParm = "",
-					TemplateTemplateParm = "",
-					TemplateParamObject = "",
-				},
-			},
-		},
-	},
-
 	{
 		"stevearc/conform.nvim",
 		optional = true,
 		opts = function(_, opts)
-			opts.formatters_by_ft = opts.formatters_by_ft or {}
-			opts.formatters_by_ft.c = { "clang_format" }
-			opts.formatters_by_ft.cpp = { "clang_format" }
-
 			opts.formatters.clang_format = function(bufnr)
 				local config_path = require("nautilus.core.functions").get_file_with_path(bufnr, "clang-format")
 				local args = {}
@@ -91,11 +61,42 @@ return {
 	},
 
 	{
+		"p00f/clangd_extensions.nvim",
+		lazy = true,
+		ft = lang.ft("c"),
+		opts = {
+			inlay_hints = {
+				inline = false,
+			},
+			ast = {
+				role_icons = {
+					type = "",
+					declaration = "",
+					expression = "",
+					specifier = "",
+					statement = "",
+					["template argument"] = "",
+				},
+				kind_icons = {
+					Compound = "",
+					Recovery = "",
+					TranslationUnit = "",
+					PackExpansion = "",
+					TemplateTypeParm = "",
+					TemplateTemplateParm = "",
+					TemplateParamObject = "",
+				},
+			},
+		},
+	},
+
+	{
 		"mfussenegger/nvim-dap",
 		optional = true,
-		ft = { "c", "cpp" },
+		ft = lang.ft("c"),
 		config = function()
 			local dap = require("dap")
+			if dap.adapters.codelldb then return end
 			local mason_path = vim.fn.expand("$MASON/packages/codelldb")
 			local codelldb = mason_path .. "/extension/adapter/codelldb"
 

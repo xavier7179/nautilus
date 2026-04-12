@@ -1,3 +1,5 @@
+local lang = require("nautilus.custom.lang")
+
 return {
 	{
 		"Civitasv/cmake-tools.nvim",
@@ -32,23 +34,11 @@ return {
 
 	{
 		"neovim/nvim-lspconfig",
-		ft = { "cmake" },
+		ft = lang.ft("cmake"),
 		opts = function(_, opts)
 			opts = opts or {}
 			opts.servers = opts.servers or {}
-
-			opts.servers.cmake = {}
-
-			return opts
-		end,
-	},
-
-	{
-		"mfussenegger/nvim-lint",
-		optional = true,
-		opts = function(_, opts)
-			opts.linters_by_ft = opts.linters_by_ft or {}
-			opts.linters_by_ft.cmake = { "cmakelint" }
+			opts.servers.cmake = opts.servers.cmake or {}
 			return opts
 		end,
 	},

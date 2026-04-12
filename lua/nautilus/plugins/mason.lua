@@ -1,3 +1,22 @@
+local lang = require("nautilus.custom.lang")
+
+local function merge_unique(...)
+	local out = {}
+	local seen = {}
+
+	for _, list in ipairs({ ... }) do
+		for _, item in ipairs(list or {}) do
+			if item and not seen[item] then
+				seen[item] = true
+				table.insert(out, item)
+			end
+		end
+	end
+
+	table.sort(out)
+	return out
+end
+
 return {
 	{
 		"jay-babu/mason-nvim-dap.nvim",
@@ -7,7 +26,7 @@ return {
 		},
 		opts = {
 			automatic_installation = false,
-			ensure_installed = {},
+			ensure_installed = lang.dap_mason(),
 		},
 	},
 
@@ -35,37 +54,7 @@ return {
 	{
 		"WhoIsSethDaniel/mason-tool-installer.nvim",
 		opts = {
-			ensure_installed = {
-				-- LSP Config Section
-				"bacon-ls", -- RUST
-				"rust_analyzer", -- RUST
-				"clangd", -- C/C++
-				"lua_ls", -- Lua
-				"marksman", -- Markdown
-				"intelephense", -- PHP
-				"bashls", -- Bash
-				"cmake-language-server", -- CMAKE
-				"vtsls", -- TS/JS
-				-- Linters and Formatters
-				"shellcheck", -- bash linter
-				"clang-format", -- C/C++ formatter_path
-				"stylua", -- lua formatter
-				"shfmt", -- shell formatter
-				"markdownlint-cli2", -- markdown formatter
-				"markdown-toc", -- mardown formatter
-				"markdownlint", -- markdown linter
-				"phpcs", -- PHP linter
-				"php-cs-fixer", -- PHP formatter
-				"eslint-lsp", -- JS linter
-				"biome", -- JS formatter
-				-- DAP
-				"bash-debug-adapter", -- Bash
-				"codelldb", -- C /CPP / Rust
-				"php-debug-adapter", -- PHP
-				"js-debug-adapter", -- TS/JS
-				"yamlls", -- YAML LSP
-				"yamllint", -- YAML Linter
-			},
+			ensure_installed = merge_unique(lang.lsp_mason(), lang.format_mason(), lang.lint_mason(), lang.dap_mason()),
 		},
 	},
 }

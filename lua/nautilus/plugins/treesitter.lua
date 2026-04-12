@@ -1,3 +1,5 @@
+local lang = require("nautilus.custom.lang")
+
 return {
 	{
 		"nvim-treesitter/nvim-treesitter",
@@ -5,14 +7,11 @@ return {
 		build = ":TSUpdate",
 		main = "nvim-treesitter.configs",
 		dependencies = {
-			"windwp/nvim-ts-autotag", -- auto-tag closure support
+			"windwp/nvim-ts-autotag",
 		},
 		opts = {
 			auto_install = true,
-			ensure_installed = {
-				-- shell / config
-				"bash",
-				"cmake",
+			ensure_installed = vim.list_extend(lang.treesitter(), {
 				"dockerfile",
 				"git_config",
 				"gitattributes",
@@ -23,42 +22,8 @@ return {
 				"json5",
 				"jsonc",
 				"toml",
-				"yaml",
-
-				-- lua / nvim
-				"lua",
-				"luadoc",
-				"luap",
-				"printf",
-				"query",
-				"vim",
-				"vimdoc",
-
-				-- web / js / ts
-				"css",
-				"html",
-				"javascript",
-				"jsdoc",
-				"tsx",
-				"typescript",
 				"xml",
-
-				-- systems / native
-				"c",
-				"cpp",
-				"diff",
-				"rust",
-				"ron",
-
-				-- writing / docs
-				"comment",
-				"markdown",
-				"markdown_inline",
-				"regex",
-
-				-- other supported languages
-				"php",
-			},
+			}),
 			-- List of parsers to ignore installing (or "all")
 			ignore_install = {},
 			--sync_install = false,
@@ -84,11 +49,5 @@ return {
 				},
 			},
 		},
-		-- There are additional nvim-treesitter modules that you can use to interact
-		-- with nvim-treesitter. You should go explore a few and see what interests you:
-		--
-		--    - Incremental selection: Included, see `:help nvim-treesitter-incremental-selection-mod`
-		--    - Show your current context: https://github.com/nvim-treesitter/nvim-treesitter-context
-		--    - Treesitter + textobjects: https://github.com/nvim-treesitter/nvim-treesitter-textobjects
 	},
 } -- Synthax Highlighting

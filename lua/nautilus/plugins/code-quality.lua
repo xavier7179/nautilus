@@ -1,3 +1,5 @@
+local lang = require("nautilus.custom.lang")
+
 return {
 	-- Formatters
 	{
@@ -20,15 +22,8 @@ return {
 		},
 		opts = function()
 			return {
-				formatters_by_ft = {},
-				formatters = {
-					--	stylua = {
-					--		prepend_args = {
-					--			"--collapse-simple-statement",
-					--			"Always",
-					--		},
-					--	},
-				},
+				formatters_by_ft = lang.conform_by_ft(),
+				formatters = {},
 				default_format_opts = {
 					lsp_format = "fallback",
 				},
@@ -50,7 +45,7 @@ return {
 		event = { "BufReadPre", "BufNewFile" },
 		opts = function()
 			return {
-				linters_by_ft = {},
+				linters_by_ft = lang.linters_by_ft(),
 			}
 		end,
 		config = function(_, opts)
@@ -69,11 +64,11 @@ return {
 		end,
 	},
 
-	{
-		"nvimdev/guard.nvim",
-		ft = { "c", "cpp" },
-		dependencies = {
-			"nvimdev/guard-collection",
-		},
-	},
+	--{
+	--	"nvimdev/guard.nvim",
+	--	ft = { "c", "cpp" },
+	--	dependencies = {
+	--		"nvimdev/guard-collection",
+	--	},
+	-- },
 }

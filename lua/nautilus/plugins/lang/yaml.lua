@@ -1,3 +1,5 @@
+local lang = require("nautilus.custom.lang")
+
 return {
 	{
 		"b0o/SchemaStore.nvim",
@@ -6,7 +8,7 @@ return {
 
 	{
 		"neovim/nvim-lspconfig",
-		ft = { "yaml", "yml" },
+		ft = lang.ft("yaml"),
 		dependencies = {
 			"b0o/SchemaStore.nvim",
 		},
@@ -16,7 +18,7 @@ return {
 
 			local capabilities = require("blink.cmp").get_lsp_capabilities()
 
-			opts.servers.yamlls = {
+			opts.servers.yamlls = vim.tbl_deep_extend("force", opts.servers.yamlls or {}, {
 				capabilities = vim.tbl_deep_extend("force", capabilities, {
 					textDocument = {
 						foldingRange = {
@@ -52,24 +54,9 @@ return {
 						},
 					},
 				},
-			}
+			})
 
 			return opts
-		end,
-	},
-
-	{
-		"mfussenegger/nvim-lint",
-		optional = true,
-		opts = function(_, opts)
-			opts.linters_by_ft = opts.linters_by_ft or {}
-			opts.linters_by_ft.yaml = { "yamllint" }
-			opts.linters_by_ft.yml = { "yamllint" }
-			return opts
-		end,
-		config = function(_, opts)
-			local lint = require("lint")
-			lint.linters_by_ft = vim.tbl_deep_extend("force", lint.linters_by_ft or {}, opts.linters_by_ft or {})
 		end,
 	},
 }
