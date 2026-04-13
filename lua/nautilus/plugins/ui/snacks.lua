@@ -2,7 +2,8 @@ return {
 	{
 		"folke/snacks.nvim",
 		priority = 1000,
-		lazy = false,
+		event = "VeryLazy",
+		--lazy = false,
 		---@type snacks.Config
 		opts = {
 			animate = { enabled = true },

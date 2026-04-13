@@ -42,7 +42,7 @@ return {
 	-- Linters
 	{
 		"mfussenegger/nvim-lint",
-		event = { "BufReadPre", "BufNewFile" },
+		event = { "BufReadPost", "BufNewFile" },
 		opts = function()
 			return {
 				linters_by_ft = lang.linters_by_ft(),

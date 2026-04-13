@@ -52,6 +52,7 @@ All other tools (shellcheck, eslint, phpcs, markdownlint-cli2, yamllint, biome, 
 ## Post-Install (OSX)
 
 - Update `.zshrc` setting the default editor: `export EDITOR=nvim`
+- **Italian keyboard:** `options.lua` maps `è` and `+` to `[` and `]` via `langmap`. Non-Italian keyboard users should remove or adjust the `opt.langmap` line in `lua/nautilus/core/options.lua`.
 
 ## Features
 
@@ -68,6 +69,7 @@ All other tools (shellcheck, eslint, phpcs, markdownlint-cli2, yamllint, biome, 
 | which-key.nvim | Keymap hints |
 | render-markdown.nvim | In-buffer rendered Markdown |
 | nvim-highlight-colors | Inline color code previews |
+| showkeys | Displays pressed keys on screen (toggle with `<leader>uK`) |
 
 ### Completion
 
@@ -87,7 +89,6 @@ All other tools (shellcheck, eslint, phpcs, markdownlint-cli2, yamllint, biome, 
 | mason.nvim | LSP / DAP / linter / formatter installer |
 | conform.nvim | Formatting on save |
 | nvim-lint | Linting on save / insert leave |
-| guard.nvim | Additional C/C++ linting |
 
 ### Debugging
 
@@ -123,7 +124,7 @@ All other tools (shellcheck, eslint, phpcs, markdownlint-cli2, yamllint, biome, 
 | Comment.nvim | Smart commenting with Treesitter context |
 | todo-comments.nvim | Highlight and navigate TODO/FIXME/etc. |
 | auto-session | Session save and restore |
-| vim-pencil | Soft-wrap writing mode for Markdown / LaTeX |
+| vim-pencil | Soft-wrap writing mode for Markdown |
 
 ### Language Support
 

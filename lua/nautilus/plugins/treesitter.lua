@@ -10,7 +10,7 @@ return {
 			"windwp/nvim-ts-autotag",
 		},
 		opts = {
-			auto_install = true,
+			-- auto_install = true,
 			ensure_installed = vim.list_extend(lang.treesitter(), {
 				"dockerfile",
 				"git_config",

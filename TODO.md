@@ -14,6 +14,8 @@
 [ ] More mini plugins
 [ ] Hologram.nvim
 [ ] Edgy templates for each type of Supported Language (with [edge-group.vim](https://github.com/lucobellic/edgy-group.nvim)?)
+[ ] Evaluate placing back overseer
+[ ] Evaluate introducing neotest
 
 ## Language support (= LSP, Linter, Formatter, Debugger, Extras)
 

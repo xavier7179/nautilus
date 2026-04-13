@@ -15,8 +15,6 @@ if not (vim.uv or vim.loop).fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
-local core = require("nautilus.core.functions")
-
 require("lazy").setup({
 	spec = {
 		{ import = "nautilus.plugins" }, -- common plugins
@@ -27,7 +25,7 @@ require("lazy").setup({
 }, {
 	-- Enable automatic checks for update but without notification
 	checker = {
-		enabled = true,
+		enabled = false, -- disabled
 		notify = false,
 	},
 	-- Stop notification of config updates
@@ -36,7 +34,6 @@ require("lazy").setup({
 	},
 	install = {
 		-- Set the colorscheme for the `:Lazy` UI
-		-- colorscheme = { core.getColorscheme("default") },
 		colorscheme = { require("nautilus.custom.colorscheme").get_colorscheme("default") },
 	},
 	ui = {

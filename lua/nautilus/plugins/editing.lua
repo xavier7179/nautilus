@@ -34,7 +34,7 @@ return {
 	},
 	{ -- Comments management
 		"numToStr/Comment.nvim",
-		event = { "BufReadPre", "BufNewFile" },
+		keys = { "gc", "gb" },
 		dependencies = {
 			"JoosepAlviste/nvim-ts-context-commentstring",
 		},
