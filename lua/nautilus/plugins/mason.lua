@@ -54,6 +54,8 @@ return {
 	{
 		"WhoIsSethDaniel/mason-tool-installer.nvim",
 		opts = {
+			-- Only enabled services contribute tools here.
+			-- Disabled services may still be configured in the registry for readability.
 			ensure_installed = merge_unique(lang.lsp_mason(), lang.format_mason(), lang.lint_mason(), lang.dap_mason()),
 		},
 	},

@@ -4,7 +4,7 @@
 
 [X] Advanced Theme (from [here](https://github.com/folke/snacks.nvim/discussions/1239))
 [X] Remove telescope and place Snacks pickers
-[ ] Check the landing page for Git not to report process exit when no changes are detected
+[X] Check the landing page for Git not to report process exit when no changes are detected
 
 ## Plugins
 
@@ -14,8 +14,8 @@
 [ ] More mini plugins
 [ ] Hologram.nvim
 [ ] Edgy templates for each type of Supported Language (with [edge-group.vim](https://github.com/lucobellic/edgy-group.nvim)?)
-[ ] Evaluate placing back overseer
-[ ] Evaluate introducing neotest
+[X] Evaluate placing back overseer
+[X] Evaluate introducing neotest
 
 ## Language support (= LSP, Linter, Formatter, Debugger, Extras)
 

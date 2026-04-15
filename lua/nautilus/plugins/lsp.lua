@@ -105,6 +105,8 @@ return {
 			local capabilities = require("blink.cmp").get_lsp_capabilities()
 
 			for server_name, server_opts in pairs(opts.servers or {}) do
+				-- Language modules may still contribute server configs that are explicitly disabled.
+				-- Keep the config visible, but skip activation at runtime.
 				if server_opts.enabled == false then goto continue end
 
 				server_opts.capabilities =

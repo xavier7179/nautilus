@@ -1,3 +1,10 @@
+-- Language capability registry
+--
+-- Notes:
+-- - Services may stay fully configured even when `enabled = false`
+-- - This is intentional for readability and future activation
+-- - Runtime/plugin consumers must go through `nautilus.custom.lang`
+--   which filters disabled services out unless raw access is requested
 return {
 	bash = {
 		ft = { "sh", "bash", "zsh" },
@@ -25,12 +32,20 @@ return {
 			completion = {
 				enabled = true,
 			},
+			tests = {
+				enabled = false,
+				adapters = {},
+			},
+			tasks = {
+				enabled = false,
+				commands = {},
+			},
 		},
 	},
 
 	c = {
-		ft = { "c", "cpp" },
-		treesitter = { "c", "cpp", "diff" },
+		ft = { "c", "cpp", "objc", "objcpp", "cuda", "proto" },
+		treesitter = { "c", "cpp", "cuda", "proto" },
 		services = {
 			lsp = {
 				enabled = true,
@@ -53,6 +68,14 @@ return {
 			},
 			completion = {
 				enabled = true,
+			},
+			tests = {
+				enabled = false,
+				adapters = {},
+			},
+			tasks = {
+				enabled = false,
+				commands = {},
 			},
 		},
 	},
@@ -83,6 +106,18 @@ return {
 			completion = {
 				enabled = true,
 			},
+			tests = {
+				enabled = false,
+				adapters = {},
+			},
+			tasks = {
+				enabled = true,
+				commands = {
+					configure = { "cmake", "-S", ".", "-B", "build" },
+					build = { "cmake", "--build", "build" },
+					test = { "ctest", "--test-dir", "build", "--output-on-failure" },
+				},
+			},
 		},
 	},
 
@@ -111,6 +146,18 @@ return {
 			},
 			completion = {
 				enabled = true,
+			},
+			tests = {
+				enabled = true,
+				adapters = { "vitest" },
+			},
+			tasks = {
+				enabled = true,
+				commands = {
+					test = { "npm", "test" },
+					build = { "npm", "run", "build" },
+					dev = { "npm", "run", "dev" },
+				},
 			},
 		},
 	},
@@ -141,6 +188,14 @@ return {
 			completion = {
 				enabled = true,
 			},
+			tests = {
+				enabled = false,
+				adapters = { "plenary" },
+			},
+			tasks = {
+				enabled = false,
+				commands = {},
+			},
 		},
 	},
 
@@ -170,12 +225,20 @@ return {
 			completion = {
 				enabled = true,
 			},
+			tests = {
+				enabled = false,
+				adapters = {},
+			},
+			tasks = {
+				enabled = false,
+				commands = {},
+			},
 		},
 	},
 
 	php = {
 		ft = { "php" },
-		treesitter = { "php" },
+		treesitter = { "php", "phpdoc" },
 		services = {
 			lsp = {
 				enabled = true,
@@ -198,6 +261,18 @@ return {
 			},
 			completion = {
 				enabled = true,
+			},
+			tests = {
+				enabled = true,
+				adapters = { "phpunit" },
+			},
+			tasks = {
+				enabled = true,
+				commands = {
+					test = { "composer", "test" },
+					lint = { "vendor/bin/phpcs" },
+					fix = { "vendor/bin/php-cs-fixer", "fix" },
+				},
 			},
 		},
 	},
@@ -228,6 +303,18 @@ return {
 			completion = {
 				enabled = true,
 			},
+			tests = {
+				enabled = true,
+				adapters = { "rust" },
+			},
+			tasks = {
+				enabled = true,
+				commands = {
+					test = { "cargo", "test" },
+					build = { "cargo", "build" },
+					run = { "cargo", "run" },
+				},
+			},
 		},
 	},
 
@@ -256,6 +343,14 @@ return {
 			},
 			completion = {
 				enabled = true,
+			},
+			tests = {
+				enabled = false,
+				adapters = {},
+			},
+			tasks = {
+				enabled = false,
+				commands = {},
 			},
 		},
 	},

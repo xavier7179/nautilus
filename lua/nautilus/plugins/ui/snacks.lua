@@ -81,30 +81,105 @@ return {
 						key = "b",
 						action = function() Snacks.gitbrowse() end,
 					},
-					function()
-						local in_git = Snacks.git.get_root() ~= nil
-						local cmds = {
-							{
-								icon = " ",
-								title = "Git Status",
-								cmd = "git --no-pager diff --stat -B -M -C",
-								height = 10,
-							},
-						}
-						return vim.tbl_map(
-							function(cmd)
-								return vim.tbl_extend("force", {
-									pane = 2,
-									section = "terminal",
-									enabled = in_git,
-									padding = 1,
-									ttl = 5 * 60,
-									indent = 3,
-								}, cmd)
-							end,
-							cmds
-						)
-					end,
+function()
+  -- Detect the repository root used by Snacks.
+  -- If there is no git root, we hide the whole section.
+  local git_root = Snacks.git.get_root()
+  if not git_root then
+    return {}
+  end
+
+  -- Check whether the repository already has a HEAD commit.
+  -- Freshly initialized repositories do not, so they need a separate code path.
+  vim.fn.system({
+    "git",
+    "-C",
+    git_root,
+    "rev-parse",
+    "--verify",
+    "HEAD",
+  })
+  local is_fresh_repo = vim.v.shell_error ~= 0
+
+  local cmd
+
+  if is_fresh_repo then
+    -- Fresh repo path:
+    -- We compute two stats:
+    --   1. staged changes   -> index vs empty tree
+    --   2. unstaged changes -> working tree vs index
+    --
+    -- If both are empty, we show a simple "Working tree clean" message.
+    -- Otherwise we print each section only when it has content.
+    cmd = table.concat({
+      "sh -c '",
+      "empty_tree=4b825dc642cb6eb9a060e54bf8d69288fbee4904;",
+      "staged=$(git -C "
+        .. vim.fn.shellescape(git_root)
+        .. " --no-pager diff --cached --stat \"$empty_tree\");",
+      "unstaged=$(git -C "
+        .. vim.fn.shellescape(git_root)
+        .. " --no-pager diff --stat);",
+      "printf \"No commits yet\\n\\nFirst-commit summary:\\n\";",
+      "if [ -z \"$staged\" ] && [ -z \"$unstaged\" ]; then ",
+      "  printf \"Working tree clean\\n\";",
+      "else ",
+      "  if [ -n \"$staged\" ]; then ",
+      "    printf \"Staged:\\n%s\\n\" \"$staged\";",
+      "  fi;",
+      "  if [ -n \"$staged\" ] && [ -n \"$unstaged\" ]; then ",
+      "    printf \"\\n\";",
+      "  fi;",
+      "  if [ -n \"$unstaged\" ]; then ",
+      "    printf \"Unstaged:\\n%s\\n\" \"$unstaged\";",
+      "  fi;",
+      "fi'",
+    }, "")
+  else
+    -- Normal repo path:
+    -- show the usual working-tree diff summary against HEAD.
+    cmd = "git -C "
+      .. vim.fn.shellescape(git_root)
+      .. " --no-pager diff --stat -B -M -C"
+  end
+
+  return {
+    pane = 2,
+    section = "terminal",
+    enabled = true,
+    padding = 1,
+    ttl = 5 * 60,
+    indent = 3,
+    icon = " ",
+    title = "Git Status",
+    cmd = cmd,
+    height = 10,
+  }
+end,
+--					function()
+--						local in_git = Snacks.git.get_root() ~= nil
+--						local cmds = {
+--							{
+--								icon = " ",
+--								title = "Git Status",
+--								cmd = "git --no-pager diff --stat -B -M -C",
+--								height = 10,
+--							},
+--						}
+--						return vim.tbl_map(
+--							function(cmd)
+--								return vim.tbl_extend("force", {
+--									pane = 2,
+--									section = "terminal",
+--									enabled = in_git,
+--									padding = 1,
+--									ttl = 5 * 60,
+--									indent = 3,
+--								}, cmd)
+--							end,
+--							cmds
+--						)
+--					end,
 					{ section = "startup" },
 				},
 			},

@@ -22,7 +22,8 @@ return {
 			-- NEW: Copilot completion source for Blink
 			"fang2hou/blink-copilot",
 		},
-		event = { "BufReadPre", "BufNewFile" },
+		--event = { "BufReadPre", "BufNewFile" },
+		event = "InsertEnter", -- load when entering insert mode for the first time
 		-- use a release tag to download pre-built binaries
 		version = "1.*",
 		-- AND/OR build from source, requires nightly: https://rust-lang.github.io/rustup/concepts/channels.html#working-with-nightly-rust

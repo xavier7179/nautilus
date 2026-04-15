@@ -53,4 +53,9 @@ return {
 			return opts
 		end,
 	},
+	{
+		"nvim-neotest/neotest-plenary",
+		optional = true,
+		ft = lang.ft("lua"),
+	},
 }

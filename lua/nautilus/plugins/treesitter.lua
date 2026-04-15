@@ -3,7 +3,8 @@ local lang = require("nautilus.custom.lang")
 return {
 	{
 		"nvim-treesitter/nvim-treesitter",
-		event = { "BufReadPre", "BufNewFile" },
+		-- event = { "BufReadPre", "BufNewFile" },
+		event = { "BufReadPost", "BufNewFile" },
 		build = ":TSUpdate",
 		main = "nvim-treesitter.configs",
 		dependencies = {

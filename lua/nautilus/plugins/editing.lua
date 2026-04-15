@@ -8,7 +8,7 @@
 return {
 	{
 		"brenoprata10/nvim-highlight-colors",
-		--	event = { "BufReadPost", "BufNewFile" },
+		event = { "BufReadPost", "BufNewFile" },
 		opts = {},
 	}, -- highlight color codes in editing
 	{ -- folding plugin
@@ -53,7 +53,7 @@ return {
 	},
 	{ -- TODO comments navigations
 		"folke/todo-comments.nvim",
-		event = { "BufReadPre", "BufNewFile" },
+		--event = { "BufReadPost", "BufNewFile" },
 		cmd = { "TodoTrouble" },
 		opts = {},
 		keys = {

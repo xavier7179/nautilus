@@ -124,4 +124,9 @@ return {
 			return opts
 		end,
 	},
+	{
+		"rouge8/neotest-rust",
+		optional = true,
+		ft = lang.ft("rust"),
+	},
 }

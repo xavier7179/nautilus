@@ -1,22 +1,39 @@
 return {
 	-- Split join (gS to toggle)
-	{ "echasnovski/mini.splitjoin", version = "*", opts = {} },
-	{ "echasnovski/mini.icons", version = "*" }, -- mini icons required by many plugins
+	{
+		"echasnovski/mini.splitjoin",
+		version = "*",
+		opts = {},
+	},
+	{
+		"echasnovski/mini.icons",
+		event = "VeryLazy",
+		version = "*",
+	}, -- mini icons required by many plugins
 	-- Better Around/Inside textobjects
 	--
 	-- Examples:
 	--  - va)  - [V]isually select [A]round [)]paren
 	--  - yinq - [Y]ank [I]nside [N]ext [Q]uote
 	--  - ci'  - [C]hange [I]nside [']quote
-	{ "echasnovski/mini.ai", opts = { n_lines = 500 } },
+	{
+		"echasnovski/mini.ai",
+		event = { "BufReadPost", "BufNewFile" },
+		opts = { n_lines = 500 },
+	},
 	-- Add/delete/replace surroundings (brackets, quotes, etc.)
 	--
 	-- - saiw) - [S]urround [A]dd [I]nner [W]ord [)]Paren
 	-- - sd'   - [S]urround [D]elete [']quotes
 	-- - sr)'  - [S]urround [R]eplace [)] [']
-	{ "echasnovski/mini.surround", version = "*", opts = {} },
+	{
+		"echasnovski/mini.surround",
+		version = "*",
+		opts = {},
+	},
 	{
 		"echasnovski/mini.tabline",
+		event = "VeryLazy",
 		version = "*",
 		opts = {
 			format = function(buf_id, label)
@@ -25,5 +42,10 @@ return {
 			end,
 		},
 	},
-	{ "echasnovski/mini.pairs", version = "*", event = { "InsertEnter" }, opts = {} },
+	{
+		"echasnovski/mini.pairs",
+		version = "*",
+		event = { "InsertEnter" },
+		opts = {},
+	},
 }

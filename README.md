@@ -54,6 +54,14 @@ All other tools (shellcheck, eslint, phpcs, markdownlint-cli2, yamllint, biome, 
 - Update `.zshrc` setting the default editor: `export EDITOR=nvim`
 - **Italian keyboard:** `options.lua` maps `è` and `+` to `[` and `]` via `langmap`. Non-Italian keyboard users should remove or adjust the `opt.langmap` line in `lua/nautilus/core/options.lua`.
 
+## Language architecture
+
+- `lua/nautilus/custom/lang-registry.lua` is the declarative capability registry
+- Services may remain fully configured even when `enabled = false`
+- `lua/nautilus/custom/lang.lua` is the only supported access layer for consumers
+- Shared plugin modules consume normalized enabled-only data from `lang.lua`
+- Per-language plugin files provide concrete implementation details and overrides
+
 ## Features
 
 ### UI
