@@ -53,6 +53,14 @@ return {
 
 	{
 		"WhoIsSethDaniel/mason-tool-installer.nvim",
+		cmd = {
+			"MasonToolsInstall",
+			"MasonToolsUpdate",
+			"MasonToolsClean",
+			"MasonToolsUpdateSync",
+			"MasonToolsInstallSync",
+		},
+		dependencies = { "mason-org/mason.nvim" },
 		opts = {
 			-- Only enabled services contribute tools here.
 			-- Disabled services may still be configured in the registry for readability.

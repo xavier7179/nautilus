@@ -3,6 +3,10 @@ return {
 		"lewis6991/gitsigns.nvim",
 		event = { "BufReadPost", "BufNewFile" },
 		opts = {
+			attach_to_untracked = false,
+			current_line_blame = false,
+			sign_priority = 6,
+			update_debounce = 200,
 			on_attach = function(bufnr)
 				local gs = package.loaded.gitsigns
 

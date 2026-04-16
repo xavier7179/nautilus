@@ -4,6 +4,9 @@ return {
 		"echasnovski/mini.splitjoin",
 		version = "*",
 		opts = {},
+		keys = {
+			{ "gS", mode = { "n", "x" }, desc = "Toggle split/join" },
+		},
 	},
 	{
 		"echasnovski/mini.icons",
@@ -18,8 +21,12 @@ return {
 	--  - ci'  - [C]hange [I]nside [']quote
 	{
 		"echasnovski/mini.ai",
-		event = { "BufReadPost", "BufNewFile" },
+		version = "*",
 		opts = { n_lines = 500 },
+		keys = {
+			{ "a", mode = { "o", "x" }, desc = "Around textobject" },
+			{ "i", mode = { "o", "x" }, desc = "Inside textobject" },
+		},
 	},
 	-- Add/delete/replace surroundings (brackets, quotes, etc.)
 	--
@@ -30,6 +37,15 @@ return {
 		"echasnovski/mini.surround",
 		version = "*",
 		opts = {},
+		keys = {
+			{ "sa", mode = { "n", "v" }, desc = "Add surround" },
+			{ "sd", mode = "n", desc = "Delete surround" },
+			{ "sr", mode = "n", desc = "Replace surround" },
+			{ "sf", mode = "n", desc = "Find surround right" },
+			{ "sF", mode = "n", desc = "Find surround left" },
+			{ "sh", mode = "n", desc = "Highlight surround" },
+			{ "sn", mode = "n", desc = "Update n_lines" },
+		},
 	},
 	{
 		"echasnovski/mini.tabline",

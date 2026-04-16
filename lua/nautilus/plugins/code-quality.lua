@@ -55,12 +55,37 @@ return {
 
 			local lint_augroup = vim.api.nvim_create_augroup("lint", { clear = true })
 
-			vim.api.nvim_create_autocmd({ "BufEnter", "BufWritePost", "InsertLeave" }, {
+			local function can_lint(bufnr)
+				if not vim.api.nvim_buf_is_valid(bufnr) then return false end
+				if vim.bo[bufnr].buftype ~= "" then return false end
+				if not vim.bo[bufnr].modifiable then return false end
+				if vim.bo[bufnr].filetype == "" then return false end
+				return true
+			end
+
+			local function do_lint(args)
+				local bufnr = args.buf
+				if can_lint(bufnr) then lint.try_lint() end
+			end
+
+			vim.api.nvim_create_autocmd("BufWritePost", {
 				group = lint_augroup,
-				callback = function()
-					if vim.bo.modifiable then lint.try_lint() end
+				callback = do_lint,
+			})
+
+			vim.api.nvim_create_autocmd("InsertLeave", {
+				group = lint_augroup,
+				callback = function(args)
+					if vim.bo[args.buf].modified then do_lint(args) end
 				end,
 			})
+
+			--			vim.api.nvim_create_autocmd({ "BufEnter", "BufWritePost", "InsertLeave" }, {
+			--				group = lint_augroup,
+			--				callback = function()
+			--					if vim.bo.modifiable then lint.try_lint() end
+			--				end,
+			--			})
 		end,
 	},
 

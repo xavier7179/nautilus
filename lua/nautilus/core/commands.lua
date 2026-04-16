@@ -56,6 +56,11 @@ end, {
 	desc = "Show resolved language configuration for current buffer",
 })
 
+vim.api.nvim_create_user_command(
+	"ToolsSync",
+	function() vim.cmd("MasonToolsInstall") end,
+	{ desc = "Install/update configured Mason tools" }
+)
 -- Highlight when yanking (copying) text
 --  Try it with `yap` in normal mode
 --  See `:help vim.hl.on_yank()`
