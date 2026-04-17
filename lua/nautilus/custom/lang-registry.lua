@@ -200,7 +200,7 @@ return {
 	},
 
 	markdown = {
-		ft = { "markdown", "md" },
+		ft = { "markdown" },
 		treesitter = { "markdown", "markdown_inline", "comment", "regex" },
 		services = {
 			lsp = {

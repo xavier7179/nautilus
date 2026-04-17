@@ -56,16 +56,16 @@ return {
 						vim.keymap.set(mode, keys, func, { buffer = event.buf, desc = "LSP: " .. desc })
 					end
 
-					map("gR", function() snacks.lsp_references() end, "[G]oto [R]eferences")
-					map("gD", function() snacks.lsp_declarations() end, "[G]oto [D]eclaration")
-					map("gd", function() snacks.lsp_definitions() end, "[G]oto [D]efinition")
-					map("gi", function() snacks.lsp_implementations() end, "[G]oto [I]mplementation")
-					map("gt", function() snacks.lsp_type_definitions() end, "[G]oto [T]ype Definition")
-					map("ga", vim.lsp.buf.code_action, "[G]oto Code [A]ction", { "n", "x" })
-					map("gr", vim.lsp.buf.rename, "[R]e[n]ame")
-					map("gl", vim.diagnostic.open_float, "[G]oto f[L]oat Diagnostic")
-					map("ss", function() snacks.lsp_symbols() end, "[S]earch LSP [S]ymbols")
-					map("sS", function() snacks.lsp_workspace_symbols() end, "[S]earch LSP Workspace [S]ymbols")
+				map("gR", function() snacks.lsp_references() end, "[G]oto [R]eferences")
+				map("gD", function() snacks.lsp_declarations() end, "[G]oto [D]eclaration")
+				map("gd", function() snacks.lsp_definitions() end, "[G]oto [D]efinition")
+				map("gi", function() snacks.lsp_implementations() end, "[G]oto [I]mplementation")
+				map("gt", function() snacks.lsp_type_definitions() end, "[G]oto [T]ype Definition")
+				map("ga", vim.lsp.buf.code_action, "[G]oto Code [A]ction", { "n", "x" })
+				map("gr", vim.lsp.buf.rename, "[R]e[n]ame")
+				map("gl", vim.diagnostic.open_float, "[G]oto f[L]oat Diagnostic")
+				map("<leader>ss", function() snacks.lsp_symbols() end, "[S]earch LSP [S]ymbols")
+				map("<leader>sS", function() snacks.lsp_workspace_symbols() end, "[S]earch LSP Workspace [S]ymbols")
 
 					local client = vim.lsp.get_client_by_id(event.data.client_id)
 					if
@@ -87,7 +87,7 @@ return {
 						})
 
 						vim.api.nvim_create_autocmd("LspDetach", {
-							group = vim.api.nvim_create_augroup("LspDetach", { clear = true }),
+							group = vim.api.nvim_create_augroup("LspDetach", { clear = false }),
 							callback = function(event2)
 								vim.lsp.buf.clear_references()
 								vim.api.nvim_clear_autocmds({ group = "LspHighlight", buffer = event2.buf })

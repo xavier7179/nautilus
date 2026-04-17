@@ -12,45 +12,61 @@ return {
 		opts = {},
 	}, -- highlight color codes in editing
 	{ -- folding plugin
-		"kevinhwang91/nvim-ufo",
-		dependencies = "kevinhwang91/promise-async",
-		config = function()
-			vim.o.foldcolumn = "1" -- '0' is not bad
-			vim.o.foldlevel = 99 -- Using ufo provider need a large value, feel free to decrease the value
-			vim.o.foldlevelstart = 99
-			vim.o.foldenable = true
-
-			vim.keymap.set("n", "zR", require("ufo").openAllFolds, { desc = "Open all folds" })
-			vim.keymap.set("n", "zM", require("ufo").closeAllFolds, { desc = "Close all folds" })
-			vim.keymap.set("n", "zK", function()
-				local winid = require("ufo").peekFoldedLinesUnderCursor()
-				if not winid then vim.lsp.buf.hover() end
-			end, { desc = "Peek Fold" })
-
-			require("ufo").setup({
-				provider_selector = function(bufnr, filetype, buftype) return { "treesitter", "indent" } end,
-			})
+		"chrisgrieser/nvim-origami",
+		event = { "BufReadPost", "BufNewFile" },
+		--event = "VeryLazy",
+		init = function()
+			vim.opt.foldlevel = 99
+			vim.opt.foldlevelstart = 99
 		end,
-	},
-	{ -- Comments management
-		"numToStr/Comment.nvim",
-		keys = { "gc", "gb" },
-		dependencies = {
-			"JoosepAlviste/nvim-ts-context-commentstring",
+		opts = {
+			useLspFoldsWithTreesitterFallback = { enabled = true },
+			pauseFoldsOnSearch = true,
+			foldtext = { enabled = true },
+			autoFold = { enabled = false },
+			-- h/l/^/$ are overloaded: h=fold, l=unfold, ^=fold recursive, $=unfold recursive.
+			-- To use dedicated keys instead, set setup=false and add:
+			--   vim.keymap.set("n", "zc", function() require("origami").h() end)
+			--   vim.keymap.set("n", "zo", function() require("origami").l() end)
+			--   vim.keymap.set("n", "zC", function() require("origami").caret() end)
+			--   vim.keymap.set("n", "zO", function() require("origami").dollar() end)
+			foldKeymaps = { setup = true },
 		},
-		config = function()
-			-- import comment plugin safely
-			local comment = require("Comment")
-
-			local ts_context_commentstring = require("ts_context_commentstring.integrations.comment_nvim")
-
-			-- enable comment
-			comment.setup({
-				-- for commenting tsx, jsx, svelte, html files
-				pre_hook = ts_context_commentstring.create_pre_hook(),
-			})
+		keys = {
+			{ "zR", "zR", desc = "Open all folds" },
+			{ "zM", "zM", desc = "Close all folds" },
+		},
+	},
+	{
+		"JoosepAlviste/nvim-ts-context-commentstring",
+		opts = {
+			enable_autocmd = false,
+		},
+		init = function()
+			local get_option = vim.filetype.get_option
+			vim.filetype.get_option = function(filetype, option)
+				return option == "commentstring"
+						and require("ts_context_commentstring.internal").calculate_commentstring()
+					or get_option(filetype, option)
+			end
 		end,
 	},
+	-- { -- Comments management
+	-- 	"numToStr/Comment.nvim",
+	-- 	keys = { "gc", "gb" },
+	-- 	dependencies = 		config = function()
+	-- 		-- import comment plugin safely
+	-- 		local comment = require("Comment")
+
+	-- 		local ts_context_commentstring = require("ts_context_commentstring.integrations.comment_nvim")
+
+	-- 		-- enable comment
+	-- 		comment.setup({
+	-- 			-- for commenting tsx, jsx, svelte, html files
+	-- 			pre_hook = ts_context_commentstring.create_pre_hook(),
+	-- 		})
+	-- 	end,
+	-- },
 	{ -- TODO comments navigations
 		"folke/todo-comments.nvim",
 		--event = { "BufReadPost", "BufNewFile" },

@@ -1,9 +1,14 @@
-vim.g.disable_autoformat = true
+-- Disable autoformat for markdown buffers only (buffer-local scope)
+vim.b.disable_autoformat = true
 
 -- Fix markdown indentation settings
 vim.g.markdown_recommended_style = 0
 
-vim.keymap.set("n", "<leader>um", function()
+vim.opt_local.tabstop = 2 -- spaces for tab
+vim.opt_local.softtabstop = 2
+vim.opt_local.shiftwidth = 2 -- spaces for indent width
+
+vim.keymap.set("n", "<leader>mm", function()
 	require("snacks")
 		.toggle({
 			name = "Toggle Render Markdown",

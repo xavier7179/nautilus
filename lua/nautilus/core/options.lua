@@ -15,8 +15,8 @@ local opt = vim.opt
 -- right now is limited to map:
 -- è -> [
 -- + -> ]
-opt.langmap = "è+;[]"
-
+-- opt.langmap = "è+;[]" -- not working
+--
 -- Don't show the mode, since it's already in the status line
 opt.showmode = false
 
@@ -76,9 +76,6 @@ end)
 -- Case-insensitive searching UNLESS \C or one or more capital letters in the search term
 vim.o.ignorecase = true
 vim.o.smartcase = true
-
--- Keep signcolumn on by default
-vim.o.signcolumn = "yes"
 
 -- Decrease update time
 vim.o.updatetime = 250

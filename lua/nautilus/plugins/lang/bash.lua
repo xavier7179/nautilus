@@ -57,8 +57,9 @@ return {
 				},
 			}
 
-			dap.configurations.bash = dap.configurations.sh
-			dap.configurations.zsh = dap.configurations.sh
+			-- deepcopy to avoid shared table mutation if any plugin appends to one config
+			dap.configurations.bash = vim.deepcopy(dap.configurations.sh)
+			dap.configurations.zsh = vim.deepcopy(dap.configurations.sh)
 		end,
 	},
 }

@@ -31,6 +31,7 @@ return {
 		"stevearc/conform.nvim",
 		optional = true,
 		opts = function(_, opts)
+			opts.formatters = opts.formatters or {}
 			opts.formatters.clang_format = function(bufnr)
 				local config_path = require("nautilus.core.functions").get_file_with_path(bufnr, "clang-format")
 				local args = {}

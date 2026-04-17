@@ -5,9 +5,9 @@ return {
 		opts = {
 			use_icons = vim.g.have_nerd_font,
 		},
-		config = function()
+		config = function(_, opts)
 			-- Mini.statusline configuration
-			require("mini.statusline").setup({
+			require("mini.statusline").setup(vim.tbl_deep_extend("force", {
 				content = {
 					-- Left section: Add your overseer and lazy status updates here
 					active = function()
@@ -46,9 +46,9 @@ return {
 					end,
 				},
 
-				-- Use default options or customize as needed
-				set_vim_settings = true,
-			})
+			-- Use default options or customize as needed
+			set_vim_settings = true,
+		}, opts))
 		end,
 	},
 }

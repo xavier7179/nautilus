@@ -21,7 +21,14 @@ return {
 		opts = function(_, opts)
 			opts.formatters["markdownlint-cli2"] =
 				vim.tbl_deep_extend("force", opts.formatters["markdownlint-cli2"] or {}, {
-					args = { "--config", vim.fn.expand("$HOME/.markdownlint-cli2.yaml"), "--fix", "$FILENAME" },
+					args = function()
+						-- Use a custom markdownlint config if present, otherwise fall back
+						-- to markdownlint-cli2 defaults (which already use 2-space indent).
+						local config = vim.fn.expand("$HOME/.markdownlint-cli2.yaml")
+						if vim.fn.filereadable(config) == 1 then return { "--config", config, "--fix", "$FILENAME" } end
+						return { "--fix", "$FILENAME" }
+					end,
+					-- args = { "--config", vim.fn.expand("$HOME/.markdownlint-cli2.yaml"), "--fix", "$FILENAME" },
 				})
 
 			return opts
@@ -30,7 +37,7 @@ return {
 	{
 		"MeanderingProgrammer/render-markdown.nvim",
 		lazy = true,
-		ft = { "markdown", "norg", "rmd", "org", "codecompanion" },
+		ft = { "markdown", "norg", "rmd", "org", "codecompanion_chat" },
 		opts = {
 			code = {
 				sign = false,
@@ -56,13 +63,6 @@ return {
 	},
 
 	{
-		"chrisgrieser/nvim-origami",
-		optional = true,
-		ft = lang.ft("markdown"),
-		opts = {},
-	},
-
-	{
 		"AckslD/nvim-FeMaco.lua",
 		optional = true,
 		ft = lang.ft("markdown"),
@@ -77,7 +77,8 @@ return {
 			opts = opts or {}
 			opts.spec = opts.spec or {}
 
-			table.insert(opts.spec, { "<leader>m", group = "markdown" })
+			-- <leader>m group is declared globally in which-key.lua;
+			-- only the markdown-specific keymap is injected here.
 			table.insert(opts.spec, {
 				"<leader>mt",
 				function()

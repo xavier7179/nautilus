@@ -62,6 +62,226 @@ All other tools (shellcheck, eslint, phpcs, markdownlint-cli2, yamllint, biome, 
 - Shared plugin modules consume normalized enabled-only data from `lang.lua`
 - Per-language plugin files provide concrete implementation details and overrides
 
+## Keymap Tree
+
+All `<leader>` bindings follow a strict **tree organisation**: the first letter after `<leader>` identifies a group. Use `<leader>?` to open a which-key popup for the current buffer.
+
+### Navigation (no leader)
+
+| Key | Action |
+|-----|--------|
+| `gd` | Goto Definition |
+| `gD` | Goto Declaration |
+| `gR` | Goto References |
+| `gi` | Goto Implementation |
+| `gt` | Goto Type Definition |
+| `ga` | Code Action |
+| `gr` | Rename Symbol |
+| `gl` | Float Diagnostic |
+| `gS` | Toggle split/join (mini.splitjoin) |
+| `zR` | Open all folds |
+| `zM` | Close all folds |
+| `h` / `l` | Fold / unfold on cursor line (overloaded) |
+| `^` / `$` | Fold / unfold recursively (overloaded) |
+| `<leader>uz` | Toggle auto-fold |
+| `]h` / `[h` | Next / prev hunk |
+| `]t` / `[t` | Next / prev TODO comment |
+| `]q` / `[q` | Next / prev Trouble/Quickfix item |
+| `]]` / `[[` | Next / prev word reference |
+| `<S-h>` / `<S-l>` | Prev / next buffer |
+| `<C-hjkl>` | Navigate windows |
+| `<A-hjkl>` | Resize windows |
+| `<C-t>` | Toggle terminal |
+| `<C-f>` / `<C-b>` | Scroll LSP docs forward/backward |
+
+### `<leader>a` — AI
+
+| Key | Action |
+|-----|--------|
+| `<leader>ac` | Toggle Chat (CodeCompanion) |
+| `<leader>ao` | Actions / Options (CodeCompanion) |
+
+### `<leader>b` — Buffer
+
+| Key | Action |
+|-----|--------|
+| `<leader>bb` | Switch to other buffer |
+| `<leader>bd` | Delete buffer |
+| `<leader>bD` | Buffer diagnostics (Trouble) |
+| `<leader>bs` | Select scratch buffer |
+
+### `<leader>c` — Code
+
+| Key | Action |
+|-----|--------|
+| `<leader>cf` | Format buffer (conform.nvim) |
+| `<leader>cg` | CMake Generate |
+| `<leader>cb` | CMake Build |
+| `<leader>cr` | CMake Run |
+| `<leader>ct` | CMake Test |
+| `<leader>cR` | Rust Code Action (rustaceanvim, Rust buffers only) |
+
+### `<leader>d` — Debug
+
+| Key | Action |
+|-----|--------|
+| `<leader>db` | Toggle Breakpoint |
+| `<leader>dB` | Breakpoint Condition |
+| `<leader>dc` | Continue |
+| `<leader>dC` | Run to Cursor |
+| `<leader>de` | Eval (n/v) |
+| `<leader>di` | Step Into |
+| `<leader>do` | Step Out |
+| `<leader>dO` | Step Over |
+| `<leader>dp` | Pause |
+| `<leader>dr` | Rust Debuggables (rustaceanvim, Rust buffers only) |
+| `<leader>dR` | Toggle DAP REPL |
+| `<leader>dt` | Terminate |
+| `<leader>du` | Toggle DAP UI |
+
+### `<leader>f` — File
+
+| Key | Action |
+|-----|--------|
+| `<leader>fe` | Toggle File Explorer |
+| `<leader>fn` | New File |
+| `<leader>fR` | Rename File |
+
+### `<leader>g` — Git
+
+| Key | Action |
+|-----|--------|
+| `<leader>gg` | Lazygit |
+| `<leader>gl` | Lazygit Log (cwd) |
+| `<leader>gf` | Lazygit Current File History |
+| `<leader>gb` | Git Blame Line |
+| `<leader>gB` | Git Browse (n/v) |
+| **`<leader>gh` — Hunks** | |
+| `<leader>ghs` | Stage hunk (n/v) |
+| `<leader>ghr` | Reset hunk (n/v) |
+| `<leader>ghS` | Stage buffer |
+| `<leader>ghR` | Reset buffer |
+| `<leader>ghu` | Undo stage hunk |
+| `<leader>ghp` | Preview hunk |
+| `<leader>ghb` | Blame line (full) |
+| `<leader>ghB` | Toggle line blame |
+| `<leader>ghd` | Diff this |
+| `<leader>ghD` | Diff this ~ |
+
+### `<leader>m` — Markdown _(markdown buffers only)_
+
+| Key | Action |
+|-----|--------|
+| `<leader>mm` | Toggle Render Markdown |
+| `<leader>mt` | Update Markdown TOC |
+
+### `<leader>o` — Overseer (Tasks)
+
+| Key | Action |
+|-----|--------|
+| `<leader>or` | Run Task |
+| `<leader>ot` | Toggle Tasks panel |
+| `<leader>oa` | Task Quick Action |
+| `<leader>oc` | Configure (lang task) |
+| `<leader>ob` | Build (lang task) |
+| `<leader>od` | Dev task (lang task) |
+| `<leader>oR` | Run (lang task) |
+| `<leader>oT` | Test task (lang task) |
+
+### `<leader>p` — Project
+
+| Key | Action |
+|-----|--------|
+| `<leader>pd` | Project Diagnostics (Trouble) |
+| `<leader>ps` | Project Symbols (Trouble) |
+| `<leader>pL` | Location List (Trouble) |
+| `<leader>pQ` | Quickfix List (Trouble) |
+| `<leader>pT` | Project TODOs (Trouble) |
+
+### `<leader>s` — Search
+
+| Key | Action |
+|-----|--------|
+| `<leader>sf` | Search Files |
+| `<leader>sg` | Search Grep |
+| `<leader>sw` | Search Word / selection |
+| `<leader>sr` | Search Recent |
+| `<leader>sb` | Search Open Buffers (sidebar) |
+| `<leader>sB` | Grep Open Buffers |
+| `<leader>sp` | Search Projects |
+| `<leader>sc` | Search Config Files |
+| `<leader>sh` | Search Help Pages |
+| `<leader>sk` | Search Keymaps |
+| `<leader>ss` | Search LSP Symbols |
+| `<leader>sS` | Search LSP Workspace Symbols |
+| **`<leader>sn` — Noice** | |
+| `<leader>snl` | Noice Last Message |
+| `<leader>snh` | Noice History |
+| `<leader>sna` | Noice All |
+| `<leader>snd` | Dismiss All |
+
+### `<leader>t` — Test
+
+| Key | Action |
+|-----|--------|
+| `<leader>tn` | Test Nearest |
+| `<leader>tf` | Test File |
+| `<leader>tl` | Test Last |
+| `<leader>td` | Debug Test |
+| `<leader>ts` | Test Summary |
+| `<leader>to` | Test Output Panel |
+| `<leader>tO` | Test Output |
+| `<leader>tS` | Stop Test |
+
+### `<leader>u` — UI / Toggles
+
+| Key | Action |
+|-----|--------|
+| `<leader>uA` | Toggle Animate |
+| `<leader>ub` | Toggle Dark Background |
+| `<leader>uc` | Toggle Conceal Level |
+| `<leader>uC` | Pick Colorscheme |
+| `<leader>ud` | Toggle Diagnostics |
+| `<leader>uD` | Toggle Dim Mode |
+| `<leader>ug` | Toggle Indent Guides |
+| `<leader>uh` | Toggle Inlay Hints |
+| `<leader>uK` | Toggle Showkeys |
+| `<leader>ul` | Toggle Line Numbers |
+| `<leader>uL` | Toggle Relative Numbers |
+| `<leader>uP` | Toggle Profiler |
+| `<leader>uS` | Toggle Session Autosave |
+| `<leader>us` | Toggle Spelling |
+| `<leader>uT` | Toggle Treesitter |
+| `<leader>uw` | Toggle Wrap |
+
+### `<leader>w` — Window / Workspace
+
+| Key | Action |
+|-----|--------|
+| `<leader>wv` | Split window vertically |
+| `<leader>wh` | Split window horizontally |
+| `<leader>we` | Equalize splits |
+| `<leader>wc` | Close current split |
+| `<leader>wo` | Open new tab |
+| `<leader>wq` | Close current tab |
+| `<leader>wn` | Next tab |
+| `<leader>wp` | Previous tab |
+| `<leader>wt` | Current buffer in new tab |
+| `<leader>ws` | Save session |
+| `<leader>wr` | Session search |
+| `<leader>wl` | Restore last session |
+
+### Convenience leaves (single-key shortcuts)
+
+| Key | Action |
+|-----|--------|
+| `<leader>z` | Toggle Zen Mode |
+| `<leader>Z` | Toggle Zoom |
+| `<leader>.` | Toggle Scratch Buffer |
+| `<leader>n` | Notification History |
+| `<leader>N` | Neovim News |
+| `<leader>?` | Buffer Keymaps (which-key) |
+
 ## Features
 
 ### UI
@@ -95,7 +315,7 @@ All other tools (shellcheck, eslint, phpcs, markdownlint-cli2, yamllint, biome, 
 |--------|---------|
 | nvim-lspconfig | LSP client configuration |
 | mason.nvim | LSP / DAP / linter / formatter installer |
-| conform.nvim | Formatting on save |
+| conform.nvim | Formatting on save (`<leader>cf` for manual format) |
 | nvim-lint | Linting on save / insert leave |
 
 ### Debugging
@@ -110,7 +330,7 @@ All other tools (shellcheck, eslint, phpcs, markdownlint-cli2, yamllint, biome, 
 
 | Plugin | Purpose |
 |--------|---------|
-| gitsigns.nvim | Hunk signs, staging, blame, diff |
+| gitsigns.nvim | Hunk signs, staging, blame, diff (`<leader>gh*`) |
 | Snacks lazygit | Full lazygit UI (`<leader>gg`) |
 
 ### AI
@@ -125,13 +345,13 @@ All other tools (shellcheck, eslint, phpcs, markdownlint-cli2, yamllint, biome, 
 | Plugin | Purpose |
 |--------|---------|
 | mini.ai | Extended text objects: `va)`, `yinq`, `ci'`, ... |
-| mini.surround | Add / delete / replace surroundings |
+| mini.surround | Add / delete / replace surroundings (`sa`, `sd`, `sr`, …) |
 | mini.splitjoin | Toggle split/join (`gS`) |
 | mini.pairs | Auto-close brackets and quotes |
-| nvim-ufo | Modern fold provider (Treesitter + indent) |
-| Comment.nvim | Smart commenting with Treesitter context |
+| nvim-origami | LSP/Treesitter fold provider with fold decorations, auto-fold, and search-pause |
+| Comment.nvim | Smart commenting with Treesitter context (`gc`, `gb`) |
 | todo-comments.nvim | Highlight and navigate TODO/FIXME/etc. |
-| auto-session | Session save and restore |
+| auto-session | Session save and restore (`<leader>w{s,r,l}`) |
 | vim-pencil | Soft-wrap writing mode for Markdown |
 
 ### Language Support

@@ -89,7 +89,7 @@ return {
 								-- Enable emoji completion only for git commits and markdown.
 								-- By default, enabled for all file-types.
 								{ "gitcommit", "markdown" },
-								vim.o.filetype
+								vim.bo.filetype
 							)
 						end,
 					},

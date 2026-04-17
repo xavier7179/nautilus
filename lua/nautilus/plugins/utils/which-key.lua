@@ -1,6 +1,4 @@
 return {
-	-- which-key helps you remember key bindings by showing a popup
-	-- with the active keybindings of the command you started typing.
 	{
 		"folke/which-key.nvim",
 		event = "VeryLazy",
@@ -48,44 +46,41 @@ return {
 				},
 			},
 			spec = {
-				-- 		{
-				-- 			mode = { "n", "v" },
-				-- 			{ "<leader><tab>", group = "tabs" },
-				{ "<leader>a", group = "ai" },
-				-- 			{ "<leader>c", group = "code" },
-				-- 			{ "<leader>d", group = "debug" },
-				-- 			{ "<leader>dp", group = "profiler" },
-				{ "<leader>f", group = "file" },
-				-- 			{ "<leader>g", group = "git" },
-				-- 			{ "<leader>gh", group = "hunks" },
-				{ "<leader>p", group = "project (management)" },
-				-- 			{ "<leader>q", group = "quit/session" },
-				{ "<leader>s", group = "search" },
-				-- 			{ "<leader>u", group = "ui", icon = { icon = "󰙵 ", color = "cyan" } },
-				-- 			{ "<leader>x", group = "diagnostics/quickfix", icon = { icon = "󱖫 ", color = "green" } },
+				-- ── Navigation prefixes ──────────────────────────────────────
 				{ "[", group = "prev" },
 				{ "]", group = "next" },
-				-- 			{ "g", group = "goto" },
-				-- 			{ "gs", group = "surround" },
 				{ "z", group = "fold" },
-				-- 			{
-				-- 				"<leader>b",
-				-- 				group = "buffer",
-				-- 				expand = function()
-				-- 					return require("which-key.extras").expand.buf()
-				-- 				end,
-				-- 			},
-				-- 			{
-				-- 				"<leader>w",
-				-- 				group = "windows",
-				-- 				proxy = "<c-w>",
-				-- 				expand = function()
-				-- 					return require("which-key.extras").expand.win()
-				-- 				end,
-				-- 			},
-				-- 			-- better descriptions
-				-- 			{ "gx", desc = "Open with system app" },
-				-- 		},
+				{ "g", group = "goto / lsp" },
+
+				-- ── <leader> top-level groups ────────────────────────────────
+				{
+					{ "<leader>a", group = "ai",      icon = { icon = " ", color = "yellow" } },
+					{ "<leader>b", group = "buffer",  icon = { icon = "󰈔 ", color = "cyan" } },
+					{ "<leader>c", group = "code",    icon = { icon = "󰅪 ", color = "orange" } },
+					{ "<leader>d", group = "debug",   icon = { icon = " ", color = "red" } },
+					{ "<leader>f", group = "file",    icon = { icon = "󰉋 ", color = "blue" } },
+					{ "<leader>g", group = "git",     icon = { icon = "󰊢 ", color = "green" } },
+					{ "<leader>m", group = "markdown",icon = { icon = "󰍔 ", color = "cyan" } },
+					{ "<leader>o", group = "overseer",icon = { icon = "󰗇 ", color = "orange" } },
+					{ "<leader>p", group = "project", icon = { icon = "󰗋 ", color = "purple" } },
+					{ "<leader>s", group = "search",  icon = { icon = " ", color = "blue" } },
+					{ "<leader>t", group = "test",    icon = { icon = "󰙨 ", color = "green" } },
+					{ "<leader>u", group = "ui",      icon = { icon = "󰙵 ", color = "cyan" } },
+					{ "<leader>w", group = "window / workspace", icon = { icon = "󱂬 ", color = "azure" } },
+				},
+
+				-- ── <leader>g  sub-group ─────────────────────────────────────
+				{ "<leader>gh", group = "hunks", icon = { icon = "󰊢 ", color = "green" } },
+
+				-- ── <leader>s  sub-group ─────────────────────────────────────
+				{ "<leader>sn", group = "noice", icon = { icon = "󰍡 ", color = "purple" } },
+
+				-- ── Convenience single-key leaves (not groups) ───────────────
+				-- <leader>z   → Zen Mode      (defined in snacks.lua)
+				-- <leader>Z   → Zoom          (defined in snacks.lua)
+				-- <leader>.   → Scratch       (defined in snacks.lua)
+				-- <leader>n   → Notif history (defined in snacks.lua)
+				-- <leader>N   → Nvim news     (defined in snacks.lua)
 			},
 		},
 		keys = {

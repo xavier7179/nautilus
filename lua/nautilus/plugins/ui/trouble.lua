@@ -6,7 +6,7 @@ return {
 			-- "nvim-tree/nvim-web-devicons",
 			"folke/todo-comments.nvim",
 		},
-		-- cmd = { "Trouble" },
+		cmd = { "Trouble" },
 		opts = {
 			modes = {
 				lsp = {
@@ -17,17 +17,17 @@ return {
 		keys = {
 			{
 				"<leader>pd",
-				function() require("trouble").toggle("diagnostics") end,
+				"<cmd>Trouble diagnostics toggle<cr>",
 				desc = "[P]roject [D]iagnostics (Trouble)",
 			},
 			{
 				"<leader>bD",
-				function() require("trouble").toggle("diagnostics"):filter({ buf = 0 }) end,
+				"<cmd>Trouble diagnostics toggle filter.buf=0<cr>",
 				desc = "[B]uffer [D]iagnostics (Trouble)",
 			},
 			{
 				"<leader>ps",
-				function() require("trouble").toggle("symbols") end,
+				"<cmd>Trouble symbols toggle focus=false<cr>",
 				desc = "[P]roject [S]ymbols (Trouble)",
 			},
 			{
@@ -79,17 +79,24 @@ return {
 				Hint = " ",
 				Information = " ",
 			}
-			for type, icon in pairs(signs) do
-				local hl = "DiagnosticSign" .. type
+			local signConf = {
+				text = {},
+				texthl = {},
+				numhl = {},
+			}
 
-				vim.diagnostic.config({
-					signs = {
-						active = {
-							{ name = hl, text = icon, numhl = hl },
-						},
-					},
-				})
+			for type, icon in pairs(signs) do
+				local severityName = string.upper(type)
+				local severity = vim.diagnostic.severity[severityName]
+				local hl = "DiagnosticSign" .. type
+				signConf.text[severity] = icon
+				signConf.texthl[severity] = hl
+				signConf.numhl[severity] = hl
 			end
+
+			vim.diagnostic.config({
+				signs = signConf,
+			})
 		end,
 	},
 }

@@ -36,7 +36,6 @@ end
 M.closePickersByLayout = function(active_pickers, layout_name, picker_to_avoid)
 	-- Iterate through each active picker
 	for _, picker in ipairs(active_pickers) do
-		print(picker)
 		-- Check if the picker layout matches the specified layout and it is not the one to avoid
 		if picker.layout == layout_name and picker ~= picker_to_avoid then
 			-- Close the picker

@@ -43,7 +43,7 @@ return {
 		"stevearc/overseer.nvim",
 		cmd = { "OverseerOpen", "OverseerRun", "OverseerToggle", "OverseerQuickAction" },
 		opts = {
-			strategy = "toggleterm",
+			strategy = "jobstart",
 			task_list = {
 				direction = "bottom",
 				min_height = 8,

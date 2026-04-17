@@ -18,39 +18,43 @@ vim.keymap.set("n", "<right>", '<cmd>echo "Use l to move!!"<CR>')
 vim.keymap.set("n", "<up>", '<cmd>echo "Use k to move!!"<CR>')
 vim.keymap.set("n", "<down>", '<cmd>echo "Use j to move!!"<CR>')
 
--- The next four lines define key mappings for switching between windows using Ctrl + hjkl keys
+-- Window navigation  (Ctrl + hjkl)
 keymap.set("n", "<C-k>", ":wincmd k<CR>", { silent = true })
 keymap.set("n", "<C-j>", ":wincmd j<CR>", { silent = true })
 keymap.set("n", "<C-h>", ":wincmd h<CR>", { silent = true })
 keymap.set("n", "<C-l>", ":wincmd l<CR>", { silent = true })
 
--- The next four lines define key mappings for resizing windows using Alt + hjkl keys
+-- Window resize  (Alt + hjkl)
 keymap.set("n", "<A-l>", ":vertical resize -5<CR>", { silent = true })
 keymap.set("n", "<A-h>", ":vertical resize +5<CR>", { silent = true })
 keymap.set("n", "<A-j>", ":resize -5<CR>", { silent = true })
 keymap.set("n", "<A-k>", ":resize +5<CR>", { silent = true })
 
--- These lines define key mappings for moving the cursor 10 spaces at a time using Shift + arrow keys
+-- Jump 10 lines at a time (Shift + jk)
 keymap.set("n", "<S-j>", "10j", { silent = true })
 keymap.set("n", "<S-k>", "10k", { silent = true })
 
--- window management
-keymap.set("n", "<leader>Wv", "<C-w>v", { desc = "Split window vertically" }) -- split window vertically
-keymap.set("n", "<leader>Wh", "<C-w>s", { desc = "Split window horizontally" }) -- split window horizontally
-keymap.set("n", "<leader>We", "<C-w>=", { desc = "Make splits equal size" }) -- make split windows equal width & height
-keymap.set("n", "<leader>Wx", "<cmd>close<CR>", { desc = "Close current split" }) -- close current split window
+-- ─── <leader>w  Window / Workspace ───────────────────────────────────────────
 
--- Tab management
-keymap.set("n", "<leader>to", "<cmd>tabnew<CR>", { desc = "Open new tab" }) -- open new tab
-keymap.set("n", "<leader>tx", "<cmd>tabclose<CR>", { desc = "Close current tab" }) -- close current tab
-keymap.set("n", "<leader>tn", "<cmd>tabn<CR>", { desc = "Go to next tab" }) --  go to next tab
-keymap.set("n", "<leader>tp", "<cmd>tabp<CR>", { desc = "Go to previous tab" }) --  go to previous tab
-keymap.set("n", "<leader>tf", "<cmd>tabnew %<CR>", { desc = "Open current buffer in new tab" }) --  move current buffer to new tab
+-- Window splits
+keymap.set("n", "<leader>wv", "<C-w>v", { desc = "Split window vertically" })
+keymap.set("n", "<leader>wh", "<C-w>s", { desc = "Split window horizontally" })
+keymap.set("n", "<leader>we", "<C-w>=", { desc = "Equalize splits" })
+keymap.set("n", "<leader>wc", "<cmd>close<CR>", { desc = "Close current split" })
 
--- new file
+-- Tab management  (all under <leader>w to keep the tree clean)
+keymap.set("n", "<leader>wo", "<cmd>tabnew<CR>", { desc = "Open new tab" })
+keymap.set("n", "<leader>wq", "<cmd>tabclose<CR>", { desc = "Close current tab" })
+keymap.set("n", "<leader>wn", "<cmd>tabn<CR>", { desc = "Go to next tab" })
+keymap.set("n", "<leader>wp", "<cmd>tabp<CR>", { desc = "Go to previous tab" })
+keymap.set("n", "<leader>wt", "<cmd>tabnew %<CR>", { desc = "Open current buffer in new tab" })
+
+-- ─── <leader>f  File ─────────────────────────────────────────────────────────
+
 keymap.set("n", "<leader>fn", "<cmd>enew<cr>", { desc = "New File" })
 
--- buffers
+-- ─── <leader>b  Buffer ───────────────────────────────────────────────────────
+
 keymap.set("n", "<S-h>", "<cmd>bprevious<cr>", { desc = "Prev Buffer" })
 keymap.set("n", "<S-l>", "<cmd>bnext<cr>", { desc = "Next Buffer" })
 keymap.set("n", "<leader>bb", "<cmd>e #<cr>", { desc = "Switch to Other Buffer" })

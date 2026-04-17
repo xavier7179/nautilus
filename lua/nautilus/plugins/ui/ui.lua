@@ -1,4 +1,64 @@
 return {
+	{ -- persistent colorscheme saver
+		"https://git.sr.ht/~swaits/colorsaver.nvim",
+		lazy = true,
+		event = "VimEnter",
+		opts = {
+			-- your options here
+		},
+		dependencies = {
+			{ "EdenEast/nightfox.nvim" },
+			{ "AlexvZyl/nordic.nvim" },
+			{
+				"olimorris/onedarkpro.nvim",
+				priority = 1000,
+				pattern = { "onedark.*", "onelight", "vaporwave" },
+				opts = {
+					highlights = {
+						Comment = { italic = true },
+						Directory = { bold = true },
+						ErrorMsg = { italic = true, bold = true },
+					},
+				},
+			},
+			{
+				"folke/tokyonight.nvim",
+				opts = { transparent = true, styles = { sidebars = "transparent", floats = "transparent" } },
+			},
+			{
+				"catppuccin/nvim",
+				name = "catppuccin",
+				priority = 1000,
+				opts = {
+					integrations = {
+						cmp = true,
+						gitsigns = true,
+						lsp_trouble = true,
+						mason = true,
+						markdown = true,
+						mini = true,
+						native_lsp = {
+							enabled = true,
+							underlines = {
+								errors = { "undercurl" },
+								hints = { "undercurl" },
+								warnings = { "undercurl" },
+								information = { "undercurl" },
+							},
+						},
+						navic = { enabled = true, custom_bg = "lualine" },
+						neotree = false,
+						overseer = true,
+						noice = true,
+						snacks = true,
+						telescope = true,
+						treesitter = true,
+						treesitter_context = true,
+					},
+				},
+			},
+		},
+	},
 	{ "MunifTanjim/nui.nvim" },
 	-- Highly experimental plugin that completely replaces the UI for messages, cmdline and the popupmenu.
 	{

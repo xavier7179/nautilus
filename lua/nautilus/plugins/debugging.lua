@@ -51,11 +51,11 @@ return {
 				function() require("dap").pause() end,
 				desc = "Pause",
 			},
-			{
-				"<leader>dr",
-				function() require("dap").repl.toggle() end,
-				desc = "Toggle REPL",
-			},
+		{
+			"<leader>dR",
+			function() require("dap").repl.toggle() end,
+			desc = "Toggle REPL",
+		},
 			{
 				"<leader>dt",
 				function() require("dap").terminate() end,
@@ -104,7 +104,6 @@ return {
 
 			dap.listeners.before.attach.dapui_config = function() dapui.open() end
 			dap.listeners.before.launch.dapui_config = function() dapui.open() end
-			dap.listeners.after.event_initialized.dapui_config = function() dapui.open() end
 			dap.listeners.before.event_terminated.dapui_config = function() dapui.close() end
 			dap.listeners.before.event_exited.dapui_config = function() dapui.close() end
 		end,

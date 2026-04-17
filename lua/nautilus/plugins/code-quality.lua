@@ -7,18 +7,18 @@ return {
 		event = { "BufWritePre" },
 		cmd = { "ConformInfo" },
 		keys = {
-			{
-				"fp",
-				function()
-					require("conform").format({
-						lsp_fallback = true,
-						async = false,
-						timeout_ms = 1000,
-					})
-				end,
-				mode = { "n", "v" },
-				desc = "[F]ormat buffer",
-			},
+		{
+			"<leader>cf",
+			function()
+				require("conform").format({
+					lsp_fallback = true,
+					async = false,
+					timeout_ms = 1000,
+				})
+			end,
+			mode = { "n", "v" },
+			desc = "Format buffer",
+		},
 		},
 		opts = function()
 			return {

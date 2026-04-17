@@ -32,10 +32,10 @@ require("lazy").setup({
 	change_detection = {
 		notify = false,
 	},
-	install = {
-		-- Set the colorscheme for the `:Lazy` UI
-		colorscheme = { require("nautilus.custom.colorscheme").get_colorscheme("default") },
-	},
+	-- install = {
+	--	-- Set the colorscheme for the `:Lazy` UI
+	--	colorscheme = { require("nautilus.custom.colorscheme").get_colorscheme("default") },
+	--},
 	ui = {
 		-- If you are using a Nerd Font: set icons to an empty table which will use the
 		-- default lazy.nvim defined Nerd Font icons, otherwise define a unicode icons table
