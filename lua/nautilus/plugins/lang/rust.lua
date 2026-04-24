@@ -91,7 +91,7 @@ return {
 			},
 		},
 		config = function(_, opts)
-			local package_path = vim.fn.expand("$MASON/packages/codelldb")
+			local package_path = vim.fn.stdpath("data") .. "/mason/packages/codelldb"
 			local codelldb = package_path .. "/extension/adapter/codelldb"
 			local library_path = package_path .. "/extension/lldb/lib/liblldb.dylib"
 			local uname = io.popen("uname"):read("*l")

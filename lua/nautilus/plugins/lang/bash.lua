@@ -13,6 +13,23 @@ return {
 			opts.servers.bashls = vim.tbl_deep_extend("force", opts.servers.bashls or {}, {
 				capabilities = capabilities,
 				filetypes = lang.ft("bash"),
+				settings = {
+					bashIde = {
+						-- Glob pattern for workspace file discovery.
+						globPattern = "*@(.sh|.inc|.bash|.command|.zsh)",
+						-- Use the shellcheck binary installed by Mason if available,
+						-- otherwise fall back to whatever is on PATH.
+						shellcheckPath = vim.fn.exepath("shellcheck"),
+						shellcheckArguments = {
+							"--shell=bash",
+							"--severity=style",
+						},
+						-- Disable the built-in shfmt integration; conform handles formatting.
+						shfmt = {
+							enable = false,
+						},
+					},
+				},
 			})
 
 			return opts

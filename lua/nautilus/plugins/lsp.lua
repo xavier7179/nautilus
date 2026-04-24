@@ -56,6 +56,14 @@ return {
 						vim.keymap.set(mode, keys, func, { buffer = event.buf, desc = "LSP: " .. desc })
 					end
 
+				-- Hover styling: rounded border + capped width, passed directly to buf.hover()
+				-- per the Neovim 0.12 deprecation of vim.lsp.with().
+				-- Uses "rounded" to match the diagnostic float rather than "single" (blink popup)
+				-- since hover and completion are visually distinct surfaces.
+				map("K", function()
+					vim.lsp.buf.hover({ border = "rounded", max_width = 80, max_height = 20 })
+				end, "Hover Documentation")
+
 				map("gR", function() snacks.lsp_references() end, "[G]oto [R]eferences")
 				map("gD", function() snacks.lsp_declarations() end, "[G]oto [D]eclaration")
 				map("gd", function() snacks.lsp_definitions() end, "[G]oto [D]efinition")

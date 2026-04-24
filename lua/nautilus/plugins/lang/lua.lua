@@ -4,6 +4,18 @@ return {
 	{
 		"neovim/nvim-lspconfig",
 		ft = lang.ft("lua"),
+		init = function()
+			-- Enable inlay hints for lua_ls buffers on attach.
+			vim.api.nvim_create_autocmd("LspAttach", {
+				group = vim.api.nvim_create_augroup("LuaLsInlayHints", { clear = true }),
+				callback = function(event)
+					local client = vim.lsp.get_client_by_id(event.data.client_id)
+					if client and client.name == "lua_ls" then
+						vim.lsp.inlay_hint.enable(true, { bufnr = event.buf })
+					end
+				end,
+			})
+		end,
 		opts = function(_, opts)
 			opts = opts or {}
 			opts.servers = opts.servers or {}
@@ -26,6 +38,13 @@ return {
 						},
 						format = {
 							enable = false,
+						},
+						hint = {
+							enable = true,
+							setType = true,
+							paramName = "All",
+							paramType = true,
+							arrayIndex = "Disable",
 						},
 					},
 				},

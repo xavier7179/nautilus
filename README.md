@@ -318,7 +318,6 @@ All `<leader>` bindings follow a strict **tree organisation**: the first letter 
 | mason.nvim | LSP / DAP / linter / formatter installer |
 | conform.nvim | Formatting on save (`<leader>cf` for manual format) |
 | nvim-lint | Linting on save / insert leave |
-
 ### Debugging
 
 | Plugin | Purpose |
@@ -354,17 +353,17 @@ All `<leader>` bindings follow a strict **tree organisation**: the first letter 
 
 ### Language Support
 
-| Language | LSP | Formatter | Linter | Debugger |
-|----------|-----|-----------|--------|----------|
-| C / C++ | clangd + clangd_extensions | clang-format | clang-tidy | codelldb |
-| CMake | cmake-language-server | N/A | cmakelint | N/A |
-| Rust | rust-analyzer (rustaceanvim) + crates.nvim | LSP built-in | clippy | codelldb |
-| PHP | intelephense | php-cs-fixer | phpcs | php-debug-adapter |
-| JavaScript / TypeScript | vtsls | biome | eslint | js-debug-adapter |
-| Markdown | marksman | markdownlint-cli2 | markdownlint-cli2 | N/A |
-| YAML | yamlls + SchemaStore | LSP built-in | yamllint | N/A |
-| Bash / Shell | bashls | shfmt | shellcheck | bash-debug-adapter |
-| Lua | lua_ls | stylua | N/A | N/A |
+| Language | LSP | Formatter | Linter | Debugger | Inlay Hints |
+|----------|-----|-----------|--------|----------|-------------|
+| C / C++ | clangd + clangd_extensions | clang-format | clang-tidy | codelldb | ✓ (auto-enabled) |
+| CMake | cmake-language-server | N/A | cmakelint | N/A | — |
+| Rust | rust-analyzer (rustaceanvim) + crates.nvim | LSP built-in | clippy | codelldb | `<leader>uh` |
+| PHP | intelephense | php-cs-fixer | phpcs | php-debug-adapter | — |
+| JavaScript / TypeScript | vtsls | biome | eslint | js-debug-adapter | ✓ (configured) |
+| Markdown | marksman | markdownlint-cli2 | markdownlint-cli2 | N/A | — |
+| YAML | yamlls + SchemaStore | LSP built-in | yamllint | N/A | — |
+| Bash / Shell | bashls | shfmt | shellcheck | bash-debug-adapter | — |
+| Lua | lua_ls | stylua | N/A | N/A | ✓ (auto-enabled) |
 
 ## Uninstall
 

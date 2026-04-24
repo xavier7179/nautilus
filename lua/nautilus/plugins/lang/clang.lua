@@ -4,6 +4,20 @@ return {
 	{
 		"neovim/nvim-lspconfig",
 		ft = lang.ft("c"),
+		init = function()
+			-- Enable inlay hints for clangd buffers on attach.
+			-- Registered here (nvim-lspconfig init) so the autocmd exists before LspAttach fires,
+			-- avoiding the load-order race that would occur if it were in clangd_extensions' init.
+			vim.api.nvim_create_autocmd("LspAttach", {
+				group = vim.api.nvim_create_augroup("ClangdInlayHints", { clear = true }),
+				callback = function(event)
+					local client = vim.lsp.get_client_by_id(event.data.client_id)
+					if client and client.name == "clangd" then
+						vim.lsp.inlay_hint.enable(true, { bufnr = event.buf })
+					end
+				end,
+			})
+		end,
 		opts = function(_, opts)
 			opts = opts or {}
 			opts.servers = opts.servers or {}
@@ -66,26 +80,23 @@ return {
 		lazy = true,
 		ft = lang.ft("c"),
 		opts = {
-			inlay_hints = {
-				inline = false,
-			},
 			ast = {
 				role_icons = {
-					type = "",
-					declaration = "",
-					expression = "",
-					specifier = "",
-					statement = "",
-					["template argument"] = "",
+					type = "",
+					declaration = "",
+					expression = "",
+					specifier = "",
+					statement = "",
+					["template argument"] = "",
 				},
 				kind_icons = {
-					Compound = "",
-					Recovery = "",
-					TranslationUnit = "",
-					PackExpansion = "",
-					TemplateTypeParm = "",
-					TemplateTemplateParm = "",
-					TemplateParamObject = "",
+					Compound = "",
+					Recovery = "",
+					TranslationUnit = "",
+					PackExpansion = "",
+					TemplateTypeParm = "",
+					TemplateTemplateParm = "",
+					TemplateParamObject = "",
 				},
 			},
 		},
@@ -95,33 +106,48 @@ return {
 		"mfussenegger/nvim-dap",
 		optional = true,
 		ft = lang.ft("c"),
-		config = function()
-			local dap = require("dap")
-			if dap.adapters.codelldb then return end
-			local mason_path = vim.fn.expand("$MASON/packages/codelldb")
-			local codelldb = mason_path .. "/extension/adapter/codelldb"
+		-- Use init (not config) so this setup always runs regardless of which
+		-- fragment's config function lazy picks when merging multiple nvim-dap specs.
+		init = function()
+			-- Defer until dap is actually loaded to avoid forcing an eager require.
+			vim.api.nvim_create_autocmd("FileType", {
+				pattern = { "c", "cpp", "objc", "objcpp" },
+				once = true,
+				callback = function()
+					vim.schedule(function()
+						local ok, dap = pcall(require, "dap")
+						if not ok then return end
+						if dap.adapters.codelldb then return end
 
-			dap.adapters.codelldb = {
-				type = "server",
-				port = "${port}",
-				executable = {
-					command = codelldb,
-					args = { "--port", "${port}" },
-				},
-			}
+						local codelldb = vim.fn.stdpath("data")
+							.. "/mason/packages/codelldb/extension/adapter/codelldb"
 
-			dap.configurations.c = {
-				{
-					name = "Launch file",
-					type = "codelldb",
-					request = "launch",
-					program = function() return vim.fn.input("Path to executable: ", vim.fn.getcwd() .. "/", "file") end,
-					cwd = "${workspaceFolder}",
-					stopOnEntry = false,
-				},
-			}
+						dap.adapters.codelldb = {
+							type = "server",
+							port = "${port}",
+							executable = {
+								command = codelldb,
+								args = { "--port", "${port}" },
+							},
+						}
 
-			dap.configurations.cpp = dap.configurations.c
+						dap.configurations.c = {
+							{
+								name = "Launch file",
+								type = "codelldb",
+								request = "launch",
+								program = function()
+									return vim.fn.input("Path to executable: ", vim.fn.getcwd() .. "/", "file")
+								end,
+								cwd = "${workspaceFolder}",
+								stopOnEntry = false,
+							},
+						}
+
+						dap.configurations.cpp = dap.configurations.c
+					end)
+				end,
+			})
 		end,
 	},
 }
