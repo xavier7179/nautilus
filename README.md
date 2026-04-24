@@ -173,6 +173,7 @@ All `<leader>` bindings follow a strict **tree organisation**: the first letter 
 | Key | Action |
 |-----|--------|
 | `<leader>mm` | Toggle Render Markdown |
+| `<leader>me` | Edit fenced code block (FeMaco) |
 | `<leader>mt` | Update Markdown TOC |
 
 ### `<leader>o` — Overseer (Tasks)
@@ -245,7 +246,7 @@ All `<leader>` bindings follow a strict **tree organisation**: the first letter 
 | `<leader>uD` | Toggle Dim Mode |
 | `<leader>ug` | Toggle Indent Guides |
 | `<leader>uh` | Toggle Inlay Hints |
-| `<leader>uK` | Toggle Showkeys |
+| `<leader>uK` | Toggle recording mode (showkeys + WezTerm font zoom) |
 | `<leader>ul` | Toggle Line Numbers |
 | `<leader>uL` | Toggle Relative Numbers |
 | `<leader>uP` | Toggle Profiler |
@@ -297,7 +298,7 @@ All `<leader>` bindings follow a strict **tree organisation**: the first letter 
 | which-key.nvim | Keymap hints |
 | render-markdown.nvim | In-buffer rendered Markdown |
 | nvim-highlight-colors | Inline color code previews |
-| showkeys | Displays pressed keys on screen (toggle with `<leader>uK`) |
+| showkeys | Displays pressed keys on screen — recording mode toggle (`<leader>uK`) also zooms WezTerm font |
 
 ### Completion
 
@@ -350,9 +351,6 @@ All `<leader>` bindings follow a strict **tree organisation**: the first letter 
 | mini.pairs | Auto-close brackets and quotes |
 | nvim-origami | LSP/Treesitter fold provider with fold decorations, auto-fold, and search-pause |
 | Comment.nvim | Smart commenting with Treesitter context (`gc`, `gb`) |
-| todo-comments.nvim | Highlight and navigate TODO/FIXME/etc. |
-| auto-session | Session save and restore (`<leader>w{s,r,l}`) |
-| vim-pencil | Soft-wrap writing mode for Markdown |
 
 ### Language Support
 

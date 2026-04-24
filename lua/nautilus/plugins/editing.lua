@@ -95,10 +95,4 @@ return {
 			use_git_branch = false, -- Include git branch name in session name
 		},
 	},
-	{
-		"preservim/vim-pencil",
-		lazy = true,
-		ft = { "plaintex", "markdown" },
-		init = function() vim.g["pencil#wrapModeDefault"] = "soft" end,
-	},
 }

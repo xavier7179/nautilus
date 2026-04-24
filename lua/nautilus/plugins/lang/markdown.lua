@@ -64,9 +64,16 @@ return {
 
 	{
 		"AckslD/nvim-FeMaco.lua",
-		optional = true,
 		ft = lang.ft("markdown"),
 		opts = {},
+		keys = {
+			{
+				"<leader>me",
+				function() require("femaco.edit").edit_code_block() end,
+				desc = "Edit fenced code block",
+				ft = "markdown",
+			},
+		},
 	},
 
 	{

@@ -7,20 +7,21 @@ return {
 			-- your options here
 		},
 		dependencies = {
-			{ "EdenEast/nightfox.nvim" },
-			{ "AlexvZyl/nordic.nvim" },
-			{
-				"olimorris/onedarkpro.nvim",
-				priority = 1000,
-				pattern = { "onedark.*", "onelight", "vaporwave" },
-				opts = {
-					highlights = {
-						Comment = { italic = true },
-						Directory = { bold = true },
-						ErrorMsg = { italic = true, bold = true },
-					},
-				},
-			},
+			-- Kept for occasional use; commented out to avoid eager loading.
+			-- { "EdenEast/nightfox.nvim" },
+			-- { "AlexvZyl/nordic.nvim" },
+			-- {
+			-- 	"olimorris/onedarkpro.nvim",
+			-- 	priority = 1000,
+			-- 	pattern = { "onedark.*", "onelight", "vaporwave" },
+			-- 	opts = {
+			-- 		highlights = {
+			-- 			Comment = { italic = true },
+			-- 			Directory = { bold = true },
+			-- 			ErrorMsg = { italic = true, bold = true },
+			-- 		},
+			-- 	},
+			-- },
 			{
 				"folke/tokyonight.nvim",
 				opts = { transparent = true, styles = { sidebars = "transparent", floats = "transparent" } },
@@ -46,7 +47,7 @@ return {
 								information = { "undercurl" },
 							},
 						},
-						navic = { enabled = true, custom_bg = "lualine" },
+						navic = { enabled = false },
 						neotree = false,
 						overseer = true,
 						noice = true,
