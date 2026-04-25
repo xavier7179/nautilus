@@ -75,8 +75,16 @@ return {
 				map("<leader>ss", function() snacks.lsp_symbols() end, "[S]earch LSP [S]ymbols")
 				map("<leader>sS", function() snacks.lsp_workspace_symbols() end, "[S]earch LSP Workspace [S]ymbols")
 
-					local client = vim.lsp.get_client_by_id(event.data.client_id)
-					if
+				local client = vim.lsp.get_client_by_id(event.data.client_id)
+				
+				-- clangd-specific keymap
+				if client and client.name == "clangd" then
+					map("<leader>ch", function()
+						require("clangd_extensions.switch_source_header").switch_source_header()
+					end, "[C]lang switch [H]eader/Source")
+				end
+
+				if
 						client
 						and client:supports_method(vim.lsp.protocol.Methods.textDocument_documentHighlight, event.buf)
 					then

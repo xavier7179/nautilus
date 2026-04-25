@@ -115,6 +115,7 @@ All `<leader>` bindings follow a strict **tree organisation**: the first letter 
 | Key | Action |
 |-----|--------|
 | `<leader>cf` | Format buffer (conform.nvim) |
+| `<leader>ch` | Switch between header and source (clangd, C/C++ buffers only) |
 | `<leader>cg` | CMake Generate |
 | `<leader>cb` | CMake Build |
 | `<leader>cr` | CMake Run |
