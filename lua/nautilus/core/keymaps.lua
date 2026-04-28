@@ -18,17 +18,8 @@ vim.keymap.set("n", "<right>", '<cmd>echo "Use l to move!!"<CR>')
 vim.keymap.set("n", "<up>", '<cmd>echo "Use k to move!!"<CR>')
 vim.keymap.set("n", "<down>", '<cmd>echo "Use j to move!!"<CR>')
 
--- Window navigation  (Ctrl + hjkl)
-keymap.set("n", "<C-k>", ":wincmd k<CR>", { silent = true })
-keymap.set("n", "<C-j>", ":wincmd j<CR>", { silent = true })
-keymap.set("n", "<C-h>", ":wincmd h<CR>", { silent = true })
-keymap.set("n", "<C-l>", ":wincmd l<CR>", { silent = true })
-
--- Window resize  (Alt + hjkl)
-keymap.set("n", "<A-l>", ":vertical resize -5<CR>", { silent = true })
-keymap.set("n", "<A-h>", ":vertical resize +5<CR>", { silent = true })
-keymap.set("n", "<A-j>", ":resize -5<CR>", { silent = true })
-keymap.set("n", "<A-k>", ":resize +5<CR>", { silent = true })
+-- Window navigation  (Ctrl + hjkl) and resize (Alt + hjkl) are handled by
+-- smart-splits.nvim (plugins/utils/smart-splits.lua) for seamless WezTerm integration.
 
 -- Jump 10 lines at a time (Shift + jk)
 keymap.set("n", "<S-j>", "10j", { silent = true })

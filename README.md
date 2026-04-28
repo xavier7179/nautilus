@@ -89,8 +89,9 @@ All `<leader>` bindings follow a strict **tree organisation**: the first letter 
 | `]q` / `[q` | Next / prev Trouble/Quickfix item |
 | `]]` / `[[` | Next / prev word reference |
 | `<S-h>` / `<S-l>` | Prev / next buffer |
-| `<C-hjkl>` | Navigate windows |
-| `<A-hjkl>` | Resize windows |
+| `<C-hjkl>` | Navigate windows (smart-splits: seamless with WezTerm panes) |
+| `<A-hjkl>` | Move lines / selections (mini.move) |
+| `<leader>wr` | Resize mode — h/j/k/l to resize splits, `<Esc>` or `q` to exit |
 | `<C-t>` | Toggle terminal |
 | `<C-f>` / `<C-b>` | Scroll LSP docs forward/backward |
 
@@ -245,16 +246,19 @@ All `<leader>` bindings follow a strict **tree organisation**: the first letter 
 | `<leader>uC` | Pick Colorscheme |
 | `<leader>ud` | Toggle Diagnostics |
 | `<leader>uD` | Toggle Dim Mode |
+| `<leader>ue` | Toggle Edgy panels |
 | `<leader>ug` | Toggle Indent Guides |
 | `<leader>uh` | Toggle Inlay Hints |
 | `<leader>uK` | Toggle recording mode (showkeys + WezTerm font zoom) |
 | `<leader>ul` | Toggle Line Numbers |
 | `<leader>uL` | Toggle Relative Numbers |
+| `<leader>um` | Toggle minimap |
 | `<leader>uP` | Toggle Profiler |
 | `<leader>uS` | Toggle Session Autosave |
 | `<leader>us` | Toggle Spelling |
 | `<leader>uT` | Toggle Treesitter |
 | `<leader>uw` | Toggle Wrap |
+| `<leader>uW` | Trim trailing whitespace |
 
 ### `<leader>w` — Window / Workspace
 
@@ -270,7 +274,8 @@ All `<leader>` bindings follow a strict **tree organisation**: the first letter 
 | `<leader>wp` | Previous tab |
 | `<leader>wt` | Current buffer in new tab |
 | `<leader>ws` | Save session |
-| `<leader>wr` | Session search |
+| `<leader>wr` | Resize mode (h/j/k/l to resize · `<Esc>` or `q` to exit) |
+| `<leader>wR` | Session search |
 | `<leader>wl` | Restore last session |
 
 ### Convenience leaves (single-key shortcuts)
@@ -345,12 +350,16 @@ All `<leader>` bindings follow a strict **tree organisation**: the first letter 
 
 | Plugin | Purpose |
 |--------|---------|
+| smart-splits.nvim | Seamless navigation and resize across Neovim splits and WezTerm panes (`<C-hjkl>`, `<leader>wr` resize mode) |
 | mini.ai | Extended text objects: `va)`, `yinq`, `ci'`, ... |
 | mini.surround | Add / delete / replace surroundings (`sa`, `sd`, `sr`, …) |
 | mini.splitjoin | Toggle split/join (`gS`) |
 | mini.pairs | Auto-close brackets and quotes |
+| mini.move | Move lines / selections in any direction (`<A-hjkl>`) |
+| mini.map | Minimap sidebar with git diff and diagnostic markers (`<leader>um`) |
+| mini.trailspace | Trailing whitespace highlight and auto-trim on save (`<leader>uW`) |
+| mini.comment | Comment toggling with Treesitter context (`gc`, `gcc`) |
 | nvim-origami | LSP/Treesitter fold provider with fold decorations, auto-fold, and search-pause |
-| Comment.nvim | Smart commenting with Treesitter context (`gc`, `gb`) |
 
 ### Language Support
 

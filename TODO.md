@@ -12,7 +12,7 @@
 [X] Blink.cmp
 [X] mini.statusline
 [X] Replace nvim-ufo with nvim-origami (LSP folds, fold decorations, h/l keymaps, Snacks auto-fold toggle)
-[ ] More mini plugins
+[X] More mini plugins
 [ ] Hologram.nvim
 [ ] Edgy templates for each type of Supported Language (with [edge-group.vim](https://github.com/lucobellic/edgy-group.nvim)?)
 [X] Evaluate placing back overseer
@@ -20,10 +20,6 @@
 
 ### Plugin notes
 
-- **Comment.nvim**: Neovim 0.10+ has native `gc`/`gcc` commenting. The only real value
-  is the `ts_context_commentstring` integration for TSX/JSX/Svelte/HTML. Since
-  `ts_context_commentstring` ≥ 0.8 works with the native commenting too, this plugin
-  is a candidate for removal in a future cleanup pass.
 - **showkeys**: Pure demo/presentation utility (`<leader>uK`). No conflicts; low daily value.
 - **vim-pencil**: No keymaps; loaded lazily for markdown/plaintex. Low priority.
 

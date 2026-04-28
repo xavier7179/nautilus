@@ -51,22 +51,8 @@ return {
 			end
 		end,
 	},
-	-- { -- Comments management
-	-- 	"numToStr/Comment.nvim",
-	-- 	keys = { "gc", "gb" },
-	-- 	dependencies = 		config = function()
-	-- 		-- import comment plugin safely
-	-- 		local comment = require("Comment")
-
-	-- 		local ts_context_commentstring = require("ts_context_commentstring.integrations.comment_nvim")
-
-	-- 		-- enable comment
-	-- 		comment.setup({
-	-- 			-- for commenting tsx, jsx, svelte, html files
-	-- 			pre_hook = ts_context_commentstring.create_pre_hook(),
-	-- 		})
-	-- 	end,
-	-- },
+	-- Comment.nvim removed: replaced by mini.comment in plugins/utils/mini.lua,
+	-- which integrates with ts_context_commentstring via custom_commentstring hook.
 	{ -- TODO comments navigations
 		"folke/todo-comments.nvim",
 		--event = { "BufReadPost", "BufNewFile" },
@@ -83,7 +69,7 @@ return {
 		lazy = true,
 		keys = {
 			-- Will use Telescope if installed or a vim.ui.select picker otherwise
-			{ "<leader>wr", "<cmd>SessionSearch<CR>", desc = "Session search" },
+			{ "<leader>wR", "<cmd>SessionSearch<CR>", desc = "Session search" },
 			{ "<leader>wl", "<cmd>SessionRestore<CR>", desc = "Restore last session" },
 			{ "<leader>ws", "<cmd>SessionSave<CR>", desc = "Save session" },
 			{ "<leader>uS", "<cmd>SessionToggleAutoSave<CR>", desc = "Toggle autosave" },
