@@ -108,7 +108,6 @@ return {
 	},
 	{
 		"marilari88/neotest-vitest",
-		optional = true,
 		ft = lang.ft("javascript"),
 	},
 }

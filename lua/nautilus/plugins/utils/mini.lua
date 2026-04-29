@@ -137,10 +137,12 @@ return {
 		},
 		opts = {
 			options = {
-				custom_commentstring = function()
+			custom_commentstring = function()
+				local ok, cs = pcall(function()
 					return require("ts_context_commentstring.internal").calculate_commentstring()
-						or vim.bo.commentstring
-				end,
+				end)
+				return (ok and cs) or vim.bo.commentstring
+			end,
 			},
 		},
 	},

@@ -108,7 +108,6 @@ return {
 	},
 	{
 		"olimorris/neotest-phpunit",
-		optional = true,
 		ft = lang.ft("php"),
 	},
 }

@@ -3,7 +3,7 @@ local lang = require("nautilus.custom.lang")
 return {
 	{
 		"Saecki/crates.nvim",
-		event = { "BufRead Cargo.toml" },
+		ft = { "toml" },
 		opts = {
 			completion = {
 				crates = {
@@ -126,7 +126,6 @@ return {
 	},
 	{
 		"rouge8/neotest-rust",
-		optional = true,
 		ft = lang.ft("rust"),
 	},
 }

@@ -13,15 +13,14 @@
 [X] mini.statusline
 [X] Replace nvim-ufo with nvim-origami (LSP folds, fold decorations, h/l keymaps, Snacks auto-fold toggle)
 [X] More mini plugins
-[ ] Hologram.nvim
-[ ] Edgy templates for each type of Supported Language (with [edge-group.vim](https://github.com/lucobellic/edgy-group.nvim)?)
+[X] Hologram.nvim — dropped, not pursuing (inline image rendering not a priority)
+[ ] Edgy templates for each type of Supported Language (with [edge-group.vim](https://github.com/lucobellic/edgy-group.nvim)?) — tracked in plan.md step 16
 [X] Evaluate placing back overseer
 [X] Evaluate introducing neotest
 
 ### Plugin notes
 
-- **showkeys**: Pure demo/presentation utility (`<leader>uK`). No conflicts; low daily value.
-- **vim-pencil**: No keymaps; loaded lazily for markdown/plaintex. Low priority.
+- **showkeys**: Recording mode toggle (`<leader>uK`). Simultaneously toggles key display and sends OSC escape to WezTerm to zoom font size. Implemented in `plugins/utils/showkeys.lua`.
 
 ## Language support (= LSP, Linter, Formatter, Debugger, Extras)
 

@@ -21,9 +21,9 @@ vim.keymap.set("n", "<down>", '<cmd>echo "Use j to move!!"<CR>')
 -- Window navigation  (Ctrl + hjkl) and resize (Alt + hjkl) are handled by
 -- smart-splits.nvim (plugins/utils/smart-splits.lua) for seamless WezTerm integration.
 
--- Jump 10 lines at a time (Shift + jk)
-keymap.set("n", "<S-j>", "10j", { silent = true })
-keymap.set("n", "<S-k>", "10k", { silent = true })
+-- Jump 10 lines at a time (Shift + jk) — disabled: shadows Vim's J (join lines)
+-- keymap.set("n", "<S-j>", "10j", { silent = true })
+-- keymap.set("n", "<S-k>", "10k", { silent = true })
 
 -- ─── <leader>w  Window / Workspace ───────────────────────────────────────────
 

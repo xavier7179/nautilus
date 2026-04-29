@@ -74,7 +74,6 @@ return {
 	},
 	{
 		"nvim-neotest/neotest-plenary",
-		optional = true,
 		ft = lang.ft("lua"),
 	},
 }

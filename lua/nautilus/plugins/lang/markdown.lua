@@ -19,6 +19,7 @@ return {
 		"stevearc/conform.nvim",
 		optional = true,
 		opts = function(_, opts)
+			opts.formatters = opts.formatters or {}
 			opts.formatters["markdownlint-cli2"] =
 				vim.tbl_deep_extend("force", opts.formatters["markdownlint-cli2"] or {}, {
 					args = function()

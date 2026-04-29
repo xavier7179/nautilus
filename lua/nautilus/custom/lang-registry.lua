@@ -216,7 +216,7 @@ return {
 			lint = {
 				enabled = true,
 				linters = { "markdownlint-cli2" },
-				mason = { "markdownlint" },
+				mason = { "markdownlint-cli2" },
 			},
 			dap = {
 				enabled = false,

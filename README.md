@@ -10,12 +10,10 @@ A personal Neovim configuration built around [snacks.nvim](https://github.com/fo
 - Nerd font (mono variant): `brew install font-meslo-lg-nerd-font` — select **Meslo LGS Nerd Font Mono** in your terminal profile
 - Nerd font (alternative): `brew install font-jetbrains-mono-nerd-font`
 - `brew install ripgrep` — used by grep pickers
-- `brew install fzf`
-- `brew install lazygit` — required for Snacks lazygit integration (`<leader>gg`, `<leader>gf`, `<leader>gl`)
-- `brew install node` — required by JavaScript, PHP, and Bash DAP adapters
-- `brew install cmake` — required for CMake language support
-- `brew install pngpaste` — required for image pasting support
-- `npm install -g @mermaid-js/mermaid-cli` — required for diagram rendering in snacks
+- `brew install lazygit` — required for Snacks lazygit integration (`<leader>gg`, `<leader>gl`)
+- `brew install libgit2` — required by fugit2.nvim
+- `brew install node` — required by `js-debug-adapter`, `vtsls`, `eslint-lsp`, and `markdown-toc`
+- `brew install cmake` — required to build CMake projects
 
 ### Rust
 
@@ -25,34 +23,28 @@ Install the Rust toolchain via [rustup](https://rustup.rs):
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 ```
 
-Then ensure `rust-analyzer` is present:
+`rust-analyzer` is **not** used directly — this config uses `bacon-ls` + `rustaceanvim` instead. Both are installed by Mason via Cargo. Install `bacon` separately:
 
 ```sh
-rustup component add rust-analyzer
+cargo install bacon
 ```
 
 ### Grammars
 
-- `brew install tree-sitter` — enables automatic installation of Treesitter parsers
+Treesitter parsers are managed automatically by `nvim-treesitter` via `:TSUpdate`. No system installation needed.
 
 ### Linters
 
 Most linters and formatters are **auto-installed via Mason** on first launch (`:MasonUpdate`). The following require system-level installation:
 
-- **(clang-tidy / clang-format)** Install LLVM:
+- `pip install cmakelint` — CMake linter (`cmakelint`) must be on PATH; Mason entry is intentionally left empty
 
-```sh
-brew install llvm
-ln -s "$(brew --prefix llvm)/bin/clang-format" "/usr/local/bin/clang-format"
-ln -s "$(brew --prefix llvm)/bin/clang-tidy" "/usr/local/bin/clang-tidy"
-```
-
-All other tools (shellcheck, eslint, phpcs, markdownlint-cli2, yamllint, biome, shfmt, etc.) are managed automatically by Mason.
+All other tools (shellcheck, eslint, phpcs, markdownlint-cli2, yamllint, biome, shfmt, clang-format, clang-tidy, etc.) are managed automatically by Mason.
 
 ## Post-Install (OSX)
 
 - Update `.zshrc` setting the default editor: `export EDITOR=nvim`
-- **Italian keyboard:** `options.lua` maps `è` and `+` to `[` and `]` via `langmap`. Non-Italian keyboard users should remove or adjust the `opt.langmap` line in `lua/nautilus/core/options.lua`.
+- **Italian keyboard:** The `opt.langmap` line in `lua/nautilus/core/options.lua` that maps `è`/`+` to `[`/`]` is currently commented out (`-- not working`). Non-Italian keyboard users can ignore it.
 
 ## Language architecture
 
@@ -155,9 +147,12 @@ All `<leader>` bindings follow a strict **tree organisation**: the first letter 
 |-----|--------|
 | `<leader>gg` | Lazygit |
 | `<leader>gl` | Lazygit Log (cwd) |
-| `<leader>gf` | Lazygit Current File History |
 | `<leader>gb` | Git Blame Line |
 | `<leader>gB` | Git Browse (n/v) |
+| `<leader>gc` | Fugit2 Commit Panel |
+| `<leader>gd` | Diffview Open |
+| `<leader>gD` | Diffview Close |
+| `<leader>gH` | File History (diffview) |
 | **`<leader>gh` — Hunks** | |
 | `<leader>ghs` | Stage hunk (n/v) |
 | `<leader>ghr` | Reset hunk (n/v) |
@@ -337,7 +332,9 @@ All `<leader>` bindings follow a strict **tree organisation**: the first letter 
 | Plugin | Purpose |
 |--------|---------|
 | gitsigns.nvim | Hunk signs, staging, blame, diff (`<leader>gh*`) |
-| Snacks lazygit | Full lazygit UI (`<leader>gg`) |
+| fugit2.nvim | Floating commit panel — staged/unstaged tree, inline diff, commit message (`<leader>gc`) |
+| diffview.nvim | Full-project diff view, file history, merge tool (`<leader>gd/gD/gH`) |
+| Snacks lazygit | Full lazygit TUI — log, rebase, stash, remote management (`<leader>gg`, `<leader>gl`) |
 
 ### AI
 
@@ -359,6 +356,7 @@ All `<leader>` bindings follow a strict **tree organisation**: the first letter 
 | mini.map | Minimap sidebar with git diff and diagnostic markers (`<leader>um`) |
 | mini.trailspace | Trailing whitespace highlight and auto-trim on save (`<leader>uW`) |
 | mini.comment | Comment toggling with Treesitter context (`gc`, `gcc`) |
+| nvim-ts-context-commentstring | Correct commentstring per embedded language context (used by mini.comment) |
 | nvim-origami | LSP/Treesitter fold provider with fold decorations, auto-fold, and search-pause |
 
 ### Language Support

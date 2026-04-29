@@ -215,18 +215,18 @@ return {
 					-- avoiding global option leakage to other windows.
 					vim.wo[win].number = false
 					vim.wo[win].relativenumber = false
-					require("noice").disable()
-					-- nvim-origami has no disable() API; opening all folds then disabling
-					-- foldenable is the equivalent: origami silently does nothing while
-					-- foldenable is false.
-					vim.cmd("normal! zR")
-					vim.o.foldcolumn = "0"
-					vim.o.foldenable = false
-				end,
-				on_close = function(win)
-					vim.wo[win].number = true
-					vim.wo[win].relativenumber = true
-					require("noice").enable()
+				pcall(function() require("noice").disable() end)
+				-- nvim-origami has no disable() API; opening all folds then disabling
+				-- foldenable is the equivalent: origami silently does nothing while
+				-- foldenable is false.
+				vim.cmd("normal! zR")
+				vim.o.foldcolumn = "0"
+				vim.o.foldenable = false
+			end,
+			on_close = function(win)
+				vim.wo[win].number = true
+				vim.wo[win].relativenumber = true
+				pcall(function() require("noice").enable() end)
 					-- Re-enabling foldenable is sufficient for origami to resume; no
 					-- explicit enable() call is needed since origami is always loaded.
 					vim.o.foldcolumn = "1"
@@ -244,7 +244,6 @@ return {
 			{ "<leader>fR", function() Snacks.rename.rename_file() end, desc = "[F]ile [R]ename" },
 			{ "<leader>gB", function() Snacks.gitbrowse() end, desc = "Git Browse", mode = { "n", "v" } },
 			{ "<leader>gb", function() Snacks.git.blame_line() end, desc = "Git Blame Line" },
-			{ "<leader>gf", function() Snacks.lazygit.log_file() end, desc = "Lazygit Current File History" },
 			{ "<leader>gg", function() Snacks.lazygit() end, desc = "Lazygit" },
 			{ "<leader>gl", function() Snacks.lazygit.log() end, desc = "Lazygit Log (cwd)" },
 			{ "<leader>un", function() Snacks.notifier.hide() end, desc = "Dismiss All Notifications" },
