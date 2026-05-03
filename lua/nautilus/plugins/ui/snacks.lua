@@ -167,10 +167,8 @@ return {
 					colorschemes = {
 						confirm = function(picker, item)
 							local source = require("snacks.picker.config.sources").colorschemes
-							-- local core = require("nautilus.core.functions")
 							source.confirm(picker, item)
-							-- core.saveColorscheme(item.text)
-							--require("nautilus.custom.colorscheme").save_colorscheme(item.text)
+							require("nautilus.custom.colorscheme").save_colorscheme(item.text)
 						end,
 					},
 				},

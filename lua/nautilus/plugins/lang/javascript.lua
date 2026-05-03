@@ -110,4 +110,8 @@ return {
 		"marilari88/neotest-vitest",
 		ft = lang.ft("javascript"),
 	},
+	{
+		"haydenmeade/neotest-jest",
+		ft = lang.ft("javascript"),
+	},
 }

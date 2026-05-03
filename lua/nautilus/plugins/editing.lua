@@ -6,6 +6,67 @@
 -- -- writing wrappings
 -- -- etc.
 return {
+	{ -- Project-wide find & replace (JetBrains "Find in Files + Replace" equivalent)
+		"MagicDuck/grug-far.nvim",
+		cmd = { "GrugFar" },
+		keys = {
+			{
+				"<leader>sR",
+				function()
+					require("grug-far").toggle_instance({
+						instanceName = "search_replace",
+						transient = true,
+					})
+				end,
+				desc = "[S]earch & [R]eplace (grug-far)",
+				mode = { "n" },
+			},
+			{
+				"<leader>sR",
+				function()
+					require("grug-far").with_visual_selection({
+						instanceName = "search_replace",
+						transient = true,
+					})
+				end,
+				desc = "[S]earch & [R]eplace selection (grug-far)",
+				mode = { "v" },
+			},
+		},
+		opts = {
+			headerMaxWidth = 80,
+			-- Remap all internal keymaps away from <localleader> to avoid conflict
+			-- with the global <leader> tree (localleader = space = leader in this config).
+			keymaps = {
+				replace             = { n = "R" },
+				qflist              = { n = "Q" },
+				syncLocations       = { n = "S" },
+				syncLine            = { n = "sl" },
+				close               = { n = "q" },
+				historyOpen         = { n = "H" },
+				historyAdd          = { n = "ha" },
+				refresh             = { n = "<C-r>" },
+				openLocation        = { n = "o" },
+				openNextLocation    = { n = "<down>" },
+				openPrevLocation    = { n = "<up>" },
+				gotoLocation        = { n = "<CR>" },
+				pickHistoryEntry    = { n = "<CR>" },
+				abort               = { n = "<C-c>" },
+				help                = { n = "g?" },
+				toggleShowCommand   = { n = "W" },
+				swapEngine          = { n = "E" },
+				previewLocation     = { n = "P" },
+				swapReplacementInterpreter = { n = "X" },
+				applyNext           = { n = "]r" },
+				applyPrev           = { n = "[r" },
+				syncNext            = { n = "]s" },
+				syncPrev            = { n = "[s" },
+				syncFile            = { n = "sv" },
+				nextInput           = { n = "<Tab>" },
+				prevInput           = { n = "<S-Tab>" },
+			},
+		},
+	},
 	{
 		"brenoprata10/nvim-highlight-colors",
 		event = { "BufReadPost", "BufNewFile" },

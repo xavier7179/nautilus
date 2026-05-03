@@ -128,4 +128,26 @@ return {
 		"rouge8/neotest-rust",
 		ft = lang.ft("rust"),
 	},
+
+	{ -- Auto-start bacon when entering a Rust project buffer
+		"mrcjkb/rustaceanvim", -- piggy-back on existing plugin; no extra dep needed
+		optional = true,
+		init = function()
+			vim.api.nvim_create_autocmd("FileType", {
+				pattern = lang.ft("rust"),
+				desc = "Auto-start bacon in Rust project",
+				callback = function()
+					-- Only start once per Neovim session; skip if already running.
+					if vim.g.bacon_started then return end
+					local root = vim.fn.findfile("Cargo.toml", vim.fn.expand("%:p:h") .. ";")
+					if root == "" then return end
+					vim.fn.jobstart({ "bacon", "--headless" }, {
+						cwd = vim.fn.fnamemodify(root, ":h"),
+						detach = true,
+					})
+					vim.g.bacon_started = true
+				end,
+			})
+		end,
+	},
 }

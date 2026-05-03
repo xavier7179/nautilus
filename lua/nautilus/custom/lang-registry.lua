@@ -97,7 +97,7 @@ return {
 			lint = {
 				enabled = true,
 				linters = { "cmakelint" },
-				mason = {},
+				mason = { "cmakelint" },
 			},
 			dap = {
 				enabled = false,
@@ -149,7 +149,7 @@ return {
 			},
 			tests = {
 				enabled = true,
-				adapters = { "vitest" },
+				adapters = { "vitest", "jest" },
 			},
 			tasks = {
 				enabled = true,

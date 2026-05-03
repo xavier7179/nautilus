@@ -15,24 +15,6 @@ function M.enableAutoFormatting()
 	vim.g.disable_autoformat = false
 end
 
--- Colorscheme functions
---
----@param fallback? string
----@return string|nil
-M.getColorscheme = function(fallback)
-	if not vim.g.COLORS_NAME then vim.cmd.rshada() end
-	if not vim.g.COLORS_NAME or vim.g.COLORS_NAME == "" then return fallback or "default" end
-	return vim.g.COLORS_NAME
-end
-
----@param colorscheme? string
-M.saveColorscheme = function(colorscheme)
-	colorscheme = colorscheme or vim.g.colors_name
-	if M.getColorscheme() == colorscheme then return end
-	vim.g.COLORS_NAME = colorscheme
-	vim.cmd.wshada()
-end
-
 M.closePickersByLayout = function(active_pickers, layout_name, picker_to_avoid)
 	-- Iterate through each active picker
 	for _, picker in ipairs(active_pickers) do
@@ -52,3 +34,4 @@ M.get_file_with_path = function(bufnr, file)
 end
 
 return M
+

@@ -37,9 +37,9 @@ Treesitter parsers are managed automatically by `nvim-treesitter` via `:TSUpdate
 
 Most linters and formatters are **auto-installed via Mason** on first launch (`:MasonUpdate`). The following require system-level installation:
 
-- `pip install cmakelint` — CMake linter (`cmakelint`) must be on PATH; Mason entry is intentionally left empty
+- `cargo install bacon` — required for Rust continuous background diagnostics (auto-started when opening a Rust project)
 
-All other tools (shellcheck, eslint, phpcs, markdownlint-cli2, yamllint, biome, shfmt, clang-format, clang-tidy, etc.) are managed automatically by Mason.
+All other tools (shellcheck, eslint, phpcs, markdownlint-cli2, yamllint, biome, shfmt, clang-format, clang-tidy, cmakelint, etc.) are managed automatically by Mason.
 
 ## Post-Install (OSX)
 
@@ -80,6 +80,8 @@ All `<leader>` bindings follow a strict **tree organisation**: the first letter 
 | `]t` / `[t` | Next / prev TODO comment |
 | `]q` / `[q` | Next / prev Trouble/Quickfix item |
 | `]]` / `[[` | Next / prev word reference |
+| `[C` | Jump to outer treesitter context |
+| `[b` / `]b` | Go to / select next breadcrumb context (dropbar) |
 | `<S-h>` / `<S-l>` | Prev / next buffer |
 | `<C-hjkl>` | Navigate windows (smart-splits: seamless with WezTerm panes) |
 | `<A-hjkl>` | Move lines / selections (mini.move) |
@@ -113,6 +115,7 @@ All `<leader>` bindings follow a strict **tree organisation**: the first letter 
 | `<leader>cb` | CMake Build |
 | `<leader>cr` | CMake Run |
 | `<leader>ct` | CMake Test |
+| `<leader>cB` | Code Breadcrumb picker (dropbar) |
 | `<leader>cR` | Rust Code Action (rustaceanvim, Rust buffers only) |
 
 ### `<leader>d` — Debug
@@ -200,6 +203,7 @@ All `<leader>` bindings follow a strict **tree organisation**: the first letter 
 
 | Key | Action |
 |-----|--------|
+| `<leader>sR` | Search & Replace (grug-far) |
 | `<leader>sf` | Search Files |
 | `<leader>sg` | Search Grep |
 | `<leader>sw` | Search Word / selection |
@@ -292,7 +296,7 @@ All `<leader>` bindings follow a strict **tree organisation**: the first letter 
 |--------|---------|
 | snacks.nvim | Dashboard, file picker, grep, explorer, notifier, zen mode, lazygit, terminal, scratch buffers |
 | noice.nvim | Replaces cmdline, messages, and popupmenu UI |
-| mini.statusline | Lightweight statusline |
+| mini.statusline | Lightweight statusline with LSP progress, macro recording indicator, and lazy update count |
 | mini.tabline | Buffer tabline with modified indicator |
 | flash.nvim | Fast motions and search jumps |
 | trouble.nvim | Diagnostics, references, and quickfix list panel |
@@ -300,6 +304,8 @@ All `<leader>` bindings follow a strict **tree organisation**: the first letter 
 | render-markdown.nvim | In-buffer rendered Markdown |
 | nvim-highlight-colors | Inline color code previews |
 | showkeys | Displays pressed keys on screen — recording mode toggle (`<leader>uK`) also zooms WezTerm font |
+| dropbar.nvim | IDE-style LSP/treesitter breadcrumb in the winbar (`<leader>cB` picker, `[b`/`]b` navigation) |
+| nvim-treesitter-context | Sticky function/class context header while scrolling (`[C` to jump to context) |
 
 ### Completion
 
@@ -358,6 +364,7 @@ All `<leader>` bindings follow a strict **tree organisation**: the first letter 
 | mini.comment | Comment toggling with Treesitter context (`gc`, `gcc`) |
 | nvim-ts-context-commentstring | Correct commentstring per embedded language context (used by mini.comment) |
 | nvim-origami | LSP/Treesitter fold provider with fold decorations, auto-fold, and search-pause |
+| grug-far.nvim | Project-wide find & replace panel (`<leader>sR`) |
 
 ### Language Support
 
@@ -365,9 +372,9 @@ All `<leader>` bindings follow a strict **tree organisation**: the first letter 
 |----------|-----|-----------|--------|----------|-------------|
 | C / C++ | clangd + clangd_extensions | clang-format | clang-tidy | codelldb | ✓ (auto-enabled) |
 | CMake | cmake-language-server | N/A | cmakelint | N/A | — |
-| Rust | rust-analyzer (rustaceanvim) + crates.nvim | LSP built-in | clippy | codelldb | `<leader>uh` |
+| Rust | bacon-ls + rustaceanvim + crates.nvim | rustfmt (built-in) | bacon | codelldb | `<leader>uh` |
 | PHP | intelephense | php-cs-fixer | phpcs | php-debug-adapter | — |
-| JavaScript / TypeScript | vtsls | biome | eslint | js-debug-adapter | ✓ (configured) |
+| JavaScript / TypeScript | vtsls | biome | eslint | js-debug-adapter | ✓ (configured) — Jest + Vitest adapters |
 | Markdown | marksman | markdownlint-cli2 | markdownlint-cli2 | N/A | — |
 | YAML | yamlls + SchemaStore | LSP built-in | yamllint | N/A | — |
 | Bash / Shell | bashls | shfmt | shellcheck | bash-debug-adapter | — |

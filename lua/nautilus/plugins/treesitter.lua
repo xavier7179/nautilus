@@ -51,4 +51,26 @@ return {
 			},
 		},
 	},
+	{
+		"nvim-treesitter/nvim-treesitter-context",
+		event = { "BufReadPost", "BufNewFile" },
+		dependencies = { "nvim-treesitter/nvim-treesitter" },
+		opts = {
+			enable = true,
+			max_lines = 4,        -- max lines the context window can take up
+			min_window_height = 20, -- only show when window is tall enough
+			multiline_threshold = 1, -- max lines a single context can span
+			trim_scope = "outer", -- which context lines to discard when max_lines is exceeded
+			mode = "cursor",      -- "cursor" or "topline"
+			separator = nil,      -- separator between context and content; nil = no line
+		},
+		keys = {
+			{
+				"[C",
+				function() require("treesitter-context").go_to_context(vim.v.count1) end,
+				desc = "Jump to outer context",
+				silent = true,
+			},
+		},
+	},
 } -- Synthax Highlighting

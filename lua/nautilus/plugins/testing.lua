@@ -16,6 +16,28 @@ local adapter_factories = {
 			filter_dir = function(name) return name ~= "node_modules" end,
 		})
 	end,
+	jest = function()
+		local ok, adapter = pcall(require, "neotest-jest")
+		if not ok then return nil end
+		return adapter({
+			jestCommand = "npm test --",
+			jestConfigFile = function(file)
+				-- Resolve jest config relative to the detected project root
+				local root = vim.fn.fnamemodify(
+					vim.fn.findfile("jest.config.*", file .. ";"),
+					":h"
+				)
+				return root ~= "" and root or nil
+			end,
+			env = { CI = "true" },
+			cwd = function(path)
+				return vim.fn.fnamemodify(
+					vim.fn.findfile("package.json", path .. ";"),
+					":h"
+				)
+			end,
+		})
+	end,
 }
 
 local function resolve_adapters()
@@ -46,6 +68,7 @@ return {
 			"nvim-neotest/nvim-nio",
 			"nvim-treesitter/nvim-treesitter",
 			"stevearc/overseer.nvim",
+			-- adapter plugins are declared in per-language files under plugins/lang/
 		},
 		cmd = { "Neotest", "NeotestSummary", "NeotestOutput", "NeotestRun" },
 		keys = {

@@ -10,11 +10,14 @@
 
 [X] Snacks.nvim Profiler
 [X] Blink.cmp
-[X] mini.statusline
+[X] mini.statusline (enriched: LSP progress, macro recording indicator)
 [X] Replace nvim-ufo with nvim-origami (LSP folds, fold decorations, h/l keymaps, Snacks auto-fold toggle)
 [X] More mini plugins
 [X] Hologram.nvim — dropped, not pursuing (inline image rendering not a priority)
-[ ] Edgy templates for each type of Supported Language (with [edge-group.vim](https://github.com/lucobellic/edgy-group.nvim)?) — tracked in plan.md step 16
+[X] nvim-treesitter-context — sticky context header while scrolling long files
+[X] dropbar.nvim — IDE-style breadcrumb in winbar (`<leader>cB`, `[b`/`]b`)
+[X] neotest-jest — Jest adapter for JS/TS projects alongside neotest-vitest
+[ ] Edgy templates for each type of Supported Language (with [edge-group.vim](https://github.com/lucobellic/edgy-group.nvim)?) — tracked in plan.md step 15
 [X] Evaluate placing back overseer
 [X] Evaluate introducing neotest
 
@@ -38,6 +41,7 @@
 
 ## Programming Add-on
 
+[X] Fix cmakelint Mason package wiring (was silently not installing)
 [ ] MISRA checker
 [ ] Docker support
 
