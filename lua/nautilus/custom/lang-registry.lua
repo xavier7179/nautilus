@@ -121,6 +121,43 @@ return {
 		},
 	},
 
+	docker = {
+		ft = { "dockerfile" },
+		treesitter = { "dockerfile" },
+		services = {
+			lsp = {
+				enabled = true,
+				servers = { "dockerls" },
+				mason = { "dockerfile-language-server" },
+			},
+			format = {
+				enabled = false,
+				conform = {},
+				mason = {},
+			},
+			lint = {
+				enabled = true,
+				linters = { "hadolint" },
+				mason = { "hadolint" },
+			},
+			dap = {
+				enabled = false,
+				mason = {},
+			},
+			completion = {
+				enabled = true,
+			},
+			tests = {
+				enabled = false,
+				adapters = {},
+			},
+			tasks = {
+				enabled = false,
+				commands = {},
+			},
+		},
+	},
+
 	javascript = {
 		ft = { "javascript", "javascriptreact", "typescript", "typescriptreact" },
 		treesitter = { "javascript", "typescript", "tsx", "jsdoc", "css", "html" },

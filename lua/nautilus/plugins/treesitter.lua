@@ -12,9 +12,8 @@ return {
 		},
 		opts = {
 			-- auto_install = true,
-			ensure_installed = vim.list_extend(lang.treesitter(), {
-				"dockerfile",
-				"git_config",
+		ensure_installed = vim.list_extend(lang.treesitter(), {
+			"git_config",
 				"gitattributes",
 				"gitcommit",
 				"gitignore",

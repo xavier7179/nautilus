@@ -43,7 +43,7 @@
 
 [X] Fix cmakelint Mason package wiring (was silently not installing)
 [ ] MISRA checker
-[ ] Docker support
+[X] Docker support
 
 ## AI
 
