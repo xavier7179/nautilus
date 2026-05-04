@@ -103,6 +103,35 @@ return {
 	},
 
 	{
+		"mfussenegger/nvim-lint",
+		optional = true,
+		config = function()
+			local lint = require("lint")
+			lint.linters.cppcheck = vim.tbl_deep_extend("force", lint.linters.cppcheck, {
+				args = function()
+					local args = {
+						"--enable=all",
+						"--inconclusive",
+						"--inline-suppr", -- honour // cppcheck-suppress comments in source
+						"--quiet",
+					}
+					if vim.g.cppcheck_misra_enabled then
+						-- Requires cppcheck's bundled misra.py addon (ships with cppcheck).
+						-- For human-readable rule descriptions (e.g. "Rule 15.5 — ..."), place a
+						-- misra.json file at the project root pointing to a MISRA-C rule text file:
+						--   { "script": "misra.py", "args": ["--rule-texts", ".misra-rules.txt"] }
+						-- Without it, diagnostics still fire but show rule IDs only (e.g. "misra-c2012-15.5").
+						-- Per-project suppressions can be placed in a .cppcheck file at the project root.
+						table.insert(args, "--addon=misra")
+					end
+					table.insert(args, "$FILENAME")
+					return args
+				end,
+			})
+		end,
+	},
+
+	{
 		"mfussenegger/nvim-dap",
 		optional = true,
 		ft = lang.ft("c"),

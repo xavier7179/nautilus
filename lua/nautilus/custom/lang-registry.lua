@@ -57,28 +57,28 @@ return {
 				conform = { "clang_format" },
 				mason = { "clang-format" },
 			},
-			lint = {
-				enabled = false,
-				linters = {},
-				mason = {},
-			},
-			dap = {
-				enabled = true,
-				mason = { "codelldb" },
-			},
-			completion = {
-				enabled = true,
-			},
-			tests = {
-				enabled = false,
-				adapters = {},
-			},
-			tasks = {
-				enabled = false,
-				commands = {},
-			},
+		lint = {
+			enabled = true,
+			linters = { "cppcheck" },
+			mason = { "cppcheck" },
+		},
+		dap = {
+			enabled = true,
+			mason = { "codelldb" },
+		},
+		completion = {
+			enabled = true,
+		},
+		tests = {
+			enabled = false,
+			adapters = {},
+		},
+		tasks = {
+			enabled = false,
+			commands = {},
 		},
 	},
+},
 
 	cmake = {
 		ft = { "cmake" },
