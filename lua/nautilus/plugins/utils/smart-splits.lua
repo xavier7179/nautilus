@@ -1,16 +1,19 @@
 return {
 	{
 		"mrjones2014/smart-splits.nvim",
-		lazy = false, -- must not be lazy: sets IS_NVIM wezterm user var on load/exit
-		opts = {
-			multiplexer_integration = "wezterm",
+		lazy = false,
+		opts = function()
+			local is_wezterm = vim.env.TERM_PROGRAM == "WezTerm"
+			return {
+			multiplexer_integration = is_wezterm and "wezterm" or nil,
 			-- Do nothing when cursor is already at the edge (avoids accidental WezTerm pane creation)
 			at_edge = "stop",
 			-- Match the previous manual resize step of 5
 			default_amount = 5,
 			ignored_buftypes = { "nofile", "quickfix", "prompt" },
 			ignored_filetypes = { "NvimTree", "neo-tree" },
-		},
+			}
+		end,
 		keys = {
 			-- Window navigation (replaces raw :wincmd keymaps removed from keymaps.lua)
 			{ "<C-h>", function() require("smart-splits").move_cursor_left() end,  desc = "Move to left split" },
