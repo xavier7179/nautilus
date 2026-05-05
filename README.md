@@ -41,6 +41,8 @@ Most linters and formatters are **auto-installed via Mason** on first launch (`:
 
 All other tools (shellcheck, eslint, phpcs, markdownlint-cli2, yamllint, biome, shfmt, clang-format, clang-tidy, cmakelint, etc.) are managed automatically by Mason.
 
+C/C++ MISRA checks are available through `cppcheck` in opt-in mode. Toggle MISRA linting in C/C++ buffers with `<leader>uM`.
+
 ## Post-Install (OSX)
 
 - Update `.zshrc` setting the default editor: `export EDITOR=nvim`
@@ -372,6 +374,7 @@ All `<leader>` bindings follow a strict **tree organisation**: the first letter 
 |----------|-----|-----------|--------|----------|-------------|
 | C / C++ | clangd + clangd_extensions | clang-format | clang-tidy | codelldb | ✓ (auto-enabled) |
 | CMake | cmake-language-server | N/A | cmakelint | N/A | — |
+| Dockerfile | dockerls | N/A | hadolint | N/A | — |
 | Rust | bacon-ls + rustaceanvim + crates.nvim | rustfmt (built-in) | bacon | codelldb | `<leader>uh` |
 | PHP | intelephense | php-cs-fixer | phpcs | php-debug-adapter | — |
 | JavaScript / TypeScript | vtsls | biome | eslint | js-debug-adapter | ✓ (configured) — Jest + Vitest adapters |

@@ -42,7 +42,7 @@
 ## Programming Add-on
 
 [X] Fix cmakelint Mason package wiring (was silently not installing)
-[ ] MISRA checker
+[X] MISRA checker
 [X] Docker support
 
 ## AI
@@ -54,5 +54,4 @@
 [X] Check unused or redundant plugins  (see Plugin notes above)
 [X] Optimize key mappings              (full tree refactor — see README Keymap Tree)
 [X] Git double check (keep only useful stuff)
-
 
