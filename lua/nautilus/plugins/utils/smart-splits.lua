@@ -11,7 +11,7 @@ return {
 			-- Match the previous manual resize step of 5
 			default_amount = 5,
 			ignored_buftypes = { "nofile", "quickfix", "prompt" },
-			ignored_filetypes = { "NvimTree", "neo-tree" },
+			ignored_filetypes = { "NvimTree", "neo-tree", "snacks_picker_list" },
 			}
 		end,
 		keys = {

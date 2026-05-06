@@ -50,7 +50,7 @@ return {
 			local cc = require("codecompanion")
 			cc.setup(opts)
 
-			-- set a filetype for codecompanion chats (so that edgy sees them)
+			-- Normalize codecompanion filetypes to a single ft for consistent keymap/Trouble targeting.
 			vim.api.nvim_create_autocmd("FileType", {
 				pattern = { "codecompanion", "codecompanion-chat" },
 				callback = function() vim.bo.filetype = "codecompanion_chat" end,

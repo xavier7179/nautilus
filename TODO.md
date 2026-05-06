@@ -17,7 +17,9 @@
 [X] nvim-treesitter-context — sticky context header while scrolling long files
 [X] dropbar.nvim — IDE-style breadcrumb in winbar (`<leader>cB`, `[b`/`]b`)
 [X] neotest-jest — Jest adapter for JS/TS projects alongside neotest-vitest
-[ ] Edgy templates for each type of Supported Language (with [edge-group.vim](https://github.com/lucobellic/edgy-group.nvim)?) — tracked in plan.md step 15
+[X] Edgy templates for each type of Supported Language (with [edge-group.vim](https://github.com/lucobellic/edgy-group.nvim)?) — tracked in plan.md step 15
+    ↳ ABANDONED: edgy.nvim + edgy-group.nvim removed entirely. See plans/bugs-and-fixes.md for root cause analysis.
+       Panel layout now handled directly via Snacks (explorer, terminal) and dapui native layout config.
 [X] Evaluate placing back overseer
 [X] Evaluate introducing neotest
 
@@ -54,4 +56,3 @@
 [X] Check unused or redundant plugins  (see Plugin notes above)
 [X] Optimize key mappings              (full tree refactor — see README Keymap Tree)
 [X] Git double check (keep only useful stuff)
-

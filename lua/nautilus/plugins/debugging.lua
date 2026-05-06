@@ -95,6 +95,23 @@ return {
 					disconnect = "⏏",
 				},
 			},
+			layouts = {
+				{
+					elements = {
+						{ id = "scopes",      size = 0.25 },
+						{ id = "watches",     size = 0.25 },
+						{ id = "stacks",      size = 0.25 },
+						{ id = "breakpoints", size = 0.25 },
+					},
+					size = 40,
+					position = "right",
+				},
+				{
+					elements = { "repl", "console" },
+					size = 10,
+					position = "bottom",
+				},
+			},
 		},
 		config = function(_, opts)
 			local dap = require("dap")
@@ -102,8 +119,9 @@ return {
 
 			dapui.setup(opts)
 
-			dap.listeners.before.attach.dapui_config = function() dapui.open() end
-			dap.listeners.before.launch.dapui_config = function() dapui.open() end
+			-- Open DAP UI when a debug session initialises (buffers exist at this point).
+			dap.listeners.after.event_initialized.dapui_config = function() dapui.open() end
+			-- Close DAP UI on session end so right edge returns to its previous state.
 			dap.listeners.before.event_terminated.dapui_config = function() dapui.close() end
 			dap.listeners.before.event_exited.dapui_config = function() dapui.close() end
 		end,

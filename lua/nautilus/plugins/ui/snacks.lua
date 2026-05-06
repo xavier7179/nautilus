@@ -1,3 +1,22 @@
+-- Focus the nearest real file window in the current tab.
+-- Scans tab windows directly instead of relying on picker.main, which can
+-- resolve to the explorer list itself (buftype="" passes the file filter).
+-- Falls back to picker:close() only when no real file window exists.
+local function explorer_focus_editor(picker)
+	for _, win in ipairs(vim.api.nvim_tabpage_list_wins(0)) do
+		if vim.api.nvim_win_is_valid(win) then
+			local buf = vim.api.nvim_win_get_buf(win)
+			local ft = vim.bo[buf].filetype
+			local bt = vim.bo[buf].buftype
+			if bt == "" and not ft:find("^snacks_picker") and ft ~= "snacks_dashboard" then
+				vim.api.nvim_set_current_win(win)
+				return
+			end
+		end
+	end
+	picker:close()
+end
+
 return {
 	{
 		"folke/snacks.nvim",
@@ -152,7 +171,7 @@ return {
 					{ section = "startup" },
 				},
 			},
-			explorer = { enabled = true, replace_netrw = true },
+			explorer = { enabled = true, replace_netrw = true, layout = { width = 52 } },
 			image = { enabled = false },
 			indent = { enabled = true, char = "┊" },
 			input = { enabled = true },
@@ -171,6 +190,22 @@ return {
 							require("nautilus.custom.colorscheme").save_colorscheme(item.text)
 						end,
 					},
+					-- Override <Esc> in the explorer to focus the editor instead of closing.
+					-- Applied to both the list window (normal mode) and input window (search box).
+					explorer = {
+						win = {
+							list = {
+								keys = {
+									["<Esc>"] = function(picker) explorer_focus_editor(picker) end,
+								},
+							},
+							input = {
+								keys = {
+									["<Esc>"] = function(picker) explorer_focus_editor(picker) end,
+								},
+							},
+						},
+					},
 				},
 			},
 			quickfile = { enabled = true },
@@ -180,7 +215,10 @@ return {
 			},
 			scroll = { enabled = true },
 			statuscolumn = { enabled = true, folds = { open = true } },
-			terminal = { enabled = true },
+			terminal = {
+				enabled = true,
+				win = { height = 0.25 },
+			},
 			toggle = { enabled = true, which_key = false },
 			words = { enabled = true },
 			styles = {
@@ -267,6 +305,27 @@ return {
 				end,
 			},
 			{ "<leader>fe", function() Snacks.explorer() end, desc = "Toggle [F]ile [E]xplorer" }, -- toggle file explorer
+			{
+				"<leader>ue",
+				function()
+					-- Check if any panel is open (explorer or terminal).
+					local explorer_open, terminal_open = false, false
+					for _, win in ipairs(vim.api.nvim_list_wins()) do
+						local ft = vim.bo[vim.api.nvim_win_get_buf(win)].filetype
+						if ft == "snacks_picker_list" then explorer_open = true end
+						if ft == "snacks_terminal" then terminal_open = true end
+					end
+					local any_open = explorer_open or terminal_open
+					if any_open then
+						if explorer_open then Snacks.explorer() end
+						if terminal_open then Snacks.terminal.toggle() end
+					else
+						Snacks.explorer()
+						Snacks.terminal.toggle()
+					end
+				end,
+				desc = "Toggle panels (explorer + terminal)",
+			},
 			{ "<leader>sf", function() Snacks.picker.files({ layout = "telescope" }) end, desc = "[S]earch [F]iles" },
 			{ "<leader>sg", function() Snacks.picker.grep({ layout = "telescope" }) end, desc = "[S]earch [G]rep" },
 			{
@@ -329,6 +388,16 @@ return {
 			},
 		},
 		init = function()
+			-- Open the explorer on startup when Neovim is launched with file arguments.
+			-- When argc == 0 (dashboard), leave panels closed until the user opens a file.
+			vim.api.nvim_create_autocmd("UIEnter", {
+				once = true,
+				callback = function()
+					if vim.fn.argc(-1) == 0 then return end
+					vim.schedule(function() Snacks.explorer() end)
+				end,
+			})
+
 			vim.api.nvim_create_autocmd("User", {
 				pattern = "VeryLazy",
 				callback = function()

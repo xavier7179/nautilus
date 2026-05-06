@@ -247,7 +247,7 @@ All `<leader>` bindings follow a strict **tree organisation**: the first letter 
 | `<leader>uC` | Pick Colorscheme |
 | `<leader>ud` | Toggle Diagnostics |
 | `<leader>uD` | Toggle Dim Mode |
-| `<leader>ue` | Toggle Edgy panels |
+| `<leader>ue` | Toggle panels (explorer + terminal) |
 | `<leader>ug` | Toggle Indent Guides |
 | `<leader>uh` | Toggle Inlay Hints |
 | `<leader>uK` | Toggle recording mode (showkeys + WezTerm font zoom) |
