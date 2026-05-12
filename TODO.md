@@ -8,6 +8,10 @@
 
 ## Plugins
 
+[ ] nosduco/remote-sshfs.nvim — Remote file editing via SSHFS + fuse-t (`<leader>r*` keymaps)
+
+
+
 [X] Snacks.nvim Profiler
 [X] Blink.cmp
 [X] mini.statusline (enriched: LSP progress, macro recording indicator)

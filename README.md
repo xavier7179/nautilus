@@ -15,6 +15,11 @@ A personal Neovim configuration built around [snacks.nvim](https://github.com/fo
 - `brew install node` — required by `js-debug-adapter`, `vtsls`, `eslint-lsp`, and `markdown-toc`
 - `brew install cmake` — required to build CMake projects
 
+### Remote development
+
+- `brew install macos-fuse-t/homebrew-cask/fuse-t` — kext-less FUSE for macOS
+- `brew install macos-fuse-t/homebrew-cask/sshfs-fuse-t` — SSHFS for mounting remote filesystems
+
 ### Rust
 
 Install the Rust toolchain via [rustup](https://rustup.rs):
@@ -201,6 +206,16 @@ All `<leader>` bindings follow a strict **tree organisation**: the first letter 
 | `<leader>pQ` | Quickfix List (Trouble) |
 | `<leader>pT` | Project TODOs (Trouble) |
 
+### `<leader>r` — Remote
+
+| Key | Action |
+|-----|--------|
+| `<leader>rc` | Connect to remote host (picker from SSH config) |
+| `<leader>rd` | Disconnect from remote host |
+| `<leader>rf` | Find files on remote (runs `fd`/`find` via SSH) |
+| `<leader>rg` | Live grep on remote (runs `rg` via SSH) |
+| `<leader>re` | Edit an SSH config file |
+
 ### `<leader>s` — Search
 
 | Key | Action |
@@ -367,6 +382,7 @@ All `<leader>` bindings follow a strict **tree organisation**: the first letter 
 | nvim-ts-context-commentstring | Correct commentstring per embedded language context (used by mini.comment) |
 | nvim-origami | LSP/Treesitter fold provider with fold decorations, auto-fold, and search-pause |
 | grug-far.nvim | Project-wide find & replace panel (`<leader>sR`) |
+| remote-sshfs.nvim | Remote file editing via SSHFS — connect to hosts, browse files, live grep over SSH (`<leader>r*`) |
 
 ### Language Support
 
