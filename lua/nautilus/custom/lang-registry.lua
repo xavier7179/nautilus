@@ -160,7 +160,7 @@ return {
 
 	javascript = {
 		ft = { "javascript", "javascriptreact", "typescript", "typescriptreact" },
-		treesitter = { "javascript", "typescript", "tsx", "jsdoc", "css", "html" },
+		treesitter = { "javascript", "typescript", "tsx", "jsdoc" },
 		services = {
 			lsp = {
 				enabled = true,
@@ -373,6 +373,117 @@ return {
 				enabled = true,
 				linters = { "yamllint" },
 				mason = { "yamllint" },
+			},
+			dap = {
+				enabled = false,
+				mason = {},
+			},
+			completion = {
+				enabled = true,
+			},
+			tests = {
+				enabled = false,
+				adapters = {},
+			},
+			tasks = {
+				enabled = false,
+				commands = {},
+			},
+		},
+	},
+
+	html = {
+		ft = { "html" },
+		treesitter = { "html" },
+		services = {
+			lsp = {
+				enabled = true,
+				servers = { "html" },
+				mason = { "html-lsp" },
+			},
+			format = {
+				enabled = true,
+				conform = { "prettier" },
+				mason = { "prettier" },
+			},
+			lint = {
+				enabled = true,
+				linters = { "htmlhint" },
+				mason = { "htmlhint" },
+			},
+			dap = {
+				enabled = false,
+				mason = {},
+			},
+			completion = {
+				enabled = true,
+			},
+			tests = {
+				enabled = false,
+				adapters = {},
+			},
+			tasks = {
+				enabled = false,
+				commands = {},
+			},
+		},
+	},
+
+	css = {
+		ft = { "css", "scss", "less" },
+		treesitter = { "css", "scss" },
+		services = {
+			lsp = {
+				enabled = true,
+				servers = { "cssls" },
+				mason = { "css-lsp" },
+			},
+			format = {
+				enabled = true,
+				conform = { "prettier" },
+				mason = { "prettier" },
+			},
+			lint = {
+				enabled = true,
+				linters = { "stylelint" },
+				mason = { "stylelint" },
+			},
+			dap = {
+				enabled = false,
+				mason = {},
+			},
+			completion = {
+				enabled = true,
+			},
+			tests = {
+				enabled = false,
+				adapters = {},
+			},
+			tasks = {
+				enabled = false,
+				commands = {},
+			},
+		},
+	},
+
+	json = {
+		ft = { "json", "jsonc" },
+		treesitter = { "json", "jsonc" },
+		services = {
+			lsp = {
+				enabled = true,
+				servers = { "jsonls" },
+				mason = { "json-lsp" },
+			},
+			format = {
+				enabled = true,
+				conform = { "prettier" },
+				mason = { "prettier" },
+			},
+			lint = {
+				enabled = false,
+				linters = {},
+				mason = {},
 			},
 			dap = {
 				enabled = false,
