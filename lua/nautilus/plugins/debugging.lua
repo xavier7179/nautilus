@@ -51,11 +51,11 @@ return {
 				function() require("dap").pause() end,
 				desc = "Pause",
 			},
-		{
-			"<leader>dR",
-			function() require("dap").repl.toggle() end,
-			desc = "Toggle REPL",
-		},
+			{
+				"<leader>dR",
+				function() require("dap").repl.toggle() end,
+				desc = "Toggle REPL",
+			},
 			{
 				"<leader>dt",
 				function() require("dap").terminate() end,

@@ -388,16 +388,6 @@ return {
 			},
 		},
 		init = function()
-			-- Open the explorer on startup when Neovim is launched with file arguments.
-			-- When argc == 0 (dashboard), leave panels closed until the user opens a file.
-			vim.api.nvim_create_autocmd("UIEnter", {
-				once = true,
-				callback = function()
-					if vim.fn.argc(-1) == 0 then return end
-					vim.schedule(function() Snacks.explorer() end)
-				end,
-			})
-
 			vim.api.nvim_create_autocmd("User", {
 				pattern = "VeryLazy",
 				callback = function()
