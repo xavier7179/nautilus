@@ -129,7 +129,7 @@ return {
 		"rmagatti/auto-session",
 		lazy = true,
 		keys = {
-			-- Will use Telescope if installed or a vim.ui.select picker otherwise
+			-- Uses vim.ui.select for session searching
 			{ "<leader>wR", "<cmd>SessionSearch<CR>", desc = "Session search" },
 			{ "<leader>wl", "<cmd>SessionRestore<CR>", desc = "Restore last session" },
 			{ "<leader>ws", "<cmd>SessionSave<CR>", desc = "Save session" },

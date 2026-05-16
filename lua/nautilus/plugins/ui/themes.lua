@@ -29,7 +29,6 @@ return require("nautilus.custom.colorscheme").lazy_setup({
 				overseer = true,
 				noice = true,
 				snacks = true,
-				telescope = true,
 				treesitter = true,
 				treesitter_context = true,
 			},

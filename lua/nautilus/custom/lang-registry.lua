@@ -60,7 +60,7 @@ return {
 		lint = {
 			enabled = true,
 			linters = { "cppcheck" },
-			mason = { "cppcheck" },
+			mason = {},
 		},
 		dap = {
 			enabled = true,
