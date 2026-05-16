@@ -277,6 +277,7 @@ All `<leader>` bindings follow a strict **tree organisation**: the first letter 
 | `<leader>us` | Toggle Spelling |
 | `<leader>uT` | Toggle Treesitter |
 | `<leader>uw` | Toggle Wrap |
+| `<leader>un` | Dismiss all notifications |
 | `<leader>uW` | Trim trailing whitespace |
 
 ### `<leader>w` — Window / Workspace
@@ -295,7 +296,6 @@ All `<leader>` bindings follow a strict **tree organisation**: the first letter 
 | `<leader>ws` | Save session |
 | `<leader>wR` | Session search |
 | `<leader>wl` | Restore last session |
-| `<leader>un` | Dismiss all notifications |
 
 ### Convenience leaves (single-key shortcuts)
 
@@ -391,7 +391,7 @@ All `<leader>` bindings follow a strict **tree organisation**: the first letter 
 
 | Language | LSP | Formatter | Linter | Debugger | Inlay Hints |
 |----------|-----|-----------|--------|----------|-------------|
-| C / C++ | clangd + clangd_extensions | clang-format | clang-tidy | codelldb | ✓ (auto-enabled) |
+| C / C++ | clangd + clangd_extensions | clang-format | cppcheck (+ clang-tidy via clangd) | codelldb | ✓ (auto-enabled) |
 | CMake | cmake-language-server | N/A | cmakelint | N/A | — |
 | Dockerfile | dockerls | N/A | hadolint | N/A | — |
 | Rust | bacon-ls + rustaceanvim + crates.nvim | rustfmt (built-in) | bacon | codelldb | `<leader>uh` |

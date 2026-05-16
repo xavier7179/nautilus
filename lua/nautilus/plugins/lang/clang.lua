@@ -35,7 +35,7 @@ return {
 					"--function-arg-placeholders",
 					"--fallback-style=llvm",
 				},
-				filetypes = { "c", "cpp", "objc", "objcpp" },
+				filetypes = lang.ft("c"),
 			})
 
 			return opts

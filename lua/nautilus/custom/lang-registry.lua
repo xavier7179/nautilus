@@ -44,8 +44,8 @@ return {
 	},
 
 	c = {
-		ft = { "c", "cpp", "objc", "objcpp", "cuda", "proto" },
-		treesitter = { "c", "cpp", "cuda", "proto" },
+		ft = { "c", "cpp", "objc", "objcpp" },
+		treesitter = { "c", "cpp" },
 		services = {
 			lsp = {
 				enabled = true,
@@ -57,28 +57,28 @@ return {
 				conform = { "clang_format" },
 				mason = { "clang-format" },
 			},
-		lint = {
-			enabled = true,
-			linters = { "cppcheck" },
-			mason = {},
-		},
-		dap = {
-			enabled = true,
-			mason = { "codelldb" },
-		},
-		completion = {
-			enabled = true,
-		},
-		tests = {
-			enabled = false,
-			adapters = {},
-		},
-		tasks = {
-			enabled = false,
-			commands = {},
+			lint = {
+				enabled = true,
+				linters = { "cppcheck" },
+				mason = {},
+			},
+			dap = {
+				enabled = true,
+				mason = { "codelldb" },
+			},
+			completion = {
+				enabled = true,
+			},
+			tests = {
+				enabled = false,
+				adapters = {},
+			},
+			tasks = {
+				enabled = false,
+				commands = {},
+			},
 		},
 	},
-},
 
 	cmake = {
 		ft = { "cmake" },

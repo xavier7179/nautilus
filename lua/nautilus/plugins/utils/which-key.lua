@@ -63,6 +63,7 @@ return {
 					{ "<leader>m", group = "markdown",icon = { icon = "󰍔 ", color = "cyan" } },
 					{ "<leader>o", group = "overseer",icon = { icon = "󰗇 ", color = "orange" } },
 					{ "<leader>p", group = "project", icon = { icon = "󰗋 ", color = "purple" } },
+					{ "<leader>r", group = "remote",  icon = { icon = "󰛳 ", color = "blue" } },
 					{ "<leader>s", group = "search",  icon = { icon = " ", color = "blue" } },
 					{ "<leader>t", group = "test",    icon = { icon = "󰙨 ", color = "green" } },
 					{ "<leader>u", group = "ui",      icon = { icon = "󰙵 ", color = "cyan" } },
