@@ -8,7 +8,7 @@
 
 ## Plugins
 
-[ ] nosduco/remote-sshfs.nvim — Remote file editing via SSHFS + fuse-t (`<leader>r*` keymaps)
+[X] nosduco/remote-sshfs.nvim — Remote file editing via SSHFS + fuse-t (`<leader>r*` keymaps)
 
 
 
@@ -40,6 +40,9 @@
 [X] PHP
 [X] Node
 [X] Javascript / Typescript
+[X] HTML
+[X] CSS
+[X] JSON
 [X] Markdown
 [X] YAML
 [X] Bash / Shell

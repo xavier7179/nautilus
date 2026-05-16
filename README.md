@@ -43,6 +43,7 @@ Treesitter parsers are managed automatically by `nvim-treesitter` via `:TSUpdate
 Most linters and formatters are **auto-installed via Mason** on first launch (`:MasonUpdate`). The following require system-level installation:
 
 - `cargo install bacon` — required for Rust continuous background diagnostics (auto-started when opening a Rust project)
+- `brew install cppcheck` — required for C/C++ MISRA linting (not available via Mason)
 
 All other tools (shellcheck, eslint, phpcs, markdownlint-cli2, yamllint, biome, shfmt, clang-format, clang-tidy, cmakelint, etc.) are managed automatically by Mason.
 
@@ -77,6 +78,7 @@ All `<leader>` bindings follow a strict **tree organisation**: the first letter 
 | `ga` | Code Action |
 | `gr` | Rename Symbol |
 | `gl` | Float Diagnostic |
+| `K` | Hover Documentation |
 | `gS` | Toggle split/join (mini.splitjoin) |
 | `zR` | Open all folds |
 | `zM` | Close all folds |
@@ -100,6 +102,7 @@ All `<leader>` bindings follow a strict **tree organisation**: the first letter 
 
 | Key | Action |
 |-----|--------|
+| `<leader>aa` | Agents: Select Agent (prompt picker) |
 | `<leader>ac` | Toggle Chat (CodeCompanion) |
 | `<leader>ao` | Actions / Options (CodeCompanion) |
 
@@ -290,9 +293,9 @@ All `<leader>` bindings follow a strict **tree organisation**: the first letter 
 | `<leader>wp` | Previous tab |
 | `<leader>wt` | Current buffer in new tab |
 | `<leader>ws` | Save session |
-| `<leader>wr` | Resize mode (h/j/k/l to resize · `<Esc>` or `q` to exit) |
 | `<leader>wR` | Session search |
 | `<leader>wl` | Restore last session |
+| `<leader>un` | Dismiss all notifications |
 
 ### Convenience leaves (single-key shortcuts)
 
@@ -397,6 +400,9 @@ All `<leader>` bindings follow a strict **tree organisation**: the first letter 
 | Markdown | marksman | markdownlint-cli2 | markdownlint-cli2 | N/A | — |
 | YAML | yamlls + SchemaStore | LSP built-in | yamllint | N/A | — |
 | Bash / Shell | bashls | shfmt | shellcheck | bash-debug-adapter | — |
+| HTML | html-lsp | prettier | htmlhint | N/A | — |
+| CSS | cssls | prettier | stylelint | N/A | — |
+| JSON | json-lsp | prettier | N/A | N/A | — |
 | Lua | lua_ls | stylua | N/A | N/A | ✓ (auto-enabled) |
 
 ## Uninstall
