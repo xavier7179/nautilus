@@ -183,7 +183,7 @@ function M.get_entries()
 			end
 		end
 
-		entries[short_name] = entry
+		entries[frontmatter.name] = entry
 	end
 	return entries
 end
@@ -215,7 +215,7 @@ function M.pick()
 			return i.name .. desc_part
 		end,
 	}, function(choice)
-		if choice then require("codecompanion").prompt(choice.short_name) end
+		if choice then require("codecompanion").prompt(choice.name) end
 	end)
 end
 
