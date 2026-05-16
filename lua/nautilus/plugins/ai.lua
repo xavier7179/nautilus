@@ -1,3 +1,5 @@
+local prompts = require("nautilus.custom.prompts")
+
 return {
 
 	-- Copilot backend
@@ -22,7 +24,6 @@ return {
 		opts = {
 			adapters = {
 				copilot = {
-					-- CodeCompanion has built-in support for Copilot and GitHub Models [web:28][web:290]
 					enabled = true,
 				},
 			},
@@ -30,7 +31,48 @@ return {
 				chat = { adapter = "copilot" },
 				inline = { adapter = "copilot" },
 			},
-			-- we’ll keep defaults for now and refine prompts later
+			prompt_library = vim.tbl_deep_extend("keep", prompts.get_entries(), {}),
+			interactions = {
+				chat = {
+					tools = {
+						groups = {
+							debug_agent = {
+								description = "Debug: tools for hypothesis-instrument workflow",
+								tools = {
+									"ask_questions",
+									"create_file",
+									"delete_file",
+									"file_search",
+									"get_changed_files",
+									"get_diagnostics",
+									"grep_search",
+									"insert_edit_into_file",
+									"read_file",
+									"run_command",
+								},
+								opts = {
+									collapse_tools = true,
+									ignore_system_prompt = true,
+									ignore_tool_system_prompt = true,
+								},
+							},
+							read = {
+								description = "Read-only tools for code review and analysis",
+								tools = {
+									"file_search",
+									"grep_search",
+									"read_file",
+									"get_diagnostics",
+									"get_changed_files",
+								},
+								opts = {
+									collapse_tools = true,
+								},
+							},
+						},
+					},
+				},
+			},
 		},
 		keys = {
 			{
@@ -44,6 +86,11 @@ return {
 				"<cmd>CodeCompanionActions<cr>",
 				desc = "Options",
 				mode = { "n", "v" },
+			},
+			{
+				"<leader>aa",
+				function() prompts.pick() end,
+				desc = "Agents: Select Agent",
 			},
 		},
 		config = function(_, opts)
