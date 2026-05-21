@@ -12,8 +12,8 @@ return {
 		},
 		opts = {
 			-- auto_install = true,
-		ensure_installed = vim.list_extend(lang.treesitter(), {
-			"git_config",
+			ensure_installed = vim.list_extend(lang.treesitter(), {
+				"git_config",
 				"gitattributes",
 				"gitcommit",
 				"gitignore",
@@ -49,6 +49,36 @@ return {
 				},
 			},
 		},
+		config = function(_, opts)
+			require("nvim-treesitter.configs").setup(opts)
+			vim.treesitter.query.set(
+				"markdown",
+				"injections",
+				[[
+(fenced_code_block
+  (info_string
+    (language) @injection.language)
+  (code_fence_content) @injection.content)
+((html_block) @injection.content
+  (#set! injection.language "html")
+  (#set! injection.combined)
+  (#set! injection.include-children))
+((minus_metadata) @injection.content
+  (#set! injection.language "yaml")
+  (#offset! @injection.content 1 0 -1 0)
+  (#set! injection.include-children))
+((plus_metadata) @injection.content
+  (#set! injection.language "toml")
+  (#offset! @injection.content 1 0 -1 0)
+  (#set! injection.include-children))
+([
+  (inline)
+  (pipe_table_cell)
+] @injection.content
+  (#set! injection.language "markdown_inline"))
+]]
+			)
+		end,
 	},
 	{
 		"nvim-treesitter/nvim-treesitter-context",
@@ -56,12 +86,12 @@ return {
 		dependencies = { "nvim-treesitter/nvim-treesitter" },
 		opts = {
 			enable = true,
-			max_lines = 4,        -- max lines the context window can take up
+			max_lines = 4, -- max lines the context window can take up
 			min_window_height = 20, -- only show when window is tall enough
 			multiline_threshold = 1, -- max lines a single context can span
 			trim_scope = "outer", -- which context lines to discard when max_lines is exceeded
-			mode = "cursor",      -- "cursor" or "topline"
-			separator = nil,      -- separator between context and content; nil = no line
+			mode = "cursor", -- "cursor" or "topline"
+			separator = nil, -- separator between context and content; nil = no line
 		},
 		keys = {
 			{
