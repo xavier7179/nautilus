@@ -4,10 +4,22 @@ local M = {}
 
 function M.sync_colorscheme() pcall(vim.cmd.rshada) end
 
+---@return string
+function M.get_default_colorscheme()
+	local configured = vim.g.nautilus_default_colorscheme
+	if type(configured) == "string" then
+		configured = vim.trim(configured)
+		if configured ~= "" then return configured end
+	end
+	vim.g.nautilus_default_colorscheme = "default"
+	return "default"
+end
+
 ---@param fallback? string
 ---@return string|nil
 function M.get_colorscheme(fallback)
 	if not vim.g.COLORS_NAME then M.sync_colorscheme() end
+	fallback = fallback or M.get_default_colorscheme()
 	return vim.g.COLORS_NAME or fallback
 end
 
@@ -53,7 +65,7 @@ function M.tune_colorscheme_plugins(plugins)
 		return vim.iter(tbl_wrap(pattern)):any(function(pat) return string.match(colorscheme, pat) end)
 	end
 
-	local colorscheme = M.get_colorscheme("default")
+	local colorscheme = M.get_colorscheme()
 
 	plugins = plugins:map(function(plug)
 		if match_colorscheme(plug, colorscheme) then
@@ -77,7 +89,7 @@ function M.lazy_setup(plugins)
 		group = aug,
 		callback = function()
 			M.load_colorscheme()
-			return vim.g.colors_name == M.get_colorscheme("default")
+			return vim.g.colors_name == M.get_colorscheme()
 		end,
 	})
 	-- You can also save colorschemes manually instead of relying on the `ColorScheme` event
