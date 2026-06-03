@@ -1,5 +1,42 @@
 -- Debuggers (hopefully for all supported languages
 local lang = require("nautilus.custom.lang")
+local run_registry = require("nautilus.custom.run-registry")
+
+local function run_debug_preset(preset)
+	if not preset or not preset.dap then
+		vim.notify("Invalid debug preset", vim.log.levels.ERROR)
+		return
+	end
+
+	vim.g.nautilus_last_debug_preset_id = preset.id
+	require("dap").run(vim.deepcopy(preset.dap))
+end
+
+local function pick_debug_preset()
+	local items = run_registry.list_for_buffer(0)
+	if vim.tbl_isempty(items) then
+		vim.notify("No debug presets available for current buffer", vim.log.levels.WARN)
+		return
+	end
+
+	require("snacks").picker.select(items, {
+		prompt = "Debug Presets",
+		format_item = function(item) return item.name end,
+	}, function(choice)
+		if not choice then return end
+		run_debug_preset(choice)
+	end)
+end
+
+local function rerun_last_debug_preset()
+	local preset = run_registry.get(vim.g.nautilus_last_debug_preset_id, 0) or run_registry.default_for_buffer(0)
+	if not preset then
+		vim.notify("No debug preset available to rerun", vim.log.levels.WARN)
+		return
+	end
+	run_debug_preset(preset)
+end
+
 return {
 	{
 		"mfussenegger/nvim-dap",
@@ -52,9 +89,19 @@ return {
 				desc = "Pause",
 			},
 			{
-				"<leader>dR",
+				"<leader>dq",
 				function() require("dap").repl.toggle() end,
 				desc = "Toggle REPL",
+			},
+			{
+				"<leader>dr",
+				pick_debug_preset,
+				desc = "Run Debug Preset",
+			},
+			{
+				"<leader>dR",
+				rerun_last_debug_preset,
+				desc = "Run Last Debug Preset",
 			},
 			{
 				"<leader>dt",

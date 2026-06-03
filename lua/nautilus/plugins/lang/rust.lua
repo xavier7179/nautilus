@@ -51,7 +51,7 @@ return {
 
 					vim.keymap.set(
 						"n",
-						"<leader>dr",
+						"<leader>dG",
 						function() vim.cmd.RustLsp("debuggables") end,
 						{ desc = "Rust Debuggables", buffer = bufnr }
 					)
