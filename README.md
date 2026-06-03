@@ -213,6 +213,7 @@ All `<leader>` bindings follow a strict **tree organisation**: the first letter 
 | `<leader>pQ` | Quickfix List (Trouble) |
 | `<leader>pT` | Project TODOs (Trouble) |
 | `<leader>pa` | Action Palette |
+| `<leader>pt` | Project Templates |
 
 ### `<leader>r` — Remote
 
@@ -323,10 +324,12 @@ All `<leader>` bindings follow a strict **tree organisation**: the first letter 
 - `:RunPipeline` — open pipeline picker (alias for `<leader>op`)
 - `:AgentActions` — open AI agent picker (alias for `<leader>aa`)
 - `:Action` — open command palette aliases (launcher: `<leader>pa`)
+- `:TemplateNew` — open project template wizard (launcher: `<leader>pt`)
 
 ## Daily Workflow
 
 - Open action palette with `<leader>pa` (or `:Action`) for high-signal actions.
+- Create new projects with `<leader>pt` (or `:TemplateNew`).
 - Start debug via `<leader>dr` (preset picker), then iterate with `<leader>dR`.
 - Run workflows with `<leader>op` (pipeline picker) and rerun with `<leader>oP`.
 - Switch quality mode quickly with `<leader>uI` or `:InspectionProfile <strict|normal|fast>`.

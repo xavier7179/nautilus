@@ -2,6 +2,8 @@ local core = require("nautilus.core.functions")
 local lang = require("nautilus.custom.lang")
 local action_aliases = require("nautilus.custom.command-aliases")
 local inspection_profile = require("nautilus.custom.inspection-profile")
+local template_engine = require("nautilus.custom.template-engine")
+local template_registry = require("nautilus.custom.template-registry")
 local workspace_health = require("nautilus.custom.workspace-health")
 
 local function fmt_list(xs)
@@ -117,6 +119,25 @@ vim.api.nvim_create_user_command("Action", function()
 	end)
 end, {
 	desc = "Open workflow action palette",
+})
+
+vim.api.nvim_create_user_command("TemplateNew", function()
+	local items = template_registry.list()
+	core.select_with_snacks(items, {
+		prompt = "Project Templates",
+		format_item = function(item) return ("[%s] %s"):format(item.group, item.name) end,
+		empty_message = "No templates registered",
+	}, function(choice)
+		if not choice then return end
+		local result, err = template_engine.create(choice.id)
+		if not result then
+			vim.notify(("Template '%s' failed: %s"):format(choice.name, err), vim.log.levels.ERROR)
+			return
+		end
+		vim.notify(("Template '%s' created at %s"):format(choice.name, result.context.abs_target_dir), vim.log.levels.INFO)
+	end)
+end, {
+	desc = "Create a new project from template",
 })
 -- Highlight when yanking (copying) text
 --  Try it with `yap` in normal mode

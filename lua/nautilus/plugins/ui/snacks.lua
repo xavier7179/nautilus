@@ -395,6 +395,11 @@ return {
 				desc = "[P]roject [A]ctions",
 			},
 			{
+				"<leader>pt",
+				function() vim.cmd("TemplateNew") end,
+				desc = "[P]roject [T]emplates",
+			},
+			{
 				"<leader>sh",
 				function() Snacks.picker.help({ layout = "telescope" }) end,
 				desc = "[S]earch [H]elp Pages",

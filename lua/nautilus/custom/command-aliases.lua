@@ -120,6 +120,13 @@ local aliases = {
 		run = function() vim.cmd("RunPipeline") end,
 	},
 	{
+		id = "templates_new",
+		label = "Workflow: New Template Project",
+		group = "Workflow",
+		order = 15,
+		run = function() vim.cmd("TemplateNew") end,
+	},
+	{
 		id = "workspace_health",
 		label = "Workflow: Workspace Health",
 		group = "Workflow",
