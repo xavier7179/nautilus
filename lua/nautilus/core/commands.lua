@@ -1,5 +1,6 @@
 local core = require("nautilus.core.functions")
 local lang = require("nautilus.custom.lang")
+local action_aliases = require("nautilus.custom.command-aliases")
 local inspection_profile = require("nautilus.custom.inspection-profile")
 local workspace_health = require("nautilus.custom.workspace-health")
 
@@ -108,6 +109,19 @@ end, {
 
 vim.api.nvim_create_user_command("AgentActions", function() require("nautilus.custom.prompts").pick() end, {
 	desc = "Open AI agent actions picker",
+})
+
+vim.api.nvim_create_user_command("Action", function()
+	local items = action_aliases.list()
+	require("snacks").picker.select(items, {
+		prompt = "Action Palette",
+		format_item = action_aliases.display_label,
+	}, function(choice)
+		if not choice then return end
+		action_aliases.run(choice.id)
+	end)
+end, {
+	desc = "Open workflow action palette",
 })
 -- Highlight when yanking (copying) text
 --  Try it with `yap` in normal mode

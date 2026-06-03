@@ -388,6 +388,11 @@ return {
 				desc = "[S]earch [P]rojects",
 			},
 			{
+				"<leader>pa",
+				function() vim.cmd("Action") end,
+				desc = "[P]roject [A]ctions",
+			},
+			{
 				"<leader>sh",
 				function() Snacks.picker.help({ layout = "telescope" }) end,
 				desc = "[S]earch [H]elp Pages",
