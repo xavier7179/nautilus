@@ -89,20 +89,14 @@ vim.api.nvim_create_user_command("WorkspaceHealth", function() workspace_health.
 	desc = "Show workspace health report",
 })
 
-local function feed_mapping(lhs)
-	local keys = lhs:gsub("<leader>", vim.g.mapleader or "\\")
-	local termcodes = vim.api.nvim_replace_termcodes(keys, true, false, true)
-	vim.api.nvim_feedkeys(termcodes, "m", false)
-end
-
 vim.api.nvim_create_user_command("RunDebugPreset", function()
-	feed_mapping("<leader>dr")
+	core.feed_mapping("<leader>dr")
 end, {
 	desc = "Pick and run a debug preset",
 })
 
 vim.api.nvim_create_user_command("RunPipeline", function()
-	feed_mapping("<leader>op")
+	core.feed_mapping("<leader>op")
 end, {
 	desc = "Pick and run a pipeline",
 })
@@ -113,9 +107,10 @@ vim.api.nvim_create_user_command("AgentActions", function() require("nautilus.cu
 
 vim.api.nvim_create_user_command("Action", function()
 	local items = action_aliases.list()
-	require("snacks").picker.select(items, {
+	core.select_with_snacks(items, {
 		prompt = "Action Palette",
 		format_item = action_aliases.display_label,
+		empty_message = "No action aliases configured",
 	}, function(choice)
 		if not choice then return end
 		action_aliases.run(choice.id)

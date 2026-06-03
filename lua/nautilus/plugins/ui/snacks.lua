@@ -19,14 +19,16 @@ end
 
 local function pick_inspection_profile()
 	local inspection_profile = require("nautilus.custom.inspection-profile")
+	local core = require("nautilus.core.functions")
 	local items = inspection_profile.all()
 
-	require("snacks").picker.select(items, {
+	core.select_with_snacks(items, {
 		prompt = "Inspection Profile",
 		format_item = function(item)
 			if item == inspection_profile.get() then return item .. " (current)" end
 			return item
 		end,
+		empty_message = "No inspection profiles available",
 	}, function(choice)
 		if not choice then return end
 		vim.cmd("InspectionProfile " .. choice)

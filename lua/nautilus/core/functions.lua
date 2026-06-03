@@ -33,5 +33,32 @@ M.get_file_with_path = function(bufnr, file)
 	return dir .. "/" .. file
 end
 
-return M
+M.feed_mapping = function(lhs)
+	local keys = lhs:gsub("<leader>", vim.g.mapleader or "\\")
+	local termcodes = vim.api.nvim_replace_termcodes(keys, true, false, true)
+	vim.api.nvim_feedkeys(termcodes, "m", false)
+end
 
+M.select_with_snacks = function(items, opts, on_choice)
+	opts = opts or {}
+	on_choice = on_choice or function() end
+
+	if vim.tbl_isempty(items or {}) then
+		local message = opts.empty_message or "No items available"
+		vim.notify(message, vim.log.levels.WARN)
+		return nil
+	end
+
+	local prompt = opts.prompt or "Select"
+	local format_item = opts.format_item or function(item)
+		if type(item) == "table" then return item.name or item.label or tostring(item.id or "") end
+		return tostring(item)
+	end
+
+	return require("snacks").picker.select(items, {
+		prompt = prompt,
+		format_item = format_item,
+	}, on_choice)
+end
+
+return M

@@ -1,4 +1,5 @@
 local lang = require("nautilus.custom.lang")
+local core = require("nautilus.core.functions")
 local pipeline_registry = require("nautilus.custom.pipeline-registry")
 
 local function current_task_context()
@@ -81,14 +82,10 @@ end
 
 local function pick_pipeline()
 	local items = pipeline_registry.list_for_buffer(0)
-	if vim.tbl_isempty(items) then
-		vim.notify("No pipelines available for current buffer", vim.log.levels.WARN)
-		return
-	end
-
-	require("snacks").picker.select(items, {
+	core.select_with_snacks(items, {
 		prompt = "Task Pipelines",
 		format_item = function(item) return item.name end,
+		empty_message = "No pipelines available for current buffer",
 	}, function(choice)
 		if not choice then return end
 		run_pipeline(choice)

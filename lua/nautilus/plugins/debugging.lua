@@ -1,5 +1,6 @@
 -- Debuggers (hopefully for all supported languages
 local lang = require("nautilus.custom.lang")
+local core = require("nautilus.core.functions")
 local run_registry = require("nautilus.custom.run-registry")
 
 local function run_debug_preset(preset)
@@ -14,14 +15,10 @@ end
 
 local function pick_debug_preset()
 	local items = run_registry.list_for_buffer(0)
-	if vim.tbl_isempty(items) then
-		vim.notify("No debug presets available for current buffer", vim.log.levels.WARN)
-		return
-	end
-
-	require("snacks").picker.select(items, {
+	core.select_with_snacks(items, {
 		prompt = "Debug Presets",
 		format_item = function(item) return item.name end,
+		empty_message = "No debug presets available for current buffer",
 	}, function(choice)
 		if not choice then return end
 		run_debug_preset(choice)
