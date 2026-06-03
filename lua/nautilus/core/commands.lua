@@ -1,5 +1,7 @@
 local core = require("nautilus.core.functions")
 local lang = require("nautilus.custom.lang")
+local inspection_profile = require("nautilus.custom.inspection-profile")
+local workspace_health = require("nautilus.custom.workspace-health")
 
 local function fmt_list(xs)
 	if not xs or vim.tbl_isempty(xs) then return "-" end
@@ -61,6 +63,52 @@ vim.api.nvim_create_user_command(
 	function() vim.cmd("MasonToolsInstall") end,
 	{ desc = "Install/update configured Mason tools" }
 )
+
+vim.api.nvim_create_user_command("InspectionProfile", function(args)
+	local profile = vim.trim(args.args or "")
+
+	if profile == "" then
+		vim.notify(("Inspection profile: %s"):format(inspection_profile.get()), vim.log.levels.INFO)
+		return
+	end
+
+	if not inspection_profile.set(profile) then
+		vim.notify("Invalid inspection profile. Use: strict, normal, fast", vim.log.levels.ERROR)
+		return
+	end
+
+	vim.notify(("Inspection profile set to: %s"):format(profile), vim.log.levels.INFO)
+end, {
+	desc = "Show or set inspection profile",
+	nargs = "?",
+	complete = function() return inspection_profile.all() end,
+})
+
+vim.api.nvim_create_user_command("WorkspaceHealth", function() workspace_health.notify(0) end, {
+	desc = "Show workspace health report",
+})
+
+local function feed_mapping(lhs)
+	local keys = lhs:gsub("<leader>", vim.g.mapleader or "\\")
+	local termcodes = vim.api.nvim_replace_termcodes(keys, true, false, true)
+	vim.api.nvim_feedkeys(termcodes, "m", false)
+end
+
+vim.api.nvim_create_user_command("RunDebugPreset", function()
+	feed_mapping("<leader>dr")
+end, {
+	desc = "Pick and run a debug preset",
+})
+
+vim.api.nvim_create_user_command("RunPipeline", function()
+	feed_mapping("<leader>op")
+end, {
+	desc = "Pick and run a pipeline",
+})
+
+vim.api.nvim_create_user_command("AgentActions", function() require("nautilus.custom.prompts").pick() end, {
+	desc = "Open AI agent actions picker",
+})
 -- Highlight when yanking (copying) text
 --  Try it with `yap` in normal mode
 --  See `:help vim.hl.on_yank()`

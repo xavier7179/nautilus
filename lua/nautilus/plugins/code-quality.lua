@@ -50,6 +50,7 @@ return {
 		end,
 		config = function(_, opts)
 			local lint = require("lint")
+			local inspection_profile = require("nautilus.custom.inspection-profile")
 
 			lint.linters_by_ft = vim.tbl_deep_extend("force", lint.linters_by_ft or {}, opts.linters_by_ft or {})
 
@@ -68,15 +69,32 @@ return {
 				if can_lint(bufnr) then lint.try_lint() end
 			end
 
+			local function should_lint(event)
+				local profile = inspection_profile.get()
+				if profile == "strict" then return true end
+				if profile == "normal" then return event ~= "BufEnter" end
+				if profile == "fast" then return event == "BufWritePost" end
+				return true
+			end
+
 			vim.api.nvim_create_autocmd("BufWritePost", {
 				group = lint_augroup,
-				callback = do_lint,
+				callback = function(args)
+					if should_lint("BufWritePost") then do_lint(args) end
+				end,
 			})
 
 			vim.api.nvim_create_autocmd("InsertLeave", {
 				group = lint_augroup,
 				callback = function(args)
-					if vim.bo[args.buf].modified then do_lint(args) end
+					if should_lint("InsertLeave") and vim.bo[args.buf].modified then do_lint(args) end
+				end,
+			})
+
+			vim.api.nvim_create_autocmd("BufEnter", {
+				group = lint_augroup,
+				callback = function(args)
+					if should_lint("BufEnter") then do_lint(args) end
 				end,
 			})
 

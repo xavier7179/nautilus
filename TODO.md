@@ -63,3 +63,11 @@
 [X] Check unused or redundant plugins  (see Plugin notes above)
 [X] Optimize key mappings              (full tree refactor — see README Keymap Tree)
 [X] Git double check (keep only useful stuff)
+
+## Workflow MVP
+
+[X] Run/Debug preset registry (`<leader>dr`, `<leader>dR`)
+[X] Compound task pipelines (`<leader>op`, `<leader>oP`)
+[X] Inspection profiles + picker (`:InspectionProfile`, `<leader>uI`)
+[X] Workspace health command (`:WorkspaceHealth`)
+[X] Workflow aliases (`:RunDebugPreset`, `:RunPipeline`, `:AgentActions`)

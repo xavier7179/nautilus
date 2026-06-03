@@ -17,6 +17,22 @@ local function explorer_focus_editor(picker)
 	picker:close()
 end
 
+local function pick_inspection_profile()
+	local inspection_profile = require("nautilus.custom.inspection-profile")
+	local items = inspection_profile.all()
+
+	require("snacks").picker.select(items, {
+		prompt = "Inspection Profile",
+		format_item = function(item)
+			if item == inspection_profile.get() then return item .. " (current)" end
+			return item
+		end,
+	}, function(choice)
+		if not choice then return end
+		vim.cmd("InspectionProfile " .. choice)
+	end)
+end
+
 return {
 	{
 		"folke/snacks.nvim",
@@ -381,6 +397,11 @@ return {
 				function() Snacks.picker.colorschemes({ layout = "ivy" }) end,
 				desc = "Pick colorschemes",
 			}, -- toggle the Color schemes selection
+			{
+				"<leader>uI",
+				pick_inspection_profile,
+				desc = "Pick inspection profile",
+			},
 			{
 				"<leader>sk",
 				function() Snacks.picker.keymaps({ layout = "ivy" }) end,

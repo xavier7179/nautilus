@@ -141,8 +141,10 @@ All `<leader>` bindings follow a strict **tree organisation**: the first letter 
 | `<leader>do` | Step Out |
 | `<leader>dO` | Step Over |
 | `<leader>dp` | Pause |
-| `<leader>dr` | Rust Debuggables (rustaceanvim, Rust buffers only) |
-| `<leader>dR` | Toggle DAP REPL |
+| `<leader>dq` | Toggle DAP REPL |
+| `<leader>dr` | Run Debug Preset |
+| `<leader>dR` | Run Last Debug Preset |
+| `<leader>dG` | Rust Debuggables (rustaceanvim, Rust buffers only) |
 | `<leader>dt` | Terminate |
 | `<leader>du` | Toggle DAP UI |
 
@@ -198,6 +200,8 @@ All `<leader>` bindings follow a strict **tree organisation**: the first letter 
 | `<leader>od` | Dev task (lang task) |
 | `<leader>oR` | Run (lang task) |
 | `<leader>oT` | Test task (lang task) |
+| `<leader>op` | Run Pipeline |
+| `<leader>oP` | Run Last Pipeline |
 
 ### `<leader>p` — Project
 
@@ -269,6 +273,7 @@ All `<leader>` bindings follow a strict **tree organisation**: the first letter 
 | `<leader>ug` | Toggle Indent Guides |
 | `<leader>uh` | Toggle Inlay Hints |
 | `<leader>uK` | Toggle recording mode (showkeys + WezTerm font zoom) |
+| `<leader>uI` | Pick Inspection Profile |
 | `<leader>ul` | Toggle Line Numbers |
 | `<leader>uL` | Toggle Relative Numbers |
 | `<leader>um` | Toggle minimap |
@@ -307,6 +312,15 @@ All `<leader>` bindings follow a strict **tree organisation**: the first letter 
 | `<leader>n` | Notification History |
 | `<leader>N` | Neovim News |
 | `<leader>?` | Buffer Keymaps (which-key) |
+
+## Workflow Commands
+
+- `:InspectionProfile` — show current inspection profile (`strict`, `normal`, `fast`)
+- `:InspectionProfile <profile>` — switch inspection profile
+- `:WorkspaceHealth` — show a workspace health report for current buffer context
+- `:RunDebugPreset` — open debug preset picker (alias for `<leader>dr`)
+- `:RunPipeline` — open pipeline picker (alias for `<leader>op`)
+- `:AgentActions` — open AI agent picker (alias for `<leader>aa`)
 
 ## Features
 
