@@ -70,11 +70,8 @@ return {
 			end
 
 			local function should_lint(event)
-				local profile = inspection_profile.get()
-				if profile == "strict" then return true end
-				if profile == "normal" then return event ~= "BufEnter" end
-				if profile == "fast" then return event == "BufWritePost" end
-				return true
+				local events = inspection_profile.lint_events()
+				return events[event] == true
 			end
 
 			vim.api.nvim_create_autocmd("BufWritePost", {

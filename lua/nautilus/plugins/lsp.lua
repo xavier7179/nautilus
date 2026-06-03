@@ -45,8 +45,23 @@ return {
 		config = function(_, opts)
 			local mason_lspconfig = require("mason-lspconfig")
 			local snacks = require("snacks.picker")
+			local inspection_profile = require("nautilus.custom.inspection-profile")
 
 			vim.diagnostic.config(opts.diagnostics)
+
+			local function apply_profile_diagnostics(profile)
+				local profile_diags = inspection_profile.diagnostics(profile)
+				vim.diagnostic.config(vim.tbl_deep_extend("force", {}, opts.diagnostics or {}, profile_diags or {}))
+			end
+
+			apply_profile_diagnostics(inspection_profile.get())
+			vim.api.nvim_create_autocmd("User", {
+				pattern = inspection_profile.event_name(),
+				callback = function(event)
+					local profile = event.data and event.data.profile or inspection_profile.get()
+					apply_profile_diagnostics(profile)
+				end,
+			})
 
 			vim.api.nvim_create_autocmd("LspAttach", {
 				group = vim.api.nvim_create_augroup("UserLspConfig", { clear = true }),

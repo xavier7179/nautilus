@@ -212,6 +212,7 @@ All `<leader>` bindings follow a strict **tree organisation**: the first letter 
 | `<leader>pL` | Location List (Trouble) |
 | `<leader>pQ` | Quickfix List (Trouble) |
 | `<leader>pT` | Project TODOs (Trouble) |
+| `<leader>pa` | Action Palette |
 
 ### `<leader>r` — Remote
 
@@ -321,6 +322,15 @@ All `<leader>` bindings follow a strict **tree organisation**: the first letter 
 - `:RunDebugPreset` — open debug preset picker (alias for `<leader>dr`)
 - `:RunPipeline` — open pipeline picker (alias for `<leader>op`)
 - `:AgentActions` — open AI agent picker (alias for `<leader>aa`)
+- `:Action` — open command palette aliases (launcher: `<leader>pa`)
+
+## Daily Workflow
+
+- Open action palette with `<leader>pa` (or `:Action`) for high-signal actions.
+- Start debug via `<leader>dr` (preset picker), then iterate with `<leader>dR`.
+- Run workflows with `<leader>op` (pipeline picker) and rerun with `<leader>oP`.
+- Switch quality mode quickly with `<leader>uI` or `:InspectionProfile <strict|normal|fast>`.
+- Run `:WorkspaceHealth` to validate toolchain/registry readiness and get remediation hints.
 
 ## Features
 
