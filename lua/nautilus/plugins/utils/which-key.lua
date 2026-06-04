@@ -60,7 +60,6 @@ return {
 					{ "<leader>d", group = "debug",   icon = { icon = " ", color = "red" } },
 					{ "<leader>f", group = "file",    icon = { icon = "󰉋 ", color = "blue" } },
 					{ "<leader>g", group = "git",     icon = { icon = "󰊢 ", color = "green" } },
-					{ "<leader>m", group = "markdown",icon = { icon = "󰍔 ", color = "cyan" } },
 					{ "<leader>o", group = "overseer",icon = { icon = "󰗇 ", color = "orange" } },
 					{ "<leader>p", group = "project", icon = { icon = "󰗋 ", color = "purple" } },
 					{ "<leader>r", group = "remote",  icon = { icon = "󰛳 ", color = "blue" } },

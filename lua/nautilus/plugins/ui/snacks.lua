@@ -123,6 +123,22 @@ return {
 						local git_root = Snacks.git.get_root()
 						if not git_root then return {} end
 
+						local function trim_empty(lines)
+							local start_idx, end_idx = 1, #lines
+							while start_idx <= #lines and lines[start_idx]:match("^%s*$") do
+								start_idx = start_idx + 1
+							end
+							while end_idx >= 1 and lines[end_idx]:match("^%s*$") do
+								end_idx = end_idx - 1
+							end
+							if end_idx < start_idx then return {} end
+							local out = {}
+							for i = start_idx, end_idx do
+								table.insert(out, lines[i])
+							end
+							return out
+						end
+
 						-- Check whether the repository already has a HEAD commit.
 						-- Freshly initialized repositories do not, so they need a separate code path.
 						vim.fn.system({
@@ -134,56 +150,72 @@ return {
 							"HEAD",
 						})
 						local is_fresh_repo = vim.v.shell_error ~= 0
-
-						local cmd
+						local lines = {}
 
 						if is_fresh_repo then
-							-- Fresh repo path:
-							-- We compute two stats:
-							--   1. staged changes   -> index vs empty tree
-							--   2. unstaged changes -> working tree vs index
-							--
-							-- If both are empty, we show a simple "Working tree clean" message.
-							-- Otherwise we print each section only when it has content.
-							cmd = table.concat({
-								"sh -c '",
-								"empty_tree=4b825dc642cb6eb9a060e54bf8d69288fbee4904;",
-								"staged=$(git -C "
-									.. vim.fn.shellescape(git_root)
-									.. ' --no-pager diff --cached --stat "$empty_tree");',
-								"unstaged=$(git -C " .. vim.fn.shellescape(git_root) .. " --no-pager diff --stat);",
-								'printf "No commits yet\\n\\nFirst-commit summary:\\n";',
-								'if [ -z "$staged" ] && [ -z "$unstaged" ]; then ',
-								'  printf "Working tree clean\\n";',
-								"else ",
-								'  if [ -n "$staged" ]; then ',
-								'    printf "Staged:\\n%s\\n" "$staged";',
-								"  fi;",
-								'  if [ -n "$staged" ] && [ -n "$unstaged" ]; then ',
-								'    printf "\\n";',
-								"  fi;",
-								'  if [ -n "$unstaged" ]; then ',
-								'    printf "Unstaged:\\n%s\\n" "$unstaged";',
-								"  fi;",
-								"fi'",
-							}, "")
+							local empty_tree = "4b825dc642cb6eb9a060e54bf8d69288fbee4904"
+							local staged = vim.fn.systemlist({
+								"git",
+								"-C",
+								git_root,
+								"--no-pager",
+								"diff",
+								"--cached",
+								"--stat",
+								empty_tree,
+							})
+							local unstaged = vim.fn.systemlist({
+								"git",
+								"-C",
+								git_root,
+								"--no-pager",
+								"diff",
+								"--stat",
+							})
+
+							if vim.tbl_isempty(staged) and vim.tbl_isempty(unstaged) then return {} end
+
+							table.insert(lines, "No commits yet")
+							table.insert(lines, "")
+							table.insert(lines, "First-commit summary:")
+							if not vim.tbl_isempty(staged) then
+								table.insert(lines, "Staged:")
+								vim.list_extend(lines, staged)
+							end
+							if not vim.tbl_isempty(staged) and not vim.tbl_isempty(unstaged) then table.insert(lines, "") end
+							if not vim.tbl_isempty(unstaged) then
+								table.insert(lines, "Unstaged:")
+								vim.list_extend(lines, unstaged)
+							end
 						else
-							-- Normal repo path:
-							-- show the usual working-tree diff summary against HEAD.
-							cmd = "git -C " .. vim.fn.shellescape(git_root) .. " --no-pager diff --stat -B -M -C"
+							local diff = vim.fn.systemlist({
+								"git",
+								"-C",
+								git_root,
+								"--no-pager",
+								"diff",
+								"--stat",
+								"-B",
+								"-M",
+								"-C",
+							})
+							if vim.v.shell_error ~= 0 or vim.tbl_isempty(diff) then return {} end
+							lines = diff
 						end
+
+						lines = trim_empty(lines)
+						if vim.tbl_isempty(lines) then return {} end
 
 						return {
 							pane = 2,
-							section = "terminal",
 							enabled = true,
 							padding = 1,
-							ttl = 5 * 60,
 							indent = 3,
 							icon = " ",
 							title = "Git Status",
-							cmd = cmd,
-							height = 10,
+							{
+								text = lines,
+							},
 						}
 					end,
 					{ section = "startup" },

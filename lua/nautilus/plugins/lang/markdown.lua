@@ -85,8 +85,12 @@ return {
 			opts = opts or {}
 			opts.spec = opts.spec or {}
 
-			-- <leader>m group is declared globally in which-key.lua;
-			-- only the markdown-specific keymap is injected here.
+			table.insert(opts.spec, {
+				"<leader>m",
+				group = "markdown",
+				icon = { icon = "󰍔 ", color = "cyan" },
+			})
+
 			table.insert(opts.spec, {
 				"<leader>mt",
 				function()
