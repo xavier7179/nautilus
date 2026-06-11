@@ -2,7 +2,11 @@
 
 local M = {}
 
-function M.sync_colorscheme() pcall(vim.cmd.rshada) end
+local function colorscheme_file()
+	local dir = vim.fn.stdpath("data") .. "/nautilus"
+	vim.fn.mkdir(dir, "p")
+	return dir .. "/colorscheme"
+end
 
 ---@return string
 function M.get_default_colorscheme()
@@ -16,22 +20,50 @@ function M.get_default_colorscheme()
 end
 
 ---@param fallback? string
----@return string|nil
+---@return string
 function M.get_colorscheme(fallback)
-	if not vim.g.COLORS_NAME then M.sync_colorscheme() end
 	fallback = fallback or M.get_default_colorscheme()
-	return vim.g.COLORS_NAME or fallback
+	local f = io.open(colorscheme_file(), "r")
+	if not f then return fallback end
+	local name = f:read("*l")
+	f:close()
+	if name and name ~= "" then return name end
+	return fallback
 end
 
 ---@param colorscheme? string
 function M.save_colorscheme(colorscheme)
 	colorscheme = colorscheme or vim.g.colors_name
-	if M.get_colorscheme() == colorscheme then return end
-	vim.g.COLORS_NAME = colorscheme
-	vim.cmd.wshada()
+	if not colorscheme or colorscheme == "" then return end
+	local f = io.open(colorscheme_file(), "r")
+	if f then
+		local existing = f:read("*l")
+		f:close()
+		if existing == colorscheme then return end
+	end
+	f = io.open(colorscheme_file(), "w")
+	if f then
+		f:write(colorscheme)
+		f:close()
+	end
 end
 
-function M.load_colorscheme() return pcall(vim.cmd.colorscheme, M.get_colorscheme()) end
+function M.load_colorscheme()
+	-- migrate from old shada-persisted vim.g.COLORS_NAME
+	local file = colorscheme_file()
+	local f = io.open(file, "r")
+	if not f and vim.g.COLORS_NAME and vim.g.COLORS_NAME ~= "" then
+		f = io.open(file, "w")
+		if f then
+			f:write(vim.g.COLORS_NAME)
+			f:close()
+		end
+	elseif f then
+		f:close()
+	end
+	local name = M.get_colorscheme()
+	if name then pcall(vim.cmd.colorscheme, name) end
+end
 
 ---@module 'lazy.types'
 
@@ -48,11 +80,11 @@ function M.tune_colorscheme_plugins(plugins)
 	plugins = vim.iter(plugins):map(tbl_wrap)
 
 	local get_name = function(plug)
-		local get_name = require("lazy.core.plugin").Spec.get_name
-		local name = plug.name --\
-			or plug[1] and get_name(plug[1])
-			or plug.url and get_name(plug.url)
-			or plug.dir and get_name(plug.dir)
+		local plugin_spec_get_name = require("lazy.core.plugin").Spec.get_name
+		local name = plug.name
+			or plug[1] and plugin_spec_get_name(plug[1])
+			or plug.url and plugin_spec_get_name(plug.url)
+			or plug.dir and plugin_spec_get_name(plug.dir)
 		return string.gsub(name, "[-.]nvim$", "")
 	end
 
@@ -77,35 +109,34 @@ function M.tune_colorscheme_plugins(plugins)
 
 	return plugins:totable()
 end
+
 ---@param plugins ColorschemeSpec[]
 ---@return LazyPluginSpec[]
 function M.lazy_setup(plugins)
 	local aug = vim.api.nvim_create_augroup("save_colors", { clear = true })
 
-	-- When the previous session was forcefully closed,
-	--   setting the colorscheme style inside the `LazyDone` is ignored
 	vim.api.nvim_create_autocmd("User", {
 		pattern = { "LazyDone", "VeryLazy" },
 		group = aug,
 		callback = function()
 			M.load_colorscheme()
-			return vim.g.colors_name == M.get_colorscheme()
 		end,
 	})
-	-- You can also save colorschemes manually instead of relying on the `ColorScheme` event
+
 	vim.api.nvim_create_autocmd("ColorScheme", {
 		group = aug,
-		callback = function(event) M.save_colorscheme(event.match) end,
+		callback = function(event)
+			-- onenord.nvim's util.lua fires `doautocmd ColorScheme` without a
+			-- pattern during setup(), yielding event.match == "". Guard against
+			-- any such spurious event to avoid empty writes to the persistence file.
+			if event.match == "" then return end
+			M.save_colorscheme(event.match)
+		end,
 	})
-	-- If multiple neovim instances are opened,
-	--   the colorscheme from the last exited instance will be forcefully saved.
-	-- [Can be deleted]
+
 	vim.api.nvim_create_autocmd("VimLeave", {
 		group = aug,
-		callback = function()
-			M.sync_colorscheme()
-			M.save_colorscheme(M.get_colorscheme())
-		end,
+		callback = function() M.save_colorscheme(vim.g.colors_name) end,
 	})
 	return M.tune_colorscheme_plugins(plugins)
 end
