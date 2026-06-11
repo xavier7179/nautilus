@@ -36,7 +36,9 @@ return {
 				lsp_doc_border = false, -- add a border to hover docs and signature help
 			},
 		},
-		-- TODO: check if keymaps are necessary or they can be integrated in snacks.nvim
+		-- Both noice and snacks notifier are kept active:
+		-- noice handles LSP hover/signature UI + message routing (<leader>sn* keymaps)
+		-- snacks handles notification history/dismiss (<leader>n, <leader>un)
 		keys = {
 			{
 				"<leader>sn",
