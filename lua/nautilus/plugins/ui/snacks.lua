@@ -233,13 +233,15 @@ return {
 				enabled = true,
 				ui_select = true,
 				sources = {
-					colorschemes = {
-						confirm = function(picker, item)
-							local source = require("snacks.picker.config.sources").colorschemes
-							source.confirm(picker, item)
-							require("nautilus.custom.colorscheme").save_colorscheme(item.text)
-						end,
-					},
+				colorschemes = {
+					confirm = function(picker, item)
+						picker:close()
+						if item then
+							picker.preview.state.colorscheme = nil
+							vim.cmd("colorscheme " .. item.text)
+						end
+					end,
+				},
 					-- Override <Esc> in the explorer to focus the editor instead of closing.
 					-- Applied to both the list window (normal mode) and input window (search box).
 					explorer = {
@@ -360,7 +362,7 @@ return {
 				function()
 					-- Check if any panel is open (explorer or terminal).
 					local explorer_open, terminal_open = false, false
-					for _, win in ipairs(vim.api.nvim_list_wins()) do
+					for _, win in ipairs(vim.api.nvim_tabpage_list_wins(0)) do
 						local ft = vim.bo[vim.api.nvim_win_get_buf(win)].filetype
 						if ft == "snacks_picker_list" then explorer_open = true end
 						if ft == "snacks_terminal" then terminal_open = true end
@@ -489,9 +491,7 @@ return {
 								vim.g.origami_autofold_enabled = state
 								require("origami").setup({ autoFold = { enabled = state } })
 								if state then
-									-- foldclose takes an optional winid (not bufnr); omit to use current window
-									vim.lsp.foldclose("imports")
-									vim.lsp.foldclose("comment")
+								vim.cmd("normal! zM")
 								else
 									vim.cmd("normal! zR")
 								end
