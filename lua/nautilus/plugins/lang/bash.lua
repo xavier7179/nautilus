@@ -44,7 +44,7 @@ return {
 			local dap = require("dap")
 			if dap.adapters.bashdb then return end
 
-			local install_path = vim.fn.expand("$MASON/packages/bash-debug-adapter")
+			local install_path = vim.fn.stdpath("data") .. "/mason/packages/bash-debug-adapter"
 
 			dap.adapters.bashdb = {
 				type = "executable",

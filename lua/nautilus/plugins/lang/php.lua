@@ -80,7 +80,7 @@ return {
 			local dap = require("dap")
 			if dap.adapters.php then return end
 
-			local path = vim.fn.expand("$MASON/packages/php-debug-adapter")
+			local path = vim.fn.stdpath("data") .. "/mason/packages/php-debug-adapter"
 			dap.adapters.php = {
 				type = "executable",
 				command = "node",

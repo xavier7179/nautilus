@@ -94,9 +94,8 @@ return {
 			local package_path = vim.fn.stdpath("data") .. "/mason/packages/codelldb"
 			local codelldb = package_path .. "/extension/adapter/codelldb"
 			local library_path = package_path .. "/extension/lldb/lib/liblldb.dylib"
-			local uname = io.popen("uname"):read("*l")
-
-			if uname == "Linux" then library_path = package_path .. "/extension/lldb/lib/liblldb.so" end
+			local sysname = vim.uv.os_uname().sysname
+			if sysname == "Linux" then library_path = package_path .. "/extension/lldb/lib/liblldb.so" end
 
 			opts.dap = {
 				adapter = require("rustaceanvim.config").get_codelldb_adapter(codelldb, library_path),
