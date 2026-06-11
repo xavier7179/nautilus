@@ -22,12 +22,8 @@ local adapter_factories = {
 		return adapter({
 			jestCommand = "npm test --",
 			jestConfigFile = function(file)
-				-- Resolve jest config relative to the detected project root
-				local root = vim.fn.fnamemodify(
-					vim.fn.findfile("jest.config.*", file .. ";"),
-					":h"
-				)
-				return root ~= "" and root or nil
+				local config_path = vim.fn.findfile("jest.config.*", file .. ";")
+				return config_path ~= "" and config_path or nil
 			end,
 			env = { CI = "true" },
 			cwd = function(path)
