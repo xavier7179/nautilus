@@ -33,11 +33,7 @@ return {
 				init_options = {
 					provideFormatter = false, -- conform handles formatting
 				},
-				before_init = function(_, new_config)
-					new_config.settings = new_config.settings or {}
-					new_config.settings.css = new_config.settings.css or {}
-					new_config.settings.css.schemas = require("schemastore").css.schemas()
-				end,
+	
 			})
 
 			return opts
