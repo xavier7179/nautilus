@@ -101,7 +101,7 @@ return {
 
 				if
 						client
-						and client:supports_method(vim.lsp.protocol.Methods.textDocument_documentHighlight, event.buf)
+						and client:supports_method(vim.lsp.protocol.Methods.textDocument_documentHighlight)
 					then
 					local buf = event.buf
 					local highlight_group = vim.api.nvim_create_augroup("LspHighlight_" .. buf, { clear = true })

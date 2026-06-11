@@ -70,33 +70,6 @@ return {
 				desc = "Next Trouble/Quickfix Item",
 			},
 		},
-		config = function()
-			-- Diagnostic signs
-			-- https://github.com/folke/trouble.nvim/issues/52
-			local signs = {
-				Error = " ",
-				Warning = " ",
-				Hint = " ",
-				Information = " ",
-			}
-			local signConf = {
-				text = {},
-				texthl = {},
-				numhl = {},
-			}
-
-			for type, icon in pairs(signs) do
-				local severityName = string.upper(type)
-				local severity = vim.diagnostic.severity[severityName]
-				local hl = "DiagnosticSign" .. type
-				signConf.text[severity] = icon
-				signConf.texthl[severity] = hl
-				signConf.numhl[severity] = hl
-			end
-
-			vim.diagnostic.config({
-				signs = signConf,
-			})
-		end,
+		config = function(_, opts) require("trouble").setup(opts) end,
 	},
 }
