@@ -176,7 +176,7 @@ local function exec_forge(ctx, dry_run)
 	if dry_run then
 		return {
 			files = {},
-			commands = { scaffold_cmd, { "patch", "package.json metadata" }, ctx.run_start_smoke and { "npm", "run", "start" } or nil },
+			commands = { scaffold_cmd, { "patch", "package.json metadata" } },
 			expected = { "package.json" },
 		}
 	end
@@ -187,10 +187,6 @@ local function exec_forge(ctx, dry_run)
 
 	local ok_patch, patch_err = patch_forge(ctx)
 	if not ok_patch then return nil, patch_err end
-
-	if ctx.run_start_smoke then
-		local _, _ = run_system({ "npm", "run", "start" }, ctx.abs_target_dir)
-	end
 
 	return {
 		files = {},
@@ -275,6 +271,25 @@ local function validate_expected(plan, root)
 	return true, nil
 end
 
+local function run_smoke_if_requested(template, ctx)
+	if not ctx.run_smoke then return true, nil end
+	local smoke_cmd = template.smoke_run
+	if not smoke_cmd or vim.tbl_isempty(smoke_cmd) then return true, nil end
+	return run_system(smoke_cmd, ctx.abs_target_dir)
+end
+
+local function run_post_create_hooks(template, ctx)
+	local hooks = template.post_create_hooks
+	if not hooks or vim.tbl_isempty(hooks) then return true, nil end
+	for _, hook in ipairs(hooks) do
+		if type(hook) == "function" then
+			local ok, err = pcall(hook, ctx)
+			if not ok then return false, ("post-create hook failed: %s"):format(err) end
+		end
+	end
+	return true, nil
+end
+
 function M.create(template_id, opts)
 	opts = opts or {}
 	local template = registry.get(template_id)
@@ -304,6 +319,12 @@ function M.create(template_id, opts)
 
 	local ok_cmd, cmd_err = run_plan_commands(plan, ctx.abs_target_dir)
 	if not ok_cmd then return nil, cmd_err end
+
+	local ok_smoke, smoke_err = run_smoke_if_requested(template, ctx)
+	if not ok_smoke then return nil, smoke_err end
+
+	local ok_hooks, hooks_err = run_post_create_hooks(template, ctx)
+	if not ok_hooks then return nil, hooks_err end
 
 	local ok_expected, expected_err = validate_expected(plan, ctx.abs_target_dir)
 	if not ok_expected then return nil, expected_err end

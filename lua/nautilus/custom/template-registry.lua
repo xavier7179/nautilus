@@ -8,12 +8,14 @@ local templates = {
 		order = 10,
 		description = "Scaffold a plain Node JavaScript package",
 		overwrite_strategy = "merge",
+		smoke_run = { "npm", "test" },
 		prompts = {
 			{ key = "project_name", label = "Project name", default = "node-js-package", required = true },
 			{ key = "target_dir", label = "Target directory", default = "./{{project_name}}", required = true },
 			{ key = "author", label = "Author", default = "" },
 			{ key = "license", label = "License", default = "MIT", required = true },
 			{ key = "install_deps", label = "Install deps", type = "boolean", default = false },
+			{ key = "run_smoke", label = "Run smoke test", type = "boolean", default = false },
 		},
 	},
 	{
@@ -23,13 +25,14 @@ local templates = {
 		order = 20,
 		description = "Scaffold Electron Forge app (Vite) then patch JS/React conventions",
 		overwrite_strategy = "merge",
+		smoke_run = { "npm", "run", "start" },
 		prompts = {
 			{ key = "project_name", label = "Project name", default = "electron-forge-app", required = true },
 			{ key = "target_dir", label = "Target directory", default = "./{{project_name}}", required = true },
 			{ key = "app_display_name", label = "Display name", default = "{{project_name}}" },
 			{ key = "author", label = "Author", default = "" },
 			{ key = "license", label = "License", default = "MIT", required = true },
-			{ key = "run_start_smoke", label = "Run start smoke", type = "boolean", default = false },
+			{ key = "run_smoke", label = "Run start smoke", type = "boolean", default = false },
 		},
 	},
 	{
@@ -39,10 +42,12 @@ local templates = {
 		order = 10,
 		description = "Scaffold a minimal CMake C++ executable project",
 		overwrite_strategy = "merge",
+		smoke_run = { "ctest", "--test-dir", "build", "--output-on-failure" },
 		prompts = {
 			{ key = "project_name", label = "Project name", default = "cpp-app", required = true },
 			{ key = "target_dir", label = "Target directory", default = "./{{project_name}}", required = true },
 			{ key = "cpp_standard", label = "C++ standard", default = "20", required = true },
+			{ key = "run_smoke", label = "Run tests after build", type = "boolean", default = false },
 		},
 	},
 	{
@@ -52,11 +57,13 @@ local templates = {
 		order = 10,
 		description = "Run cargo new --bin and patch basic project metadata",
 		overwrite_strategy = "merge",
+		smoke_run = { "cargo", "test" },
 		prompts = {
 			{ key = "project_name", label = "Project name", default = "rust-app", required = true },
 			{ key = "target_dir", label = "Target directory", default = "./{{project_name}}", required = true },
 			{ key = "author", label = "Author", default = "" },
 			{ key = "license", label = "License", default = "MIT", required = true },
+			{ key = "run_smoke", label = "Run tests after build", type = "boolean", default = false },
 		},
 	},
 }
