@@ -116,6 +116,93 @@ local presets = {
 			stopOnEntry = false,
 		},
 	},
+	{
+		id = "lua-run-file",
+		name = "Lua: Run current file",
+		scope = {
+			language = "lua",
+		},
+		dap = {
+			type = "nlua",
+			request = "launch",
+			name = "Lua Run Current File",
+			program = "${file}",
+			cwd = "${workspaceFolder}",
+		},
+	},
+	{
+		id = "html-live-server",
+		name = "HTML: Live Server",
+		scope = {
+			language = "html",
+		},
+		dap = {
+			type = "chrome",
+			request = "launch",
+			name = "HTML Live Server",
+			url = "http://localhost:8080",
+			webRoot = "${workspaceFolder}",
+		},
+	},
+	{
+		id = "css-lint-file",
+		name = "CSS: Lint current file",
+		scope = {
+			language = "css",
+		},
+		dap = {
+			type = "node",
+			request = "launch",
+			name = "CSS Lint",
+			program = "${workspaceFolder}/node_modules/.bin/stylelint",
+			args = { "${file}" },
+			cwd = "${workspaceFolder}",
+		},
+	},
+	{
+		id = "json-validate-file",
+		name = "JSON: Validate current file",
+		scope = {
+			language = "json",
+		},
+		dap = {
+			type = "node",
+			request = "launch",
+			name = "JSON Validate",
+			program = "jq",
+			args = { ".", "${file}" },
+			cwd = "${workspaceFolder}",
+		},
+	},
+	{
+		id = "yaml-lint-file",
+		name = "YAML: Lint current file",
+		scope = {
+			language = "yaml",
+		},
+		dap = {
+			type = "node",
+			request = "launch",
+			name = "YAML Lint",
+			program = "yamllint",
+			args = { "${file}" },
+			cwd = "${workspaceFolder}",
+		},
+	},
+	{
+		id = "markdown-preview",
+		name = "Markdown: Preview",
+		scope = {
+			language = "markdown",
+		},
+		dap = {
+			type = "chrome",
+			request = "launch",
+			name = "Markdown Preview",
+			url = "http://localhost:8080",
+			webRoot = "${workspaceFolder}",
+		},
+	},
 }
 
 function M.list_for_buffer(bufnr)
