@@ -217,4 +217,72 @@ function M.notify(bufnr)
 	vim.notify(table.concat(M.report(bufnr), "\n"), vim.log.levels.INFO, { title = "WorkspaceHealth" })
 end
 
+function M.remediate(bufnr)
+	bufnr = bufnr or vim.api.nvim_get_current_buf()
+	local ft = vim.bo[bufnr].filetype
+	local language = lang.language_for_ft(ft)
+	local actions = {}
+
+	local mason_expected = {}
+	vim.list_extend(mason_expected, lang.lsp_mason())
+	vim.list_extend(mason_expected, lang.format_mason())
+	vim.list_extend(mason_expected, lang.lint_mason())
+	vim.list_extend(mason_expected, lang.dap_mason())
+
+	local seen = {}
+	local mason_unique = {}
+	for _, pkg in ipairs(mason_expected) do
+		if pkg ~= "" and not seen[pkg] then
+			seen[pkg] = true
+			table.insert(mason_unique, pkg)
+		end
+	end
+
+	local mason_missing = mason_package_status(mason_unique)
+	if mason_missing and #mason_missing > 0 then
+		table.insert(actions, { cmd = "MasonToolsInstall", desc = "Install missing Mason packages: " .. table.concat(mason_missing, ", ") })
+	end
+
+	local parsers = language and lang.treesitter(language) or {}
+	if language and not vim.tbl_isempty(parsers) then
+		local parser_missing = {}
+		for _, parser in ipairs(parsers) do
+			local available = parser_available(parser)
+			if available == false then table.insert(parser_missing, parser) end
+		end
+		if #parser_missing > 0 then
+			table.insert(actions, { cmd = "TSUpdate " .. table.concat(parser_missing, " "), desc = "Install missing treesitter parsers: " .. table.concat(parser_missing, ", ") })
+		end
+	end
+
+	for _, check in ipairs(external_tool_checks(language)) do
+		if vim.fn.executable(check.bin) == 0 and check.required then
+			table.insert(actions, { cmd = nil, desc = "Install required tool: " .. check.bin .. " (" .. check.reason .. ")" })
+		end
+	end
+
+	return actions
+end
+
+function M.fix(bufnr)
+	bufnr = bufnr or vim.api.nvim_get_current_buf()
+	local actions = M.remediate(bufnr)
+	local executed = {}
+
+	for _, action in ipairs(actions) do
+		if action.cmd then
+			vim.cmd(action.cmd)
+			table.insert(executed, action.desc)
+		end
+	end
+
+	if #executed > 0 then
+		vim.notify("WorkspaceHealth fix executed:\n  - " .. table.concat(executed, "\n  - "), vim.log.levels.INFO)
+	else
+		vim.notify("WorkspaceHealth: no auto-fixable issues found", vim.log.levels.INFO)
+	end
+
+	return executed
+end
+
 return M

@@ -94,6 +94,10 @@ vim.api.nvim_create_user_command("WorkspaceHealth", function() workspace_health.
 	desc = "Show workspace health report",
 })
 
+vim.api.nvim_create_user_command("WorkspaceHealthFix", function() workspace_health.fix(0) end, {
+	desc = "Auto-fix workspace health issues (install Mason packages, TSUpdate parsers)",
+})
+
 vim.api.nvim_create_user_command("RunDebugPreset", function()
 	core.feed_mapping("<leader>dr")
 end, {
