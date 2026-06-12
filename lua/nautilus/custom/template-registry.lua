@@ -9,6 +9,26 @@ local templates = {
 		description = "Scaffold a plain Node JavaScript package",
 		overwrite_strategy = "merge",
 		smoke_run = { "npm", "test" },
+		health_check = function(ctx)
+			local checks = {}
+			local package_json = ctx.abs_target_dir .. "/package.json"
+			if vim.fn.filereadable(package_json) == 1 then
+				table.insert(checks, { status = "pass", message = "package.json exists" })
+			else
+				table.insert(checks, { status = "fail", message = "package.json missing" })
+			end
+			if vim.fn.executable("node") == 1 then
+				table.insert(checks, { status = "pass", message = "node available" })
+			else
+				table.insert(checks, { status = "fail", message = "node not found" })
+			end
+			if vim.fn.executable("npm") == 1 then
+				table.insert(checks, { status = "pass", message = "npm available" })
+			else
+				table.insert(checks, { status = "warn", message = "npm not found" })
+			end
+			return checks
+		end,
 		prompts = {
 			{ key = "project_name", label = "Project name", default = "node-js-package", required = true },
 			{ key = "target_dir", label = "Target directory", default = "./{{project_name}}", required = true },
@@ -26,6 +46,32 @@ local templates = {
 		description = "Scaffold Electron Forge app (Vite) then patch JS/React conventions",
 		overwrite_strategy = "merge",
 		smoke_run = { "npm", "run", "start" },
+		health_check = function(ctx)
+			local checks = {}
+			local package_json = ctx.abs_target_dir .. "/package.json"
+			if vim.fn.filereadable(package_json) == 1 then
+				table.insert(checks, { status = "pass", message = "package.json exists" })
+				local content = table.concat(vim.fn.readfile(package_json), "\n")
+				if content:match('"electron"') then
+					table.insert(checks, { status = "pass", message = "electron dependency found" })
+				else
+					table.insert(checks, { status = "warn", message = "electron not in dependencies" })
+				end
+			else
+				table.insert(checks, { status = "fail", message = "package.json missing" })
+			end
+			if vim.fn.executable("node") == 1 then
+				table.insert(checks, { status = "pass", message = "node available" })
+			else
+				table.insert(checks, { status = "fail", message = "node not found" })
+			end
+			if vim.fn.executable("npm") == 1 then
+				table.insert(checks, { status = "pass", message = "npm available" })
+			else
+				table.insert(checks, { status = "warn", message = "npm not found" })
+			end
+			return checks
+		end,
 		prompts = {
 			{ key = "project_name", label = "Project name", default = "electron-forge-app", required = true },
 			{ key = "target_dir", label = "Target directory", default = "./{{project_name}}", required = true },
@@ -43,6 +89,31 @@ local templates = {
 		description = "Scaffold a minimal CMake C++ executable project",
 		overwrite_strategy = "merge",
 		smoke_run = { "ctest", "--test-dir", "build", "--output-on-failure" },
+		health_check = function(ctx)
+			local checks = {}
+			local cmake_lists = ctx.abs_target_dir .. "/CMakeLists.txt"
+			if vim.fn.filereadable(cmake_lists) == 1 then
+				table.insert(checks, { status = "pass", message = "CMakeLists.txt exists" })
+			else
+				table.insert(checks, { status = "fail", message = "CMakeLists.txt missing" })
+			end
+			if vim.fn.executable("cmake") == 1 then
+				table.insert(checks, { status = "pass", message = "cmake available" })
+			else
+				table.insert(checks, { status = "fail", message = "cmake not found" })
+			end
+			if vim.fn.executable("ctest") == 1 then
+				table.insert(checks, { status = "pass", message = "ctest available" })
+			else
+				table.insert(checks, { status = "warn", message = "ctest not found" })
+			end
+			if vim.fn.executable("g++") == 1 or vim.fn.executable("clang++") == 1 then
+				table.insert(checks, { status = "pass", message = "C++ compiler available" })
+			else
+				table.insert(checks, { status = "fail", message = "no C++ compiler (g++/clang++)" })
+			end
+			return checks
+		end,
 		prompts = {
 			{ key = "project_name", label = "Project name", default = "cpp-app", required = true },
 			{ key = "target_dir", label = "Target directory", default = "./{{project_name}}", required = true },
@@ -58,6 +129,31 @@ local templates = {
 		description = "Run cargo new --bin and patch basic project metadata",
 		overwrite_strategy = "merge",
 		smoke_run = { "cargo", "test" },
+		health_check = function(ctx)
+			local checks = {}
+			local cargo_toml = ctx.abs_target_dir .. "/Cargo.toml"
+			if vim.fn.filereadable(cargo_toml) == 1 then
+				table.insert(checks, { status = "pass", message = "Cargo.toml exists" })
+			else
+				table.insert(checks, { status = "fail", message = "Cargo.toml missing" })
+			end
+			if vim.fn.executable("cargo") == 1 then
+				table.insert(checks, { status = "pass", message = "cargo available" })
+			else
+				table.insert(checks, { status = "fail", message = "cargo not found" })
+			end
+			if vim.fn.executable("rustc") == 1 then
+				table.insert(checks, { status = "pass", message = "rustc available" })
+			else
+				table.insert(checks, { status = "fail", message = "rustc not found" })
+			end
+			if vim.fn.executable("bacon") == 1 then
+				table.insert(checks, { status = "pass", message = "bacon available (optional)" })
+			else
+				table.insert(checks, { status = "warn", message = "bacon not installed (optional)" })
+			end
+			return checks
+		end,
 		prompts = {
 			{ key = "project_name", label = "Project name", default = "rust-app", required = true },
 			{ key = "target_dir", label = "Target directory", default = "./{{project_name}}", required = true },
