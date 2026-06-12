@@ -6,6 +6,82 @@ local template_engine = require("nautilus.custom.template-engine")
 local template_registry = require("nautilus.custom.template-registry")
 local workspace_health = require("nautilus.custom.workspace-health")
 
+local function show_quick_help()
+	local ft = vim.bo.filetype
+	local lang_name = lang.language_for_ft(ft)
+	local lines = {
+		"Nautilus Quick Reference",
+		"",
+		"Core:",
+		"  <leader>pa  Action Palette",
+		"  <leader>pt  New Template Project",
+		"  <leader>uI  Inspection Profile",
+		"  K          Hover documentation",
+		"",
+		"Files/Search:",
+		"  <leader>ff  Find files",
+		"  <leader>fg  Grep",
+		"  <leader>fr  Recent files",
+		"  <leader>sR  Search & Replace (grug-far)",
+		"",
+		"Diagnostics:",
+		"  <leader>xx  Project diagnostics (Trouble)",
+		"  <leader>xX  Buffer diagnostics (Trouble)",
+		"  ]d / [d    Next/prev diagnostic",
+		"",
+		"Tests:",
+		"  <leader>tr  Run nearest test",
+		"  <leader>tR  Run all tests in file",
+		"  <leader>to  Test output panel",
+		"",
+		"Debug:",
+		"  <leader>dr  Run debug preset",
+		"  <leader>dB  Toggle breakpoint",
+		"  <leader>dc  Continue",
+		"  <leader>do  Step over",
+		"  <leader>di  Step into",
+		"  <leader>dO  Step out",
+		"",
+		"Workflow:",
+		"  <leader>op  Run pipeline",
+		"  <leader>oP  Pipeline picker",
+		"  <leader>pa  Action palette",
+		"  <leader>ue  Toggle explorer/terminal",
+		"  <leader>um  Toggle minimap",
+		"  <leader>un  Notification history",
+		"",
+		"AI:",
+		"  <leader>aa  Agent actions picker",
+		"",
+	}
+
+	if lang_name then
+		table.insert(lines, "")
+		table.insert(lines, ("Current language: %s"):format(lang_name))
+		local task_cmds = lang.task_commands(lang_name)
+		if task_cmds and not vim.tbl_isempty(task_cmds) then
+			table.insert(lines, "Tasks:")
+			for name, _ in pairs(task_cmds) do
+				table.insert(lines, ("  " .. name))
+			end
+		end
+	end
+
+	table.insert(lines, "")
+	table.insert(lines, "Commands:")
+	table.insert(lines, "  :QuickHelp       This help")
+	table.insert(lines, "  :LangInfo        Language config")
+	table.insert(lines, "  :WorkspaceHealth Health report")
+	table.insert(lines, "  :WorkspaceHealthFix Auto-fix issues")
+	table.insert(lines, "  :RunDebugPreset  Debug preset")
+	table.insert(lines, "  :RunPipeline     Run pipeline")
+	table.insert(lines, "  :InspectionProfile [!] [strict|normal|fast]")
+	table.insert(lines, "  :TemplateNew     New project template")
+	table.insert(lines, "  :AgentActions    AI agent actions")
+
+	vim.notify(table.concat(lines, "\n"), vim.log.levels.INFO, { title = "Nautilus QuickHelp" })
+end
+
 local function fmt_list(xs)
 	if not xs or vim.tbl_isempty(xs) then return "-" end
 	return table.concat(xs, ", ")
@@ -126,6 +202,10 @@ vim.api.nvim_create_user_command("Action", function()
 	end)
 end, {
 	desc = "Open workflow action palette",
+})
+
+vim.api.nvim_create_user_command("QuickHelp", show_quick_help, {
+	desc = "Show context-aware quick reference",
 })
 
 vim.api.nvim_create_user_command("TemplateNew", function()

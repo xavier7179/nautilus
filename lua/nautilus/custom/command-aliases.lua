@@ -10,6 +10,7 @@ local group_order = {
 	Debug = 70,
 	Workflow = 80,
 	AI = 90,
+	Help = 100,
 }
 
 local function notify_missing(plugin)
@@ -146,6 +147,13 @@ local aliases = {
 		group = "AI",
 		order = 10,
 		run = function() vim.cmd("AgentActions") end,
+	},
+	{
+		id = "quick_help",
+		label = "Help: Quick Reference",
+		group = "Help",
+		order = 10,
+		run = function() vim.cmd("QuickHelp") end,
 	},
 }
 
