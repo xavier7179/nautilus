@@ -81,6 +81,41 @@ local presets = {
 			terminalKind = "integrated",
 		},
 	},
+	{
+		id = "docker-attach-container",
+		name = "Docker: Attach to running container",
+		scope = {
+			language = "docker",
+		},
+		dap = {
+			type = "docker",
+			request = "attach",
+			name = "Docker Attach",
+			containerName = function()
+				return vim.fn.input("Container name: ")
+			end,
+			port = 9229,
+			host = "localhost",
+		},
+	},
+	{
+		id = "cmake-launch-target",
+		name = "CMake: Launch build target",
+		scope = {
+			language = "cmake",
+		},
+		dap = {
+			type = "codelldb",
+			request = "launch",
+			name = "CMake Launch Target",
+			program = function()
+				local target = vim.fn.input("CMake target: ")
+				return vim.fn.getcwd() .. "/build/" .. target
+			end,
+			cwd = "${workspaceFolder}",
+			stopOnEntry = false,
+		},
+	},
 }
 
 function M.list_for_buffer(bufnr)
