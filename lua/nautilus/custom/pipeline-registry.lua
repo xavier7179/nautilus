@@ -45,6 +45,55 @@ local pipelines = {
 			{ "cargo", "test" },
 		},
 	},
+	{
+		id = "php-lint-test",
+		name = "PHP: Lint + Test",
+		scope = {
+			language = "php",
+		},
+		stop_on_fail = true,
+		steps = {
+			{ "composer", "lint" },
+			{ "composer", "test" },
+		},
+	},
+	{
+		id = "docker-build-test",
+		name = "Docker: Build + Test",
+		scope = {
+			language = "docker",
+		},
+		stop_on_fail = true,
+		steps = {
+			{ "docker", "build", "-t", "app", "." },
+			{ "docker", "compose", "up", "-d" },
+			{ "docker", "compose", "run", "--rm", "test" },
+		},
+	},
+	{
+		id = "cpp-build-test",
+		name = "C/C++: Build + Test",
+		scope = {
+			language = "c",
+		},
+		stop_on_fail = true,
+		steps = {
+			{ "cmake", "-S", ".", "-B", "build" },
+			{ "cmake", "--build", "build" },
+			{ "ctest", "--test-dir", "build", "--output-on-failure" },
+		},
+	},
+	{
+		id = "lua-test",
+		name = "Lua: Run tests",
+		scope = {
+			language = "lua",
+		},
+		stop_on_fail = true,
+		steps = {
+			{ "busted" },
+		},
+	},
 }
 
 function M.list_for_buffer(bufnr)
