@@ -50,20 +50,55 @@ local function is_valid(profile)
 	return vim.tbl_contains(profiles, profile)
 end
 
+local function project_profile_file(bufnr)
+	bufnr = bufnr or vim.api.nvim_get_current_buf()
+	local root = vim.fn.finddir(".git", vim.fn.expand("#" .. bufnr .. ":p:h") .. ";")
+	if root == "" then return nil end
+	return root .. "/.nvim-inspection-profile"
+end
+
+local function read_project_profile(bufnr)
+	local file = project_profile_file(bufnr)
+	if not file then return nil end
+	local f = io.open(file, "r")
+	if not f then return nil end
+	local profile = f:read("*l")
+	f:close()
+	if profile and is_valid(profile) then return profile end
+	return nil
+end
+
+local function write_project_profile(profile, bufnr)
+	local file = project_profile_file(bufnr)
+	if not file then return false end
+	local f = io.open(file, "w")
+	if not f then return false end
+	f:write(profile)
+	f:close()
+	return true
+end
+
 function M.all()
 	return vim.deepcopy(profiles)
 end
 
-function M.get()
+function M.get(bufnr)
+	local project = read_project_profile(bufnr)
+	if project then return project end
 	if not is_valid(vim.g.nautilus_inspection_profile) then
 		vim.g.nautilus_inspection_profile = default_profile
 	end
 	return vim.g.nautilus_inspection_profile
 end
 
-function M.set(profile)
+function M.set(profile, opts)
+	opts = opts or {}
 	if not is_valid(profile) then return false end
-	vim.g.nautilus_inspection_profile = profile
+	if opts.project then
+		write_project_profile(profile, opts.bufnr)
+	else
+		vim.g.nautilus_inspection_profile = profile
+	end
 	vim.api.nvim_exec_autocmds("User", {
 		pattern = user_event,
 		data = { profile = profile },

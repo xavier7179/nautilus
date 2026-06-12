@@ -69,21 +69,24 @@ vim.api.nvim_create_user_command(
 
 vim.api.nvim_create_user_command("InspectionProfile", function(args)
 	local profile = vim.trim(args.args or "")
+	local project = args.bang
 
 	if profile == "" then
-		vim.notify(("Inspection profile: %s"):format(inspection_profile.get()), vim.log.levels.INFO)
+		vim.notify(("Inspection profile: %s"):format(inspection_profile.get(0)), vim.log.levels.INFO)
 		return
 	end
 
-	if not inspection_profile.set(profile) then
+	if not inspection_profile.set(profile, { project = project, bufnr = 0 }) then
 		vim.notify("Invalid inspection profile. Use: strict, normal, fast", vim.log.levels.ERROR)
 		return
 	end
 
-	vim.notify(("Inspection profile set to: %s"):format(profile), vim.log.levels.INFO)
+	local scope = project and " (project)" or " (global)"
+	vim.notify(("Inspection profile set to: %s%s"):format(profile, scope), vim.log.levels.INFO)
 end, {
-	desc = "Show or set inspection profile",
+	desc = "Show or set inspection profile (! for project scope)",
 	nargs = "?",
+	bang = true,
 	complete = function() return inspection_profile.all() end,
 })
 
