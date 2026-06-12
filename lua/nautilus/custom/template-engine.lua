@@ -56,10 +56,24 @@ local function collect_context(template, overrides)
 	return ctx
 end
 
-local function ensure_writable_dir(path)
-	if vim.fn.isdirectory(path) == 0 then return true end
-	local entries = vim.fn.readdir(path)
-	return vim.tbl_isempty(entries)
+local function ensure_writable_dir(path, strategy)
+	strategy = strategy or "merge"
+
+	if strategy == "abort" then
+		if vim.fn.isdirectory(path) == 0 then return true end
+		local entries = vim.fn.readdir(path)
+		return vim.tbl_isempty(entries)
+	elseif strategy == "merge" then
+		return true
+	elseif strategy == "backup" then
+		if vim.fn.isdirectory(path) == 1 and not vim.tbl_isempty(vim.fn.readdir(path)) then
+			local backup = path .. ".backup." .. os.date("%Y%m%d-%H%M%S")
+			vim.fn.rename(path, backup)
+		end
+		return true
+	else
+		return true
+	end
 end
 
 local function write_file(path, lines)
@@ -269,7 +283,8 @@ function M.create(template_id, opts)
 	local ctx, ctx_err = collect_context(template, opts.overrides)
 	if not ctx then return nil, ctx_err end
 
-	if not opts.dry_run and not ensure_writable_dir(ctx.abs_target_dir) then
+	local strategy = template.overwrite_strategy or "merge"
+	if not opts.dry_run and not ensure_writable_dir(ctx.abs_target_dir, strategy) then
 		return nil, ("Target directory is not empty: %s"):format(ctx.abs_target_dir)
 	end
 

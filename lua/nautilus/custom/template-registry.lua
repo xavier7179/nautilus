@@ -7,6 +7,7 @@ local templates = {
 		group = "Node",
 		order = 10,
 		description = "Scaffold a plain Node JavaScript package",
+		overwrite_strategy = "merge",
 		prompts = {
 			{ key = "project_name", label = "Project name", default = "node-js-package", required = true },
 			{ key = "target_dir", label = "Target directory", default = "./{{project_name}}", required = true },
@@ -21,6 +22,7 @@ local templates = {
 		group = "Node",
 		order = 20,
 		description = "Scaffold Electron Forge app (Vite) then patch JS/React conventions",
+		overwrite_strategy = "merge",
 		prompts = {
 			{ key = "project_name", label = "Project name", default = "electron-forge-app", required = true },
 			{ key = "target_dir", label = "Target directory", default = "./{{project_name}}", required = true },
@@ -36,6 +38,7 @@ local templates = {
 		group = "C/C++",
 		order = 10,
 		description = "Scaffold a minimal CMake C++ executable project",
+		overwrite_strategy = "merge",
 		prompts = {
 			{ key = "project_name", label = "Project name", default = "cpp-app", required = true },
 			{ key = "target_dir", label = "Target directory", default = "./{{project_name}}", required = true },
@@ -48,6 +51,7 @@ local templates = {
 		group = "Rust",
 		order = 10,
 		description = "Run cargo new --bin and patch basic project metadata",
+		overwrite_strategy = "merge",
 		prompts = {
 			{ key = "project_name", label = "Project name", default = "rust-app", required = true },
 			{ key = "target_dir", label = "Target directory", default = "./{{project_name}}", required = true },
