@@ -94,6 +94,22 @@ local pipelines = {
 			{ "busted" },
 		},
 	},
+	{
+		id = "js-full-ci",
+		name = "JavaScript: Full CI (Lint + Test + Build)",
+		scope = {
+			language = "javascript",
+			project = {
+				markers = { "package.json" },
+			},
+		},
+		stop_on_fail = true,
+		steps = {
+			{ "npm", "run", "lint" },
+			{ "npm", "test" },
+			{ "npm", "run", "build" },
+		},
+	},
 }
 
 function M.list_for_buffer(bufnr)
