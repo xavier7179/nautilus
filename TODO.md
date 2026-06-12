@@ -12,11 +12,12 @@
 - [x] Electron Forge + React JS template (forge-first + patch).
 - [x] CMake C++ template.
 - [x] Rust binary template (`cargo new` + patch).
-- [ ] Templates v2: safer overwrite/merge behavior.
-- [ ] Templates v2: richer post-create patching.
-- [ ] Templates v2: optional smoke-run profiles per template.
-- [ ] WorkspaceHealth v2: stronger remediation output.
-- [ ] WorkspaceHealth v2: per-template checks.
-- [ ] Inspection profile v2: per-project persistence/override.
-- [ ] Add additional project templates for recurring real-world app structures.
-- [ ] Command discoverability polish (quick help / concise command map).
+- [x] Templates v2: safer overwrite/merge behavior (abort/merge/backup strategies).
+- [x] Templates v2: richer post-create patching (generic post_create_hooks system).
+- [x] Templates v2: optional smoke-run profiles per template (generic smoke_run per template).
+- [x] WorkspaceHealth v2: stronger remediation output (auto-fix with :WorkspaceHealthFix).
+- [x] WorkspaceHealth v2: per-template checks (health_check per template).
+- [x] Inspection profile v2: per-project persistence/override (.nvim-inspection-profile).
+- [x] Run/debug presets: Docker, CMake, Lua, HTML, CSS, JSON, YAML, Markdown.
+- [x] Pipelines: PHP, Docker, C/C++, Lua, JavaScript full CI.
+- [x] Command discoverability polish (QuickHelp command + action palette entry).
