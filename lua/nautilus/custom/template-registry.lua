@@ -1,5 +1,53 @@
 local M = {}
 
+-- ── Shared health-check helpers ──────────────────────────────────────────────
+
+local function add(checks, status, message)
+	table.insert(checks, { status = status, message = message })
+end
+
+local function check_file(ctx, filename, checks, label)
+	label = label or filename
+	local path = ctx.abs_target_dir .. "/" .. filename
+	if vim.fn.filereadable(path) == 1 then
+		add(checks, "pass", label .. " exists")
+	else
+		add(checks, "fail", label .. " missing")
+	end
+end
+
+---@param binary string
+---@param checks table
+---@param opts? { level?: "fail"|"warn"|"pass", label?: string }
+local function check_exec(binary, checks, opts)
+	opts = opts or {}
+	local label = opts.label or binary
+	local level = opts.level or "fail"
+	if vim.fn.executable(binary) == 1 then
+		add(checks, "pass", label .. " available")
+	else
+		add(checks, level, label .. " not found")
+	end
+end
+
+---@param binaries string[]
+---@param checks table
+---@param opts? { level?: "fail"|"warn"|"pass", label?: string }
+local function check_any_exec(binaries, checks, opts)
+	opts = opts or {}
+	local label = opts.label or table.concat(binaries, "/")
+	local level = opts.level or "fail"
+	for _, bin in ipairs(binaries) do
+		if vim.fn.executable(bin) == 1 then
+			add(checks, "pass", label .. " available")
+			return
+		end
+	end
+	add(checks, level, "no " .. label)
+end
+
+-- ── Templates ────────────────────────────────────────────────────────────────
+
 local templates = {
 	{
 		id = "node-js-package",
@@ -11,22 +59,9 @@ local templates = {
 		smoke_run = { "npm", "test" },
 		health_check = function(ctx)
 			local checks = {}
-			local package_json = ctx.abs_target_dir .. "/package.json"
-			if vim.fn.filereadable(package_json) == 1 then
-				table.insert(checks, { status = "pass", message = "package.json exists" })
-			else
-				table.insert(checks, { status = "fail", message = "package.json missing" })
-			end
-			if vim.fn.executable("node") == 1 then
-				table.insert(checks, { status = "pass", message = "node available" })
-			else
-				table.insert(checks, { status = "fail", message = "node not found" })
-			end
-			if vim.fn.executable("npm") == 1 then
-				table.insert(checks, { status = "pass", message = "npm available" })
-			else
-				table.insert(checks, { status = "warn", message = "npm not found" })
-			end
+			check_file(ctx, "package.json", checks)
+			check_exec("node", checks)
+			check_exec("npm", checks, { level = "warn" })
 			return checks
 		end,
 		prompts = {
@@ -50,26 +85,18 @@ local templates = {
 			local checks = {}
 			local package_json = ctx.abs_target_dir .. "/package.json"
 			if vim.fn.filereadable(package_json) == 1 then
-				table.insert(checks, { status = "pass", message = "package.json exists" })
+				add(checks, "pass", "package.json exists")
 				local content = table.concat(vim.fn.readfile(package_json), "\n")
 				if content:match('"electron"') then
-					table.insert(checks, { status = "pass", message = "electron dependency found" })
+					add(checks, "pass", "electron dependency found")
 				else
-					table.insert(checks, { status = "warn", message = "electron not in dependencies" })
+					add(checks, "warn", "electron not in dependencies")
 				end
 			else
-				table.insert(checks, { status = "fail", message = "package.json missing" })
+				add(checks, "fail", "package.json missing")
 			end
-			if vim.fn.executable("node") == 1 then
-				table.insert(checks, { status = "pass", message = "node available" })
-			else
-				table.insert(checks, { status = "fail", message = "node not found" })
-			end
-			if vim.fn.executable("npm") == 1 then
-				table.insert(checks, { status = "pass", message = "npm available" })
-			else
-				table.insert(checks, { status = "warn", message = "npm not found" })
-			end
+			check_exec("node", checks)
+			check_exec("npm", checks, { level = "warn" })
 			return checks
 		end,
 		prompts = {
@@ -91,27 +118,10 @@ local templates = {
 		smoke_run = { "ctest", "--test-dir", "build", "--output-on-failure" },
 		health_check = function(ctx)
 			local checks = {}
-			local cmake_lists = ctx.abs_target_dir .. "/CMakeLists.txt"
-			if vim.fn.filereadable(cmake_lists) == 1 then
-				table.insert(checks, { status = "pass", message = "CMakeLists.txt exists" })
-			else
-				table.insert(checks, { status = "fail", message = "CMakeLists.txt missing" })
-			end
-			if vim.fn.executable("cmake") == 1 then
-				table.insert(checks, { status = "pass", message = "cmake available" })
-			else
-				table.insert(checks, { status = "fail", message = "cmake not found" })
-			end
-			if vim.fn.executable("ctest") == 1 then
-				table.insert(checks, { status = "pass", message = "ctest available" })
-			else
-				table.insert(checks, { status = "warn", message = "ctest not found" })
-			end
-			if vim.fn.executable("g++") == 1 or vim.fn.executable("clang++") == 1 then
-				table.insert(checks, { status = "pass", message = "C++ compiler available" })
-			else
-				table.insert(checks, { status = "fail", message = "no C++ compiler (g++/clang++)" })
-			end
+			check_file(ctx, "CMakeLists.txt", checks)
+			check_exec("cmake", checks)
+			check_exec("ctest", checks, { level = "warn" })
+			check_any_exec({ "g++", "clang++" }, checks, { label = "C++ compiler (g++/clang++)" })
 			return checks
 		end,
 		prompts = {
@@ -131,27 +141,10 @@ local templates = {
 		smoke_run = { "cargo", "test" },
 		health_check = function(ctx)
 			local checks = {}
-			local cargo_toml = ctx.abs_target_dir .. "/Cargo.toml"
-			if vim.fn.filereadable(cargo_toml) == 1 then
-				table.insert(checks, { status = "pass", message = "Cargo.toml exists" })
-			else
-				table.insert(checks, { status = "fail", message = "Cargo.toml missing" })
-			end
-			if vim.fn.executable("cargo") == 1 then
-				table.insert(checks, { status = "pass", message = "cargo available" })
-			else
-				table.insert(checks, { status = "fail", message = "cargo not found" })
-			end
-			if vim.fn.executable("rustc") == 1 then
-				table.insert(checks, { status = "pass", message = "rustc available" })
-			else
-				table.insert(checks, { status = "fail", message = "rustc not found" })
-			end
-			if vim.fn.executable("bacon") == 1 then
-				table.insert(checks, { status = "pass", message = "bacon available (optional)" })
-			else
-				table.insert(checks, { status = "warn", message = "bacon not installed (optional)" })
-			end
+			check_file(ctx, "Cargo.toml", checks)
+			check_exec("cargo", checks)
+			check_exec("rustc", checks)
+			check_exec("bacon", checks, { level = "warn", label = "bacon (optional)" })
 			return checks
 		end,
 		prompts = {

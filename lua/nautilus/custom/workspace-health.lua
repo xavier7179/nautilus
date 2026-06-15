@@ -2,8 +2,6 @@ local lang = require("nautilus.custom.lang")
 local run_registry = require("nautilus.custom.run-registry")
 local pipeline_registry = require("nautilus.custom.pipeline-registry")
 local inspection_profile = require("nautilus.custom.inspection-profile")
-local template_registry = require("nautilus.custom.template-registry")
-local template_engine = require("nautilus.custom.template-engine")
 
 local M = {}
 
@@ -70,32 +68,6 @@ local function external_tool_checks(language)
 	end
 
 	return checks
-end
-
-local function template_health_checks(bufnr, language)
-	local pass, warn, fail = {}, {}, {}
-
-	local templates = template_registry.list()
-	for _, template in ipairs(templates) do
-		if template.health_check then
-			local ctx = { abs_target_dir = vim.fn.getcwd() }
-			local ok, checks = pcall(template.health_check, ctx)
-			if ok and checks then
-				for _, check in ipairs(checks) do
-					local line = ("template '%s': %s"):format(template.name, check.message)
-					if check.status == "pass" then
-						add_bucket_line(pass, line)
-					elseif check.status == "warn" then
-						add_bucket_line(warn, line)
-					elseif check.status == "fail" then
-						add_bucket_line(fail, line)
-					end
-				end
-			end
-		end
-	end
-
-	return pass, warn, fail
 end
 
 local function add_bucket_line(bucket, line)
@@ -198,11 +170,6 @@ function M.report(bufnr)
 			add_bucket_line(warn, ("missing optional tool '%s' (%s)"):format(check.bin, check.reason))
 		end
 	end
-
-	local t_pass, t_warn, t_fail = template_health_checks(bufnr, language)
-	for _, line in ipairs(t_pass) do add_bucket_line(pass, line) end
-	for _, line in ipairs(t_warn) do add_bucket_line(warn, line) end
-	for _, line in ipairs(t_fail) do add_bucket_line(fail, line) end
 
 	for _, mismatch in ipairs(service_mismatch_warnings(language)) do
 		add_bucket_line(warn, mismatch)
