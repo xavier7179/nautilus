@@ -5,6 +5,9 @@
 -- - This is intentional for readability and future activation
 -- - Runtime/plugin consumers must go through `nautilus.custom.lang`
 --   which filters disabled services out unless raw access is requested
+-- - treesitter entries MUST be valid parser names in the upstream
+--   nvim-treesitter registry.  Check with `:TSInstallInfo` before
+--   adding.  (Not every lang has a parser — e.g. "less" does not.)
 return {
 	bash = {
 		ft = { "sh", "bash", "zsh" },
