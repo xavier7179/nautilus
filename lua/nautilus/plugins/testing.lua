@@ -34,6 +34,10 @@ local adapter_factories = {
 			end,
 		})
 	end,
+	phpunit = function()
+		local ok, adapter = pcall(require, "neotest-phpunit")
+		return ok and adapter or nil
+	end,
 }
 
 local function resolve_adapters()
