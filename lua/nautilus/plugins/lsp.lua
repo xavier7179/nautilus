@@ -91,7 +91,27 @@ return {
 				map("<leader>sS", function() snacks.lsp_workspace_symbols() end, "[S]earch LSP Workspace [S]ymbols")
 
 				local client = vim.lsp.get_client_by_id(event.data.client_id)
-				
+
+				local function organize_imports()
+					vim.lsp.buf.code_action({
+						apply = true,
+						context = { only = { "source.organizeImports" }, diagnostics = {} },
+						filter = function(action) return action.kind == "source.organizeImports" end,
+					})
+				end
+
+				map("<leader>ci", organize_imports, "Organize Imports")
+
+				local buf = event.buf
+				vim.api.nvim_create_autocmd("BufWritePre", {
+					buffer = buf,
+					group = vim.api.nvim_create_augroup("LspOrganizeImports_" .. buf, { clear = true }),
+					callback = function()
+						if vim.g.disable_autoformat or vim.b[buf].disable_autoformat then return end
+						organize_imports()
+					end,
+				})
+
 				-- clangd-specific keymap
 				if client and client.name == "clangd" then
 					map("<leader>ch", function()

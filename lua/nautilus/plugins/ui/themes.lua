@@ -216,4 +216,6 @@ return require("nautilus.custom.colorscheme").lazy_setup({
 	{
 		"dgrco/deepwater.nvim",
 	},
+	{ "kbraggins/duskhaven.nvim" },
+	{ "scottmckendry/cyberdream.nvim" },
 })

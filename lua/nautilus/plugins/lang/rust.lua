@@ -58,6 +58,9 @@ return {
 				end,
 				default_settings = {
 					["rust-analyzer"] = {
+						diagnostics = {
+							enable = false,
+						},
 						cargo = {
 							allFeatures = true,
 							loadOutDirsFromCheck = true,

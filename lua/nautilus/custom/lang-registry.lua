@@ -93,8 +93,8 @@ return {
 				mason = { "cmake-language-server" },
 			},
 			format = {
-				enabled = false,
-				conform = {},
+				enabled = true,
+				conform = { "cmake_format" },
 				mason = {},
 			},
 			lint = {
@@ -323,8 +323,8 @@ return {
 		services = {
 			lsp = {
 				enabled = true,
-				servers = { "bacon_ls" },
-				mason = { "bacon-ls" },
+				servers = { "bacon_ls", "rust_analyzer" },
+				mason = { "bacon-ls", "rust-analyzer" },
 			},
 			format = {
 				enabled = true,
@@ -368,9 +368,9 @@ return {
 				mason = { "yamlls" },
 			},
 			format = {
-				enabled = false,
-				conform = {},
-				mason = {},
+				enabled = true,
+				conform = { "yamlfmt" },
+				mason = { "yamlfmt" },
 			},
 			lint = {
 				enabled = true,

@@ -15,6 +15,7 @@ return {
 				filetypes = lang.ft("javascript"),
 				settings = {
 					typescript = {
+						suggest = { autoImports = true },
 						inlayHints = {
 							parameterNames = { enabled = "all" },
 							parameterTypes = { enabled = true },
@@ -25,6 +26,7 @@ return {
 						},
 					},
 					javascript = {
+						suggest = { autoImports = true },
 						inlayHints = {
 							parameterNames = { enabled = "all" },
 							parameterTypes = { enabled = true },
