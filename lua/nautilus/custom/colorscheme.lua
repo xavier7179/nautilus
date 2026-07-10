@@ -94,7 +94,7 @@ function M.tune_colorscheme_plugins(plugins)
 			local name = get_name(plug)
 			if name then pattern = string.gsub(name, "-", "%%-") end
 		end
-		return vim.iter(tbl_wrap(pattern)):any(function(pat) return string.match(colorscheme, pat) end)
+		return vim.iter(tbl_wrap(pattern)):any(function(pat) return string.match(colorscheme, "^" .. pat .. "$") end)
 	end
 
 	local colorscheme = M.get_colorscheme()

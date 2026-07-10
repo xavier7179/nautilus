@@ -133,6 +133,28 @@ return require("nautilus.custom.colorscheme").lazy_setup({
 				float_background = false,
 			},
 		},
+		config = function(_, opts)
+			require("onenord").setup(opts)
+
+			vim.api.nvim_create_autocmd("ColorScheme", {
+				pattern = "onenord",
+				group = vim.api.nvim_create_augroup("onenord_mini_statusline", { clear = true }),
+				callback = function()
+					local colors = require("onenord.colors").load()
+					local set_hl = vim.api.nvim_set_hl
+					set_hl(0, "MiniStatuslineModeNormal", { fg = colors.bg, bg = colors.cyan, bold = true })
+					set_hl(0, "MiniStatuslineModeInsert", { fg = colors.bg, bg = colors.green, bold = true })
+					set_hl(0, "MiniStatuslineModeVisual", { fg = colors.bg, bg = colors.purple, bold = true })
+					set_hl(0, "MiniStatuslineModeReplace", { fg = colors.bg, bg = colors.red, bold = true })
+					set_hl(0, "MiniStatuslineModeCommand", { fg = colors.bg, bg = colors.yellow, bold = true })
+					set_hl(0, "MiniStatuslineModeOther", { fg = colors.bg, bg = colors.blue, bold = true })
+					set_hl(0, "MiniStatuslineDevinfo", { fg = colors.cyan, bg = colors.highlight })
+					set_hl(0, "MiniStatuslineFilename", { fg = colors.fg, bg = colors.active })
+					set_hl(0, "MiniStatuslineFileinfo", { fg = colors.light_gray, bg = colors.highlight })
+					set_hl(0, "MiniStatuslineInactive", { fg = colors.light_gray, bg = colors.active })
+				end,
+			})
+		end,
 	},
 	{
 		"everviolet/nvim",
