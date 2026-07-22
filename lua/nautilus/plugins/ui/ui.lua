@@ -5,6 +5,12 @@ return {
 		"folke/noice.nvim",
 		event = "VeryLazy",
 		opts = {
+			-- snacks.nvim owns vim.notify (see snacks.lua notifier config);
+			-- don't let noice fight it for the hook, it only causes health-check nagging.
+			notify = { enabled = false },
+			-- The periodic health checker throws false-positive "overwritten" warnings
+			-- (stale closures after noice re-enables, e.g. via snacks zen mode toggle).
+			health = { checker = false },
 			lsp = {
 				override = {
 					["vim.lsp.util.convert_input_to_markdown_lines"] = true,
@@ -22,10 +28,6 @@ return {
 						},
 					},
 					view = "mini",
-				},
-				{ -- Skip notification of No Information Available type
-					filter = { event = "notify", find = "No information available" },
-					opts = { skip = true },
 				},
 			},
 			presets = {

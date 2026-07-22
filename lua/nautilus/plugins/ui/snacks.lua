@@ -228,6 +228,8 @@ return {
 			notifier = {
 				enabled = true,
 				timeout = 3000,
+				-- Skip "No information available" notifications (e.g. LSP hover with no docs).
+				filter = function(notif) return not notif.msg:find("No information available", 1, true) end,
 			},
 			picker = {
 				enabled = true,
