@@ -3,13 +3,9 @@ local lang = require("nautilus.custom.lang")
 return {
 	{
 		"nvim-treesitter/nvim-treesitter",
-		-- event = { "BufReadPre", "BufNewFile" },
 		event = { "BufReadPost", "BufNewFile" },
 		build = ":TSUpdate",
 		main = "nvim-treesitter.configs",
-		dependencies = {
-			"windwp/nvim-ts-autotag",
-		},
 		opts = {
 			-- auto_install = true,
 			ensure_installed = vim.list_extend(lang.treesitter(), {
@@ -34,20 +30,9 @@ return {
 			},
 			-- enable indentation
 			indent = { enable = true, disable = { "markdown" } },
-			-- enable autotagging (w/ nvim-ts-autotag plugin)
-			autotag = {
-				enable = true,
-			},
-			-- incremental selection using control space
-			incremental_selection = {
-				enable = true,
-				keymaps = {
-					init_selection = "<C-space>",
-					node_incremental = "<C-space>",
-					scope_incremental = false,
-					node_decremental = "<bs>",
-				},
-			},
+			-- NOTE: incremental selection is no longer a module here; nvim 0.12+
+			-- provides it natively via the `an`/`in` node textobjects, see
+			-- nautilus.core.keymaps
 		},
 		config = function(_, opts)
 			require("nvim-treesitter.configs").setup(opts)
@@ -99,6 +84,21 @@ return {
 				function() require("treesitter-context").go_to_context(vim.v.count1) end,
 				desc = "Jump to outer context",
 				silent = true,
+			},
+		},
+	},
+	{
+		"windwp/nvim-ts-autotag",
+		-- No ft filter here: internal.lua's attach() already no-ops via
+		-- TagConfigs:get(vim.bo.filetype), so the plugin is the source of truth
+		-- for which filetypes it supports, not a list we'd have to keep in sync.
+		event = { "BufReadPost", "BufNewFile" },
+		-- nested under opts.opts: current nvim-ts-autotag setup() layout, not a typo
+		opts = {
+			opts = {
+				enable_close = true,
+				enable_rename = true,
+				enable_close_on_slash = false,
 			},
 		},
 	},
