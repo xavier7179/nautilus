@@ -49,3 +49,17 @@ keymap.set("n", "<leader>fn", "<cmd>enew<cr>", { desc = "New File" })
 keymap.set("n", "<S-h>", "<cmd>bprevious<cr>", { desc = "Prev Buffer" })
 keymap.set("n", "<S-l>", "<cmd>bnext<cr>", { desc = "Next Buffer" })
 keymap.set("n", "<leader>bb", "<cmd>e #<cr>", { desc = "Switch to Other Buffer" })
+
+-- ─── Treesitter incremental selection ────────────────────────────────────────
+-- Built into nvim 0.12+ via the `an`/`in` (a/inner node) textobjects, no
+-- plugin needed anymore (replaces nvim-treesitter's incremental_selection
+-- module and daliusd/incr.nvim). <C-space> grows the selection node by node,
+-- <bs> shrinks it back while a selection is active.
+
+keymap.set("n", "<C-space>", ":normal! van<cr>", { desc = "Start incremental selection" })
+keymap.set("v", "<C-space>", function()
+	vim.api.nvim_feedkeys("an", "v", false)
+end, { desc = "Expand incremental selection" })
+keymap.set("v", "<bs>", function()
+	vim.api.nvim_feedkeys("in", "v", false)
+end, { desc = "Shrink incremental selection" })
