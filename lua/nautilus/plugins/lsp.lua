@@ -102,15 +102,17 @@ return {
 
 				map("<leader>ci", organize_imports, "Organize Imports")
 
-				local buf = event.buf
-				vim.api.nvim_create_autocmd("BufWritePre", {
-					buffer = buf,
-					group = vim.api.nvim_create_augroup("LspOrganizeImports_" .. buf, { clear = true }),
-					callback = function()
-						if vim.g.disable_autoformat or vim.b[buf].disable_autoformat then return end
-						organize_imports()
-					end,
-				})
+				if client and client:supports_method(vim.lsp.protocol.Methods.textDocument_codeAction) then
+					local buf = event.buf
+					vim.api.nvim_create_autocmd("BufWritePre", {
+						buffer = buf,
+						group = vim.api.nvim_create_augroup("LspOrganizeImports_" .. buf, { clear = true }),
+						callback = function()
+							if vim.g.disable_autoformat or vim.b[buf].disable_autoformat then return end
+							organize_imports()
+						end,
+					})
+				end
 
 				-- clangd-specific keymap
 				if client and client.name == "clangd" then
