@@ -40,6 +40,9 @@ return {
 		"folke/snacks.nvim",
 		priority = 1000,
 		lazy = false,
+		init = function()
+			vim.api.nvim_set_hl(0, "NautilusDashboardSubtitle", { link = "Comment", default = true })
+		end,
 		---@type snacks.Config
 		opts = {
 			animate = { enabled = true },
@@ -47,6 +50,13 @@ return {
 			dashboard = {
 				enabled = true,
 				preset = {
+					header = [[
+███╗   ██╗ █████╗ ██╗   ██╗████████╗██╗██╗     ██╗   ██╗███████╗
+████╗  ██║██╔══██╗██║   ██║╚══██╔══╝██║██║     ██║   ██║██╔════╝
+██╔██╗ ██║███████║██║   ██║   ██║   ██║██║     ██║   ██║███████╗
+██║╚██╗██║██╔══██║██║   ██║   ██║   ██║██║     ██║   ██║╚════██║
+██║ ╚████║██║  ██║╚██████╔╝   ██║   ██║███████╗╚██████╔╝███████║
+╚═╝  ╚═══╝╚═╝  ╚═╝ ╚═════╝    ╚═╝   ╚═╝╚══════╝ ╚═════╝ ╚══════╝]],
 					keys = {
 						{
 							icon = " ",
@@ -108,6 +118,10 @@ return {
 				},
 				sections = {
 					{ section = "header" },
+					{
+						text = { { "a Neovim configuration", hl = "NautilusDashboardSubtitle", align = "center" } },
+						padding = 1,
+					},
 					{ section = "keys", gap = 1, padding = 1 },
 					{
 						pane = 2,

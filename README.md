@@ -1,5 +1,13 @@
 # NAUTILUS Theme
 
+```text
+ _  _   _  _   _ _____ ___ _   _   _ ___
+| \| | /_\| | | |_   _|_ _| | | | | / __|
+| .` |/ _ \ |_| | | |  | || |_| |_| \__ \
+|_|\_/_/ \_\___/  |_| |___|____\___/|___/
+              a Neovim configuration
+```
+
 A personal Neovim configuration built around [snacks.nvim](https://github.com/folke/snacks.nvim), [blink.cmp](https://github.com/saghen/blink.cmp), and a modular per-language setup managed by [Mason](https://github.com/williamboman/mason.nvim).
 
 ## Pre-Requisites (OSX)
