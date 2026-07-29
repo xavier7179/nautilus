@@ -13,6 +13,12 @@ return {
 			opts.servers.vtsls = vim.tbl_deep_extend("force", opts.servers.vtsls or {}, {
 				capabilities = capabilities,
 				filetypes = lang.ft("javascript"),
+				-- vtsls returns tsserver-internal pseudo-commands (e.g. after
+				-- organizeImports) that it doesn't itself support executing via
+				-- workspace/executeCommand; they're meant to be handled client-side.
+				commands = {
+					["_typescript.didOrganizeImports"] = function() end,
+				},
 				settings = {
 					typescript = {
 						suggest = { autoImports = true },
