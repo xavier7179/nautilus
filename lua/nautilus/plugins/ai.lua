@@ -17,6 +17,53 @@ return {
 		config = function(_, opts) require("copilot").setup(opts) end,
 	},
 
+	-- Claude Code: native IDE integration (Snacks-backed panel), separate from
+	-- the CodeCompanion chat below — talks directly to the `claude` CLI via
+	-- Anthropic's IDE protocol instead of going through CodeCompanion's adapter layer.
+	{
+		"coder/claudecode.nvim",
+		dependencies = { "folke/snacks.nvim" },
+		cmd = {
+			"ClaudeCode",
+			"ClaudeCodeFocus",
+			"ClaudeCodeSelectModel",
+			"ClaudeCodeAdd",
+			"ClaudeCodeSend",
+			"ClaudeCodeTreeAdd",
+			"ClaudeCodeStatus",
+			"ClaudeCodeStart",
+			"ClaudeCodeStop",
+			"ClaudeCodeOpen",
+			"ClaudeCodeClose",
+			"ClaudeCodeDiffAccept",
+			"ClaudeCodeDiffDeny",
+			"ClaudeCodeCloseAllDiffs",
+		},
+		opts = {
+			terminal = {
+				provider = "snacks",
+			},
+		},
+		keys = {
+			{ "<leader>ak", "", desc = "+claude", mode = { "n", "v" } },
+			{ "<leader>akc", "<cmd>ClaudeCode<cr>", desc = "Toggle Claude" },
+			{ "<leader>akf", "<cmd>ClaudeCodeFocus<cr>", desc = "Focus Claude" },
+			{ "<leader>akr", "<cmd>ClaudeCode --resume<cr>", desc = "Resume Claude" },
+			{ "<leader>akC", "<cmd>ClaudeCode --continue<cr>", desc = "Continue Claude" },
+			{ "<leader>akm", "<cmd>ClaudeCodeSelectModel<cr>", desc = "Select Claude model" },
+			{ "<leader>akb", "<cmd>ClaudeCodeAdd %<cr>", desc = "Add current buffer" },
+			{ "<leader>aks", "<cmd>ClaudeCodeSend<cr>", mode = "v", desc = "Send selection to Claude" },
+			{
+				"<leader>aks",
+				"<cmd>ClaudeCodeTreeAdd<cr>",
+				desc = "Add file",
+				ft = { "NvimTree", "neo-tree", "oil", "minifiles", "netrw", "snacks_picker_list" },
+			},
+			{ "<leader>aky", "<cmd>ClaudeCodeDiffAccept<cr>", desc = "Accept diff" },
+			{ "<leader>akn", "<cmd>ClaudeCodeDiffDeny<cr>", desc = "Deny diff" },
+		},
+	},
+
 	-- CodeCompanion: light AI assistant (chat + edits)
 	{
 		"olimorris/codecompanion.nvim",
