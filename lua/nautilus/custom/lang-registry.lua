@@ -505,4 +505,50 @@ return {
 			},
 		},
 	},
+
+	python = {
+		ft = { "python" },
+		treesitter = { "python" },
+		services = {
+			lsp = {
+				enabled = true,
+				-- basedpyright: types/intellisense. ruff: fast linting + import
+				-- organizing, run as its own LSP so diagnostics are live.
+				servers = { "basedpyright", "ruff" },
+				mason = { "basedpyright", "ruff" },
+			},
+			format = {
+				enabled = true,
+				conform = { "ruff_format", "ruff_organize_imports" },
+				-- ruff binary already installed via lsp.mason above.
+				mason = {},
+			},
+			lint = {
+				-- ruff's LSP diagnostics (above) already cover linting; avoid
+				-- registering it a second time via nvim-lint.
+				enabled = false,
+				linters = {},
+				mason = {},
+			},
+			dap = {
+				enabled = true,
+				mason = { "debugpy" },
+			},
+			completion = {
+				enabled = true,
+			},
+			tests = {
+				enabled = true,
+				adapters = { "python" },
+			},
+			tasks = {
+				enabled = true,
+				commands = {
+					test = { "pytest" },
+					lint = { "ruff", "check", "." },
+					format = { "ruff", "format", "." },
+				},
+			},
+		},
+	},
 }

@@ -38,6 +38,11 @@ local adapter_factories = {
 		local ok, adapter = pcall(require, "neotest-phpunit")
 		return ok and adapter or nil
 	end,
+	python = function()
+		local ok, adapter = pcall(require, "neotest-python")
+		if not ok then return nil end
+		return adapter({ runner = "pytest" })
+	end,
 }
 
 local function resolve_adapters()

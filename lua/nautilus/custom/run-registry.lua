@@ -190,6 +190,20 @@ local presets = {
 		},
 	},
 	{
+		id = "python-launch-file",
+		name = "Python: Launch current file",
+		scope = {
+			language = "python",
+		},
+		dap = {
+			type = "python",
+			request = "launch",
+			name = "Python Launch current file",
+			program = "${file}",
+			cwd = "${workspaceFolder}",
+		},
+	},
+	{
 		id = "markdown-preview",
 		name = "Markdown: Preview",
 		scope = {
