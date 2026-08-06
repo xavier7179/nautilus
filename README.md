@@ -8,25 +8,123 @@
               a Neovim configuration
 ```
 
-A personal Neovim configuration built around [snacks.nvim](https://github.com/folke/snacks.nvim), [blink.cmp](https://github.com/saghen/blink.cmp), and a modular per-language setup managed by [Mason](https://github.com/williamboman/mason.nvim).
+A complete, opinionated Neovim development environment built around [snacks.nvim](https://github.com/folke/snacks.nvim), [blink.cmp](https://github.com/saghen/blink.cmp), and a modular per-language setup managed by [Mason](https://github.com/williamboman/mason.nvim). It is designed to be cloned or forked, then adapted to your own workflow rather than treated as a fixed personal dotfile dump.
 
-## Pre-Requisites (OSX)
+## General Approach
 
-### Core tools
+Nautilus aims to provide useful defaults without making routine customization require a rewrite. The configuration is organized around a few principles:
 
-- iTerm2 or WezTerm terminal
+- **Opinionated workflow:** project navigation, completion, diagnostics, formatting, testing, debugging, Git, tasks, and remote development are available from a consistent keymap tree.
+- **Low-maintenance configuration:** plugin specifications are grouped by responsibility and use lazy-loading, so most changes are isolated to one small module instead of a monolithic file.
+- **One language registry:** language capabilities are declared once in `lua/nautilus/custom/lang-registry.lua`. LSP servers, formatters, linters, debuggers, tests, tasks, and Treesitter parsers are derived from that registry rather than duplicated across plugin files.
+- **Explicit extension points:** core options and mappings live under `lua/nautilus/core/`; shared behavior lives under `lua/nautilus/custom/`; language-specific overrides live under `lua/nautilus/plugins/lang/`.
+- **Native Neovim APIs:** the configuration targets Neovim 0.12+ and uses its native LSP configuration and enablement APIs.
+
+The boot path is intentionally small: `init.lua` loads `nautilus.core`, then `nautilus.lazy` bootstraps [lazy.nvim](https://github.com/folke/lazy.nvim). Plugins are split into four groups: core plugins (`plugins/`), UI (`plugins/ui/`), languages (`plugins/lang/`), and utilities (`plugins/utils/`).
+
+## Themes
+
+The visual setup is dark-first, terminal-oriented, and built to keep the editor readable while exposing diagnostics, Git changes, code structure, and active modes. Several themes are available rather than enforcing one palette:
+
+- Use `<leader>uC` to choose a colorscheme.
+- The selected colorscheme is persisted between Neovim sessions.
+- Only the selected theme is eagerly loaded; the other theme plugins remain lazy-loaded.
+- Theme integrations cover completion, diagnostics, DAP, Git, Markdown, Snacks, Treesitter, which-key, and other UI components where supported.
+- Nerd Font icons, true color, and terminal color support are enabled by default. Set `vim.g.have_nerd_font = false` in `lua/nautilus/core/options.lua` if your terminal does not use a Nerd Font.
+
+## Using This Repository
+
+You can use the upstream repository directly or create your own fork. A fork is recommended when you want to maintain personal keymaps, language choices, plugins, or theme defaults independently.
+
+### Clone the upstream repository
+
+```sh
+git clone <PII type="EMAIL" id="22"/>:xavier7179/nautilus.git ~/.config/nvim
+```
+
+### Clone your fork
+
+Replace `<your-user>/<your-fork>` with your fork's SSH or HTTPS URL:
+
+```sh
+git clone git@github.com:<your-user>/<your-fork>.git ~/.config/nvim
+```
+
+If `~/.config/nvim` already contains a configuration, back it up first or use a separate Neovim profile. For a simple backup:
+
+```sh
+mv ~/.config/nvim ~/.config/nvim.backup
+```
+
+After cloning, start Neovim. `lazy.nvim` bootstraps automatically and installs the configured plugins. The repository's `lazy-lock.json` pins plugin versions and should remain committed in your fork.
+
+The most common customization locations are:
+
+| What to change | Where |
+|----------------|-------|
+| Editor options and defaults | `lua/nautilus/core/options.lua` |
+| Keymaps and leader groups | `lua/nautilus/core/keymaps.lua` |
+| Commands and reusable functions | `lua/nautilus/core/commands.lua`, `functions.lua` |
+| Theme list and theme-specific options | `lua/nautilus/plugins/ui/themes.lua` |
+| Persisted colorscheme behavior | `lua/nautilus/custom/colorscheme.lua` |
+| Language capabilities | `lua/nautilus/custom/lang-registry.lua` |
+| Language-specific plugin behavior | `lua/nautilus/plugins/lang/` |
+| Shared language consumers | `lua/nautilus/custom/lang.lua` and `lua/nautilus/plugins/` |
+
+Most users should be able to customize the config by changing one of these focused files. Adding or changing a language normally does not require editing Mason, LSP, formatting, linting, testing, debugging, task, and Treesitter modules individually.
+
+## Installation
+
+This configuration targets **Neovim 0.12 or newer** and currently assumes macOS with Homebrew.
+
+Back up any existing Neovim configuration, then clone either the upstream repository or your fork into Neovim's configuration directory. If you have not cloned it yet, the upstream option is:
+
+```sh
+mv ~/.config/nvim ~/.config/nvim.backup  # skip if no existing config is present
+git clone <PII type="EMAIL" id="22"/>:xavier7179/nautilus.git ~/.config/nvim
+nvim
+```
+
+On the first launch, `lazy.nvim` bootstraps automatically and installs the configured plugins. After the plugin installation finishes, run:
+
+```vim
+:ToolsSync
+:TSUpdate
+:checkhealth
+:WorkspaceHealth
+```
+
+`:ToolsSync` installs the configured LSP servers, formatters, linters, and debug adapters through Mason. `:TSUpdate` installs or updates Treesitter parsers. `:WorkspaceHealth` reports missing tools for the current language and provides remediation hints.
+
+To update plugins later, use `:Lazy` and run `:Lazy update` manually. Automatic update checks are disabled.
+
+## Dependencies (macOS)
+
+### Required core tools
+
+- Neovim `0.12+`
+- Git — required to bootstrap `lazy.nvim` and for Git integrations: `brew install git`
+- iTerm2 or [WezTerm](https://wezfurlong.org/wezterm/)
 - Nerd font (mono variant): `brew install font-meslo-lg-nerd-font` — select **Meslo LGS Nerd Font Mono** in your terminal profile
 - Nerd font (alternative): `brew install font-jetbrains-mono-nerd-font`
 - `brew install ripgrep` — used by grep pickers
-- `brew install lazygit` — required for Snacks lazygit integration (`<leader>gg`, `<leader>gl`)
-- `brew install libgit2` — required by fugit2.nvim
-- `brew install node` — required by `js-debug-adapter`, `vtsls`, `eslint-lsp`, and `markdown-toc`
-- `brew install cmake` — required to build CMake projects
+
+The Nerd Font is required for the configured iconography. If you do not use a Nerd Font, set `vim.g.have_nerd_font = false` in `lua/nautilus/core/options.lua`.
+
+### Optional integrations
+
+- `brew install lazygit` — enables Snacks lazygit integration (`<leader>gg`, `<leader>gl`)
+- `brew install libgit2` — used by fugit2.nvim (`<leader>gc`)
+- `brew install cmake` — required for CMake project workflows
+- WezTerm — enables cross-pane navigation and resizing through smart-splits; Neovim split navigation works in other terminals too
+
+The plugin manager, Mason packages, and Treesitter parsers are installed automatically. They do not need to be installed with Homebrew.
 
 ### Remote development
 
 - `brew install macos-fuse-t/homebrew-cask/fuse-t` — kext-less FUSE for macOS
 - `brew install macos-fuse-t/homebrew-cask/sshfs-fuse-t` — SSHFS for mounting remote filesystems
+- Configure the hosts you want to access in `~/.ssh/config` before using `<leader>r*`.
 
 ### Rust
 
@@ -36,7 +134,7 @@ Install the Rust toolchain via [rustup](https://rustup.rs):
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 ```
 
-`rust-analyzer` is **not** used directly — this config uses `bacon-ls` + `rustaceanvim` instead. Both are installed by Mason via Cargo. Install `bacon` separately:
+The Rust configuration uses `bacon-ls` and `rustaceanvim` for the primary workflow, while `rust-analyzer` remains available in the registry for compatibility. Mason installs the configured Rust packages. Install `bacon` separately:
 
 ```sh
 cargo install bacon
@@ -46,21 +144,50 @@ cargo install bacon
 
 Treesitter parsers are managed automatically by `nvim-treesitter` via `:TSUpdate`. No system installation needed.
 
-### Linters
+### Language-specific tools
+
+Install only the tools for the languages you use:
+
+- JavaScript / TypeScript: `brew install node` — required by npm tasks, `vtsls`, `js-debug-adapter`, and Markdown TOC tooling
+- PHP: install PHP and [Composer](https://getcomposer.org/) — required for PHP runtime, Composer tasks, PHPUnit, and project-local `vendor/bin/*` tools
+- Python: install Python and `pytest`; Ruff, basedpyright, and debugpy are installed through Mason
+- Rust: install the Rust toolchain with `rustup`, then `cargo install bacon`
+- CMake: `brew install cmake`
+
+### Linters and formatters
 
 Most linters and formatters are **auto-installed via Mason** on first launch (`:MasonUpdate`). The following require system-level installation:
 
 - `cargo install bacon` — required for Rust continuous background diagnostics (auto-started when opening a Rust project)
 - `brew install cppcheck` — required for C/C++ MISRA linting (not available via Mason)
 
-All other tools (shellcheck, eslint, phpcs, markdownlint-cli2, yamllint, biome, shfmt, clang-format, clang-tidy, cmakelint, etc.) are managed automatically by Mason.
+All other configured tools (shellcheck, eslint, phpcs, markdownlint-cli2, yamllint, biome, shfmt, clang-format, clang-tidy, cmakelint, and most language servers/debug adapters) are managed automatically by Mason.
 
 C/C++ MISRA checks are available through `cppcheck` in opt-in mode. Toggle MISRA linting in C/C++ buffers with `<leader>uM`.
+
+## Optional AI setup
+
+AI plugins are installed with the configuration but require their own authentication:
+
+- GitHub Copilot: install and authenticate `copilot.lua` with `:Copilot auth`. Copilot powers completion and CodeCompanion chat.
+- Claude Code: install and authenticate the `claude` CLI, then use the `<leader>ak*` mappings. The Claude integration does not work until the CLI is available on `PATH`.
+
+These integrations are optional; the rest of the configuration works without either service.
 
 ## Post-Install (OSX)
 
 - Update `.zshrc` setting the default editor: `export EDITOR=nvim`
 - **Italian keyboard:** The `opt.langmap` line in `lua/nautilus/core/options.lua` that maps `è`/`+` to `[`/`]` is currently commented out (`-- not working`). Non-Italian keyboard users can ignore it.
+
+## Troubleshooting
+
+- Run `:WorkspaceHealth` from a language buffer to identify missing Mason packages, Treesitter parsers, or external binaries.
+- Run `:WorkspaceHealthFix` to install missing Mason packages and Treesitter parsers for the current buffer.
+- Run `:Mason` to inspect or install individual packages.
+- Run `:MasonToolsInstall` to install all configured Mason-managed tools.
+- Run `:TSUpdate` if syntax highlighting or indentation is missing.
+- Run `:checkhealth` when Neovim, a plugin, or an external executable is not behaving as expected.
+- For language tasks and tests, verify that the project itself provides the expected commands, such as npm scripts, Composer scripts, `pytest`, or Cargo targets.
 
 ## Language architecture
 
@@ -69,6 +196,29 @@ C/C++ MISRA checks are available through `cppcheck` in opt-in mode. Toggle MISRA
 - `lua/nautilus/custom/lang.lua` is the only supported access layer for consumers
 - Shared plugin modules consume normalized enabled-only data from `lang.lua`
 - Per-language plugin files provide concrete implementation details and overrides
+
+## Supported Languages
+
+The registry currently provides the following language workflows. Services marked as unavailable are intentionally not configured for that language.
+
+| Language | LSP | Formatting | Linting | Debugging | Tests / Tasks |
+|----------|-----|------------|---------|-----------|--------------|
+| C / C++ | `clangd` | `clang-format` | `cppcheck` | `codelldb` | Project tasks |
+| CMake | `cmake-language-server` | `cmake-format` | `cmakelint` | N/A | Configure, build, test |
+| Dockerfile | `dockerls` | N/A | `hadolint` | N/A | Docker workflows |
+| Rust | `bacon-ls`, `rustaceanvim` (`rust-analyzer` available) | `rustfmt` | `bacon` | `codelldb` | Cargo tasks, tests, debug presets |
+| PHP | `intelephense` | `php-cs-fixer` | `phpcs` | `php-debug-adapter` | Composer and PHPUnit workflows |
+| JavaScript / TypeScript | `vtsls` | `biome` | `eslint` | `js-debug-adapter` | npm, Jest, and Vitest workflows |
+| Python | `basedpyright` | Ruff | Ruff | `debugpy` | pytest workflows |
+| Markdown | `marksman` | N/A | `markdownlint-cli2` | N/A | Markdown tasks and rendering |
+| YAML | `yamlls` + SchemaStore | `yamlfmt` | `yamllint` | N/A | YAML tasks |
+| Bash / Shell | `bashls` | `shfmt` | `shellcheck` | `bash-debug-adapter` | Shell tasks |
+| HTML | `html-lsp` | Prettier | `htmlhint` | N/A | HTML tasks and rendering |
+| CSS | `cssls` | Prettier | `stylelint` | N/A | CSS tasks |
+| JSON | `json-lsp` | Prettier | N/A | N/A | JSON tasks |
+| Lua | `lua_ls` | `stylua` | N/A | N/A | Lua run/debug presets |
+
+To add or change a language, update the registry first, then add or adjust its focused file under `lua/nautilus/plugins/lang/`. Shared consumers automatically receive the normalized registry data. See `plans/language-support.md` for the complete language-entry template.
 
 ## Keymap Tree
 
