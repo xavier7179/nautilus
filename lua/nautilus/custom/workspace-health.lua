@@ -11,13 +11,28 @@ local function parser_available(parser)
 	return parsers.has_parser(parser)
 end
 
+-- `lang.lsp_mason()` etc. list lspconfig-style server names (e.g. "bashls"),
+-- but mason-registry indexes packages under their own names (e.g.
+-- "bash-language-server"). Translate through mason-lspconfig's map before
+-- looking a package up, or every lspconfig-named LSP reads as "missing" even
+-- when installed.
+local function resolve_mason_package_name(pkg)
+	local ok, mappings = pcall(require, "mason-lspconfig.mappings")
+	if not ok then return pkg end
+
+	local ok_map, mason_map = pcall(mappings.get_mason_map)
+	if not ok_map then return pkg end
+
+	return mason_map.lspconfig_to_package[pkg] or pkg
+end
+
 local function mason_package_status(packages)
 	local ok, registry = pcall(require, "mason-registry")
 	if not ok then return nil, "mason-registry unavailable" end
 
 	local missing = {}
 	for _, pkg in ipairs(packages) do
-		local ok_pkg, package = pcall(registry.get_package, pkg)
+		local ok_pkg, package = pcall(registry.get_package, resolve_mason_package_name(pkg))
 		if not ok_pkg or not package or not package:is_installed() then table.insert(missing, pkg) end
 	end
 
