@@ -129,12 +129,20 @@ return {
 	{
 		"rmagatti/auto-session",
 		lazy = true,
+		-- `keys` alone only lazy-loads on an actual keypress of one of these
+		-- bindings. The dashboard's "Restore Session" action calls
+		-- `:AutoSession restore` as a raw command (not through this keymap),
+		-- which doesn't trigger lazy.nvim's key-based loading, so the command
+		-- doesn't exist yet -- E5108/E492. `cmd` covers that path too.
+		cmd = { "AutoSession" },
 		keys = {
-			-- Uses vim.ui.select for session searching
-			{ "<leader>wR", "<cmd>SessionSearch<CR>", desc = "Session search" },
-			{ "<leader>wl", "<cmd>SessionRestore<CR>", desc = "Restore last session" },
-			{ "<leader>ws", "<cmd>SessionSave<CR>", desc = "Save session" },
-			{ "<leader>uS", "<cmd>SessionToggleAutoSave<CR>", desc = "Toggle autosave" },
+			-- `:Session*` (SessionSearch, SessionRestore, ...) are auto-session's
+			-- deprecated legacy aliases for `:AutoSession <subcommand>` -- using
+			-- them still works but prints a "is deprecated" notice on every call.
+			{ "<leader>wR", "<cmd>AutoSession search<CR>", desc = "Session search" },
+			{ "<leader>wl", "<cmd>AutoSession restore<CR>", desc = "Restore last session" },
+			{ "<leader>ws", "<cmd>AutoSession save<CR>", desc = "Save session" },
+			{ "<leader>uS", "<cmd>AutoSession toggle<CR>", desc = "Toggle autosave" },
 		},
 		opts = {
 			suppressed_dirs = { "~/", "~/Downloads", "~/Documents", "~/Desktop/" },

@@ -89,7 +89,15 @@ return {
 							desc = "Config",
 							action = ":lua Snacks.dashboard.pick('files', {cwd = vim.fn.stdpath('config')})",
 						},
-						{ icon = " ", key = "s", desc = "Restore Session", section = "session" },
+						-- auto-session's CURRENT command is `:AutoSession <subcommand>`
+						-- (`:SessionRestore` etc. are the deprecated legacy aliases --
+						-- see the keys in editing.lua). `section = "session"` would
+						-- resolve to this same command via Snacks' built-in
+						-- auto-detection, but that command isn't registered until
+						-- auto-session actually loads, and this action runs before any
+						-- of its lazy-load keys are pressed -- hence editing.lua's
+						-- `cmd = { "AutoSession", ... }` lazy-load trigger.
+						{ icon = " ", key = "s", desc = "Restore Session", action = "<cmd>AutoSession restore<CR>" },
 						{
 							icon = "󰒲 ",
 							key = "L",
