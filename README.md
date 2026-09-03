@@ -149,6 +149,27 @@ Host myhost
   Password auth works, but on this fuse-t/macOS setup it reliably drives `sshfs`'s `password_stdin` path into a busy-poll loop that pegs a CPU core and floods Neovim's job callback with log output, freezing the editor until the stray `sshfs`/`go-nfsv4` processes are killed by hand. Key auth skips the password path entirely and avoids this.
 - `<leader>rf` / `<leader>rg` shell out over SSH and require `rg`, `fd`, `fdfind`, or `where` to be installed on the *remote* host. Many hosts (shared hosting, minimal containers) have none of these. Since the mount already exposes the remote files locally under `~/.sshfs/<host>/`, prefer the regular local pickers (`<leader>sf`, `<leader>sg`) once connected — they run `rg`/`fd` on macOS against the mounted files and don't depend on what's installed remotely.
 
+#### Deploy workflow (edit locally, push on demand)
+
+`<leader>rc`/sshfs above mounts and edits the remote filesystem live over the network — the right tool for quick remote browsing, but the wrong one for sustained work on a project: every read/write is a network round-trip, and a stalled connection stalls the editor with it. For a project you're actually developing, keep a real local working copy and push to the remote explicitly instead — the same model as JetBrains' "Deployment" feature.
+
+Add a `.nvim-deploy.lua` file at the project's root:
+
+```lua
+return {
+  host = "myhost",                    -- SSH config Host alias
+  remote_path = "/var/www/myproject",
+  excludes = { "uploads/", "cache/" }, -- optional, merged with built-in defaults
+  delete = false,                     -- optional: pass --delete to rsync on push only
+}
+```
+
+- `<leader>rp` (`:DeployPush`) and `<leader>rP` (`:DeployPull`) walk up from the current buffer to find `.nvim-deploy.lua`, run an `rsync` dry-run, show the itemized changes in a scratch buffer, and ask for confirmation before actually syncing (via `rsync` in a terminal split, so transfer progress is visible).
+- Nothing is pushed automatically on save — sync only happens when you explicitly ask for it.
+- `delete` only ever applies to push (`--delete`, removing remote files absent locally); pull never deletes local files, regardless of that setting — pull is for reviewing/grabbing server-side drift, not for silently discarding local work.
+- If the project doesn't already have a local copy, pull one down manually first (`rsync -avz host:/remote/path/ ./`), `git init` it, then use `<leader>rp`/`<leader>rP` from there on.
+- See `lua/nautilus/custom/deploy.lua` for the implementation.
+
 ### Rust
 
 Install the Rust toolchain via [rustup](https://rustup.rs):
@@ -405,6 +426,8 @@ All `<leader>` bindings follow a strict **tree organisation**: the first letter 
 | `<leader>rf` | Find files on remote (runs `fd`/`find` via SSH) |
 | `<leader>rg` | Live grep on remote (runs `rg` via SSH) |
 | `<leader>re` | Edit an SSH config file |
+| `<leader>rp` | Deploy: push local changes to the project's remote (`:DeployPush`) |
+| `<leader>rP` | Deploy: pull remote changes into the local project (`:DeployPull`) |
 
 ### `<leader>s` — Search
 
@@ -594,6 +617,7 @@ All `<leader>` bindings follow a strict **tree organisation**: the first letter 
 | nvim-origami | LSP/Treesitter fold provider with fold decorations, auto-fold, and search-pause |
 | grug-far.nvim | Project-wide find & replace panel (`<leader>sR`) |
 | remote-sshfs.nvim | Remote file editing via SSHFS — connect to hosts, browse files, live grep over SSH (`<leader>r*`) |
+| deploy (custom, `custom/deploy.lua`) | Local-edit/explicit-push workflow for remote projects — rsync push/pull with dry-run diff and confirmation (`<leader>rp`/`<leader>rP`, see `.nvim-deploy.lua`) |
 
 ### Language Support
 
