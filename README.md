@@ -126,6 +126,29 @@ The plugin manager, Mason packages, and Treesitter parsers are installed automat
 - `brew install macos-fuse-t/homebrew-cask/sshfs-fuse-t` — SSHFS for mounting remote filesystems
 - Configure the hosts you want to access in `~/.ssh/config` before using `<leader>r*`.
 
+#### Configuring a remote host
+
+Add a normal `Host` entry per remote in `~/.ssh/config`:
+
+```
+Host myhost
+    HostName 203.0.113.10
+    User deploy
+    Port 22
+    # Path=/var/www/myproject
+```
+
+- `Path` is a custom comment directive — not a real `ssh_config` keyword — that `remote-sshfs.nvim` parses to pick the subdirectory sshfs mounts. With it set, `<leader>rc` lands directly in `/var/www/myproject` instead of the account's home directory. Omit it to mount the home directory.
+- Set up key-based authentication for the host **before** connecting:
+
+  ```sh
+  ssh-copy-id -p <port> -i ~/.ssh/id_ed25519.pub myhost
+  ssh -o BatchMode=yes myhost 'echo ok'   # should print "ok" with no password prompt
+  ```
+
+  Password auth works, but on this fuse-t/macOS setup it reliably drives `sshfs`'s `password_stdin` path into a busy-poll loop that pegs a CPU core and floods Neovim's job callback with log output, freezing the editor until the stray `sshfs`/`go-nfsv4` processes are killed by hand. Key auth skips the password path entirely and avoids this.
+- `<leader>rf` / `<leader>rg` shell out over SSH and require `rg`, `fd`, `fdfind`, or `where` to be installed on the *remote* host. Many hosts (shared hosting, minimal containers) have none of these. Since the mount already exposes the remote files locally under `~/.sshfs/<host>/`, prefer the regular local pickers (`<leader>sf`, `<leader>sg`) once connected — they run `rg`/`fd` on macOS against the mounted files and don't depend on what's installed remotely.
+
 ### Rust
 
 Install the Rust toolchain via [rustup](https://rustup.rs):
