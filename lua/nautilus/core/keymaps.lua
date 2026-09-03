@@ -40,6 +40,16 @@ keymap.set("n", "<leader>wn", "<cmd>tabn<CR>", { desc = "Go to next tab" })
 keymap.set("n", "<leader>wp", "<cmd>tabp<CR>", { desc = "Go to previous tab" })
 keymap.set("n", "<leader>wt", "<cmd>tabnew %<CR>", { desc = "Open current buffer in new tab" })
 
+-- ─── <leader>r  Remote (deploy) ──────────────────────────────────────────────
+-- Local-edit, explicit-push workflow (see custom/deploy.lua) for projects
+-- that live on a remote host but shouldn't be edited live over the network.
+-- Sibling to, but independent of, remote-sshfs.nvim's own <leader>r{c,d,f,g,e}
+-- (plugins/utils/sshfs.lua) -- that mounts and browses a remote filesystem
+-- directly; this pushes/pulls a real local checkout via rsync instead.
+
+keymap.set("n", "<leader>rp", "<cmd>DeployPush<cr>", { desc = "[R]emote [P]ush (deploy)" })
+keymap.set("n", "<leader>rP", "<cmd>DeployPull<cr>", { desc = "[R]emote [P]ull (deploy)" })
+
 -- ─── <leader>f  File ─────────────────────────────────────────────────────────
 
 keymap.set("n", "<leader>fn", "<cmd>enew<cr>", { desc = "New File" })

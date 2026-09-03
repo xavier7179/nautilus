@@ -5,6 +5,7 @@ local inspection_profile = require("nautilus.custom.inspection-profile")
 local template_engine = require("nautilus.custom.template-engine")
 local template_registry = require("nautilus.custom.template-registry")
 local workspace_health = require("nautilus.custom.workspace-health")
+local deploy = require("nautilus.custom.deploy")
 
 local function show_quick_help()
 	local ft = vim.bo.filetype
@@ -172,6 +173,14 @@ vim.api.nvim_create_user_command("WorkspaceHealth", function() workspace_health.
 
 vim.api.nvim_create_user_command("WorkspaceHealthFix", function() workspace_health.fix(0) end, {
 	desc = "Auto-fix workspace health issues (install Mason packages, TSUpdate parsers)",
+})
+
+vim.api.nvim_create_user_command("DeployPush", function() deploy.push(0) end, {
+	desc = "Push local changes to the project's configured remote (see .nvim-deploy.lua)",
+})
+
+vim.api.nvim_create_user_command("DeployPull", function() deploy.pull(0) end, {
+	desc = "Pull remote changes into the local project (see .nvim-deploy.lua)",
 })
 
 vim.api.nvim_create_user_command("RunDebugPreset", function()
