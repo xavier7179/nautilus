@@ -68,12 +68,23 @@ end
 -- message can only mean something deliberately terminated the process --
 -- real auth/network failures produce different text -- so it's always safe
 -- to swallow just this one pattern; everything else still goes through.
+--
+-- Same wrapper, same story, for a second unrelated line: ssh's own
+-- "** WARNING: connection is not using a post-quantum key exchange
+-- algorithm" advisory. It's about the *server's* configuration (an
+-- upgrade molesystem's operator would make, not something fixable from the
+-- connecting side), and the connection succeeds right after it regardless
+-- -- but the wrapper still surfaces it as "Connection failed: ...". ssh's
+-- own convention marks these advisory banners with a leading "** ", which
+-- real errors (permission denied, connection refused, timeout, host key
+-- mismatch) never use, so matching that prefix is safe and general rather
+-- than hardcoding just the PQ wording.
 local function patch_sshfs_wrapper()
 	local handler = require("remote-sshfs.handler")
 	local original = handler.sshfs_wrapper
 	handler.sshfs_wrapper = function(data, host, mount_dir, callback)
 		local output = table.concat(data, "\n")
-		if output:match("^Killed by signal") then
+		if output:match("^Killed by signal") or output:match("^%*%* WARNING:") then
 			return
 		end
 		return original(data, host, mount_dir, callback)
