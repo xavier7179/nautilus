@@ -56,6 +56,19 @@ return {
 
 			local lint_augroup = vim.api.nvim_create_augroup("lint", { clear = true })
 
+			local eslint_config_files = {
+				"eslint.config.js",
+				"eslint.config.mjs",
+				"eslint.config.cjs",
+				"eslint.config.ts",
+				".eslintrc",
+				".eslintrc.js",
+				".eslintrc.cjs",
+				".eslintrc.json",
+				".eslintrc.yaml",
+				".eslintrc.yml",
+			}
+
 			local function can_lint(bufnr)
 				if not vim.api.nvim_buf_is_valid(bufnr) then return false end
 				if vim.bo[bufnr].buftype ~= "" then return false end
@@ -66,7 +79,12 @@ return {
 
 			local function do_lint(args)
 				local bufnr = args.buf
-				if can_lint(bufnr) then lint.try_lint() end
+				if not can_lint(bufnr) then return end
+				-- Run from the project root holding the ESLint flat/legacy config so the
+				-- project's own rules and node_modules/.bin/eslint are used regardless of
+				-- Neovim's cwd (nvim-lint defaults to getcwd()).
+				local root = vim.fs.root(bufnr, eslint_config_files)
+				lint.try_lint(nil, root and { cwd = root } or nil)
 			end
 
 			local function should_lint(event)

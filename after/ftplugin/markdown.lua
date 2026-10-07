@@ -8,7 +8,7 @@ vim.opt_local.tabstop = 2 -- spaces for tab
 vim.opt_local.softtabstop = 2
 vim.opt_local.shiftwidth = 2 -- spaces for indent width
 
-vim.keymap.set("n", "<leader>mm", function()
+vim.keymap.set("n", "<leader>uM", function()
 	require("snacks")
 		.toggle({
 			name = "Toggle Render Markdown",
