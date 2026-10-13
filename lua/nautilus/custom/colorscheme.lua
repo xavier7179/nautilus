@@ -1,6 +1,8 @@
 -- lua/custom/save-colors.lua
 
 local M = {}
+local loading_colorscheme = false
+local startup_load_failed = false
 
 local function colorscheme_file()
 	local dir = vim.fn.stdpath("data") .. "/nautilus"
@@ -62,7 +64,26 @@ function M.load_colorscheme()
 		f:close()
 	end
 	local name = M.get_colorscheme()
-	if name then pcall(vim.cmd.colorscheme, name) end
+	if not name then return false end
+
+	loading_colorscheme = true
+	local ok = pcall(vim.cmd.colorscheme, name)
+	loading_colorscheme = false
+	startup_load_failed = not ok
+
+	if not ok then
+		-- Do not let a stale or unavailable persisted theme leave startup in an
+		-- unusable state. Keep the persisted value intact so installing the theme
+		-- later can restore it, and use the configured fallback for this session.
+		local fallback = M.get_default_colorscheme()
+		if fallback ~= name then
+			loading_colorscheme = true
+			pcall(vim.cmd.colorscheme, fallback)
+			loading_colorscheme = false
+		end
+	end
+
+	return ok
 end
 
 ---@module 'lazy.types'
@@ -126,6 +147,8 @@ function M.lazy_setup(plugins)
 	vim.api.nvim_create_autocmd("ColorScheme", {
 		group = aug,
 		callback = function(event)
+			if loading_colorscheme then return end
+			startup_load_failed = false
 			-- onenord.nvim's util.lua fires `doautocmd ColorScheme` without a
 			-- pattern during setup(), yielding event.match == "". Guard against
 			-- any such spurious event to avoid empty writes to the persistence file.
@@ -136,7 +159,12 @@ function M.lazy_setup(plugins)
 
 	vim.api.nvim_create_autocmd("VimLeave", {
 		group = aug,
-		callback = function() M.save_colorscheme(vim.g.colors_name) end,
+		callback = function()
+			-- A failed startup load may leave Vim on its default colorscheme. Do not
+			-- overwrite the user's persisted selection with that fallback.
+			if startup_load_failed then return end
+			M.save_colorscheme(vim.g.colors_name)
+		end,
 	})
 	return M.tune_colorscheme_plugins(plugins)
 end

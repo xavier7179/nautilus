@@ -2,16 +2,58 @@ return {
 	{
 		"mrjones2014/smart-splits.nvim",
 		lazy = false,
+		dependencies = {
+			{
+				"smart-splits-nvim/backend-wezterm",
+				opts = {
+					-- Used by the backend's health check; the integration itself
+					-- communicates through WezTerm user variables.
+					cli_path = "wezterm",
+				},
+			},
+		},
 		opts = function()
 			local is_wezterm = vim.env.TERM_PROGRAM == "WezTerm"
+			local legacy_backend = is_wezterm and "wezterm" or nil
+			local ignored_buftypes = { "nofile", "quickfix", "prompt" }
+			local ignored_filetypes = { "NvimTree", "neo-tree", "snacks_picker_list" }
+
+			-- smart-splits v3 moved these options into feature namespaces. Detect the
+			-- schema instead of relying on a plugin version, so older lockfiles keep
+			-- working without making v3 report the legacy keys as config problems.
+			local ok, config = pcall(require, "smart-splits.config")
+			local has_namespaced_options = ok
+				and type(config.mux) == "table"
+				and type(config.resize) == "table"
+				and type(config.move) == "table"
+
+			if has_namespaced_options then
+				return {
+					mux = {
+						backend = is_wezterm and "smart-splits-backend-wezterm" or nil,
+					},
+					-- Do nothing at the edge (avoids accidental WezTerm pane creation).
+					move = {
+						at_edge = "stop",
+						ignored_buftypes = ignored_buftypes,
+						ignored_filetypes = ignored_filetypes,
+					},
+					-- Match the previous manual resize step of 5.
+					resize = {
+						amount = 5,
+						ignored_buftypes = ignored_buftypes,
+						ignored_filetypes = ignored_filetypes,
+					},
+				}
+			end
+
+			-- Compatibility with smart-splits versions before the namespaced schema.
 			return {
-			multiplexer_integration = is_wezterm and "wezterm" or nil,
-			-- Do nothing when cursor is already at the edge (avoids accidental WezTerm pane creation)
-			at_edge = "stop",
-			-- Match the previous manual resize step of 5
-			default_amount = 5,
-			ignored_buftypes = { "nofile", "quickfix", "prompt" },
-			ignored_filetypes = { "NvimTree", "neo-tree", "snacks_picker_list" },
+				multiplexer_integration = legacy_backend,
+				at_edge = "stop",
+				default_amount = 5,
+				ignored_buftypes = ignored_buftypes,
+				ignored_filetypes = ignored_filetypes,
 			}
 		end,
 		keys = {
