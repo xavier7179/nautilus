@@ -3,6 +3,14 @@
 local M = {}
 local loading_colorscheme = false
 local startup_load_failed = false
+local startup_complete = false
+local user_changed_colorscheme = false
+
+local function valid_colorscheme(value)
+	if type(value) ~= "string" then return false end
+	value = vim.trim(value)
+	return value ~= "" and not value:find("[%c/]"), value
+end
 
 local function colorscheme_file()
 	local dir = vim.fn.stdpath("data") .. "/nautilus"
@@ -29,37 +37,43 @@ function M.get_colorscheme(fallback)
 	if not f then return fallback end
 	local name = f:read("*l")
 	f:close()
-	if name and name ~= "" then return name end
+	local valid, normalized = valid_colorscheme(name)
+	if valid then return normalized end
 	return fallback
 end
 
 ---@param colorscheme? string
 function M.save_colorscheme(colorscheme)
 	colorscheme = colorscheme or vim.g.colors_name
-	if not colorscheme or colorscheme == "" then return end
-	local f = io.open(colorscheme_file(), "r")
+	local valid, normalized = valid_colorscheme(colorscheme)
+	if not valid then return false end
+
+	local file = colorscheme_file()
+	local f = io.open(file, "r")
 	if f then
 		local existing = f:read("*l")
 		f:close()
-		if existing == colorscheme then return end
+		if existing == normalized then return true end
 	end
-	f = io.open(colorscheme_file(), "w")
-	if f then
-		f:write(colorscheme)
-		f:close()
-	end
+
+	-- Use a process-specific temporary file and rename it into place. A rename
+	-- is atomic, so concurrent Neovim instances cannot leave a partial value.
+	local temporary = string.format("%s.%d.tmp", file, vim.fn.getpid())
+	f = io.open(temporary, "w")
+	if not f then return false end
+	f:write(normalized, "\n")
+	f:close()
+	if os.rename(temporary, file) then return true end
+	os.remove(temporary)
+	return false
 end
 
 function M.load_colorscheme()
 	-- migrate from old shada-persisted vim.g.COLORS_NAME
 	local file = colorscheme_file()
 	local f = io.open(file, "r")
-	if not f and vim.g.COLORS_NAME and vim.g.COLORS_NAME ~= "" then
-		f = io.open(file, "w")
-		if f then
-			f:write(vim.g.COLORS_NAME)
-			f:close()
-		end
+	if not f and valid_colorscheme(vim.g.COLORS_NAME) then
+		M.save_colorscheme(vim.g.COLORS_NAME)
 	elseif f then
 		f:close()
 	end
@@ -70,6 +84,7 @@ function M.load_colorscheme()
 	local ok = pcall(vim.cmd.colorscheme, name)
 	loading_colorscheme = false
 	startup_load_failed = not ok
+	startup_complete = true
 
 	if not ok then
 		-- Do not let a stale or unavailable persisted theme leave startup in an
@@ -148,11 +163,12 @@ function M.lazy_setup(plugins)
 		group = aug,
 		callback = function(event)
 			if loading_colorscheme then return end
-			startup_load_failed = false
 			-- onenord.nvim's util.lua fires `doautocmd ColorScheme` without a
 			-- pattern during setup(), yielding event.match == "". Guard against
 			-- any such spurious event to avoid empty writes to the persistence file.
-			if event.match == "" then return end
+			if event.match == "" or not startup_complete then return end
+			startup_load_failed = false
+			user_changed_colorscheme = true
 			M.save_colorscheme(event.match)
 		end,
 	})
@@ -160,9 +176,9 @@ function M.lazy_setup(plugins)
 	vim.api.nvim_create_autocmd("VimLeave", {
 		group = aug,
 		callback = function()
-			-- A failed startup load may leave Vim on its default colorscheme. Do not
-			-- overwrite the user's persisted selection with that fallback.
-			if startup_load_failed then return end
+			-- A failed startup load or a session that never changed themes must not
+			-- overwrite the user's persisted selection with a fallback/default.
+			if startup_load_failed or not user_changed_colorscheme then return end
 			M.save_colorscheme(vim.g.colors_name)
 		end,
 	})
