@@ -1,5 +1,29 @@
 local lang = require("nautilus.custom.lang")
 
+local function php_cs_fixer_project(bufnr)
+	local filename = vim.api.nvim_buf_get_name(bufnr)
+	local dirname = filename ~= "" and vim.fs.dirname(filename) or vim.fn.getcwd()
+	local config = vim.fs.find(".php-cs-fixer.dist.php", {
+		upward = true,
+		path = dirname,
+		type = "file",
+	})[1]
+	if not config then return nil end
+
+	local root = vim.fs.dirname(config)
+	for _, relative in ipairs({
+		"vendor/bin/php-cs-fixer",
+		"tools/php-cs-fixer",
+		"bin/php-cs-fixer",
+		"php-cs-fixer",
+	}) do
+		local executable = vim.fs.joinpath(root, relative)
+		if vim.fn.executable(executable) == 1 then return root, executable end
+	end
+
+	return root, nil
+end
+
 return {
 	{
 		"neovim/nvim-lspconfig",
@@ -68,6 +92,26 @@ return {
 			},
 		})
 
+			return opts
+		end,
+	},
+	{
+		"stevearc/conform.nvim",
+		optional = true,
+		opts = function(_, opts)
+			opts.formatters = opts.formatters or {}
+			opts.formatters.php_cs_fixer = function(bufnr)
+				local root, executable = php_cs_fixer_project(bufnr)
+				return {
+					-- The condition prevents this harmless placeholder from running when
+					-- the project has no local fixer or config.
+					command = executable or "false",
+					args = { "fix", "--config=.php-cs-fixer.dist.php", "$FILENAME" },
+					cwd = function() return root end,
+					stdin = false,
+					condition = function() return executable ~= nil end,
+				}
+			end
 			return opts
 		end,
 	},

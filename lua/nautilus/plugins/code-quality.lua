@@ -1,5 +1,9 @@
 local lang = require("nautilus.custom.lang")
 
+local function lsp_format_for(bufnr)
+	return vim.bo[bufnr].filetype == "php" and "never" or "fallback"
+end
+
 return {
 	-- Formatters
 	{
@@ -11,7 +15,7 @@ return {
 			"<leader>cf",
 			function()
 				require("conform").format({
-					lsp_format = "fallback",
+					lsp_format = lsp_format_for(vim.api.nvim_get_current_buf()),
 					async = false,
 					timeout_ms = 1000,
 				})
@@ -32,7 +36,7 @@ return {
 					return {
 						timeout_ms = 1000,
 						async = false,
-						lsp_format = "fallback",
+						lsp_format = lsp_format_for(bufnr),
 					}
 				end,
 			}
